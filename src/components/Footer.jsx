@@ -27,6 +27,7 @@ export default function Footer({ onOpen404Demo }) {
               <li><a href="#try-hmm">Try Live Demo</a></li>
               <li><a href="#languages">Supported Languages</a></li>
               <li><a href="#why-hmm">Why Hmm is Different</a></li>
+              <li><a href="/poster/" target="_blank" rel="noopener noreferrer">A3 Print Poster ↗</a></li>
             </ul>
           </div>
 
