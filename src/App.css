@@ -462,29 +462,6 @@
   color: var(--color-calm);
 }
 
-/* Scroll indicator cue */
-.hero-scroll-cue {
-  position: absolute;
-  bottom: 24px;
-  left: clamp(20px, 4vw, 40px);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--color-ink-muted);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  user-select: none;
-}
-
-.scroll-cue-arrow {
-  animation: bounce-cue 1.8s infinite ease-in-out;
-}
-
-@keyframes bounce-cue {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(5px); }
-}
-
 /* --------------------------------------------------------------------------
    3. The Problem Section (Editorial + 3 Overlapping Paper Sheets)
    -------------------------------------------------------------------------- */

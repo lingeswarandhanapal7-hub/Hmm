@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { ArrowDown, Sparkles, FileText, CheckCircle2 } from 'lucide-react';
+import { Sparkles, FileText, CheckCircle2 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +12,6 @@ export default function Hero() {
   const resolvedTextRef = useRef(null);
   const subheadRef = useRef(null);
   const bgTexturesRef = useRef(null);
-  const scrollIndicatorRef = useRef(null);
 
   const [isReducedMotion, setIsReducedMotion] = useState(false);
   const [manualScrubProgress, setManualScrubProgress] = useState(null);
@@ -38,7 +37,6 @@ export default function Hero() {
     const resolved = resolvedTextRef.current;
     const subhead = subheadRef.current;
     const bgTextures = bgTexturesRef.current;
-    const indicator = scrollIndicatorRef.current;
 
     if (!container || !pinTarget) return;
 
@@ -100,15 +98,6 @@ export default function Hero() {
         duration: 0.35,
         ease: 'power1.out'
       }, 0.55);
-
-      // Fade out scroll cue
-      if (indicator) {
-        tl.to(indicator, {
-          opacity: 0,
-          y: -10,
-          duration: 0.2
-        }, 0.1);
-      }
     }, container);
 
     return () => {
@@ -219,16 +208,6 @@ export default function Hero() {
               </div>
             </div>
           </div>
-
-          {/* Scroll Cue (Only before scrolling) */}
-          {!isReducedMotion && (
-            <div ref={scrollIndicatorRef} className="hero-scroll-cue" aria-hidden="true">
-              <span className="scroll-cue-text">Scroll down to untangle</span>
-              <div className="scroll-cue-arrow">
-                <ArrowDown size={16} />
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </section>
