@@ -652,28 +652,34 @@ export function getLocalizedDocumentContent(doc, langCode) {
 
 export const TEAM_MEMBERS = [
   {
-    name: 'Lingeswaran',
-    role: 'Lead AI & Fullstack Architect',
+    name: 'Lingeswaran D',
+    role: 'Team Lead & AI Architect',
     focus: 'Multimodal OCR pipelines, regional TTS synthesis, and prompt grounding',
-    initials: 'LK'
+    initials: 'LD'
   },
   {
-    name: 'Santhosh',
-    role: 'Product & Accessibility Designer',
-    focus: 'Low-literacy UX, editorial typography, and high-contrast ergonomics',
-    initials: 'SK'
+    name: 'Lingesh R',
+    role: 'Fullstack & Systems Engineer',
+    focus: 'Document ingestion pipelines, OCR processing, and backend service integration',
+    initials: 'LR'
   },
   {
-    name: 'Dharani',
-    role: 'Document Intelligence Engineer',
-    focus: 'Legal clause extraction, medical jargon ontology, and rules-retrieval engine',
-    initials: 'DK'
-  },
-  {
-    name: 'Kaviarasan',
-    role: 'Frontend & Motion Specialist',
-    focus: 'Scroll-driven micro-interactions, responsive paper physics, and audio player engine',
+    name: 'Krishniya K',
+    role: 'Document Intelligence & RAG Engineer',
+    focus: 'Legal clause extraction, medical ontology mapping, and rules retrieval engine',
     initials: 'KK'
+  },
+  {
+    name: 'Kiruthik V',
+    role: 'Frontend & Motion Specialist',
+    focus: 'High-performance scroll interactions, paper ergonomics, and audio engine',
+    initials: 'KV'
+  },
+  {
+    name: 'Harsithaa P',
+    role: 'Product & Accessibility Designer',
+    focus: 'Low-literacy UX ergonomics, multilingual typography, and WCAG AA compliance',
+    initials: 'HP'
   }
 ];
 
