@@ -83,9 +83,6 @@ export default function TheProblem({ onSelectDocForDemo }) {
                       isSelected ? 'overlapping-paper--active' : ''
                     }`}
                     style={{
-                      transform: isSelected
-                        ? `translateY(-12px) rotate(0deg) scale(1.02)`
-                        : `rotate(${angle}deg)`,
                       zIndex: isSelected ? 10 : 3 - idx
                     }}
                     onClick={() => setActiveSheetIndex(idx)}
