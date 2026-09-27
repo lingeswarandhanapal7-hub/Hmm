@@ -134,8 +134,8 @@ textarea:focus-visible,
   max-width: var(--max-content-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: clamp(20px, 4vw, 40px);
-  padding-right: clamp(20px, 4vw, 40px);
+  padding-left: clamp(16px, 4vw, 40px);
+  padding-right: clamp(16px, 4vw, 40px);
 }
 
 .editorial-col {

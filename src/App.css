@@ -985,8 +985,9 @@
 .doc-card-badge-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .doc-type-tag {
@@ -2385,8 +2386,25 @@
 }
 
 /* --------------------------------------------------------------------------
-   13. Responsive Media Queries
+   13. Comprehensive Multi-Device Responsive System
    -------------------------------------------------------------------------- */
+
+/* --- A. Tablet Landscape & Small Desktop (<= 1140px) --- */
+@media (max-width: 1140px) {
+  .how-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .why-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  }
+}
+
+/* --- B. Tablet Portrait (<= 960px) --- */
 @media (max-width: 960px) {
   .navbar__nav {
     display: none;
@@ -2394,31 +2412,110 @@
 
   .navbar__mobile-toggle {
     display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
   }
 
   .problem-layout {
     grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .problem-visual-stage {
+    order: -1;
   }
 
   .paper-stack-container {
     min-height: 440px;
+    max-width: 100%;
+  }
+
+  .overlapping-paper {
+    max-width: 100%;
   }
 
   .demo-workspace {
     grid-template-columns: 1fr;
+    gap: 36px;
   }
 
   .final-cta-band {
     flex-direction: column;
     align-items: flex-start;
+    gap: 28px;
+    padding: 36px 28px;
+  }
+
+  .final-cta-button {
+    width: auto;
   }
 
   .footer-top-row {
     grid-template-columns: 1fr 1fr;
+    gap: 36px;
+  }
+
+  .languages-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
+/* --- C. Phablets & Mobile Devices (<= 768px) --- */
+@media (max-width: 768px) {
+  /* Eliminate clashing hero background stamps on mobile */
+  .hero-stamp--left,
+  .hero-stamp--right,
+  .hero-clause-line,
+  .hero-clause-highlight {
+    display: none !important;
+  }
+
+  .hero-scroll-wrapper {
+    height: 135vh;
+  }
+
+  .hero-headline {
+    font-size: clamp(1.85rem, 6.5vw, 2.75rem);
+  }
+
+  .section-kicker {
+    font-size: 0.75rem;
+    margin-bottom: 12px;
+  }
+
+  .languages-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .responsible-callout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+
+  .responsible-pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .how-step-card {
+    padding: 22px 18px;
+  }
+
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* --- D. Standard Smartphones (<= 640px) --- */
 @media (max-width: 640px) {
+  .navbar__inner {
+    height: 60px;
+  }
+
   .navbar__logo-tagline {
     display: none;
   }
@@ -2427,20 +2524,307 @@
     display: none;
   }
 
+  .btn-read-aloud {
+    padding: 8px;
+    min-width: 38px;
+    min-height: 38px;
+    justify-content: center;
+  }
+
+  .navbar__cta {
+    padding: 7px 14px;
+    font-size: 0.8125rem;
+  }
+
+  /* Hero Section */
+  .hero-scroll-wrapper {
+    height: 120vh;
+  }
+
+  .hero-content-stage {
+    padding-top: 24px;
+  }
+
+  .hero-headline-stage {
+    min-height: 95px;
+    margin-bottom: 16px;
+  }
+
+  .hero-headline--cramped .hero-scan-marker {
+    display: inline-block;
+    margin-top: 6px;
+    margin-left: 0;
+    font-size: 0.7rem;
+  }
+
+  .hero-subhead {
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 22px;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .btn-clarity--hero,
+  .hero-cta-group .btn-ghost {
+    width: 100%;
+    justify-content: center;
+    padding: 13px 20px;
+  }
+
+  .hero-trust-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  /* The Problem Section */
+  .problem-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .stat-callout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 18px 16px;
+  }
+
+  .stat-callout__number {
+    font-size: 2.6rem;
+  }
+
+  .paper-stack-container {
+    min-height: 390px;
+  }
+
+  .overlapping-paper {
+    padding: 16px 14px;
+    transform: rotate(0deg) !important;
+  }
+
+  .paper-doc-title {
+    font-size: 1.05rem;
+  }
+
+  /* How It Works */
+  .how-it-works-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .how-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  /* Try Hmm Demo */
+  .try-hmm-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .sample-picker-bar {
+    margin-bottom: 16px;
+  }
+
+  .sample-picker-bar .sample-btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sample-doc-btn {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .error-demo-pill {
+    width: 100%;
+    text-align: center;
+  }
+
+  .doc-card-badge-row {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .language-chip-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .lang-pill {
+    padding: 8px 10px;
+  }
+
+  .audio-player-card {
+    padding: 14px 12px;
+  }
+
+  .audio-player-controls {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .audio-progress-wrap {
+    order: 3;
+    width: 100%;
+  }
+
+  .action-card-container {
+    padding: 16px 14px;
+  }
+
+  .action-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .btn-tasks-audio {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .checklist-item {
+    padding: 12px 10px;
+    gap: 10px;
+  }
+
+  .results-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .results-actions-bar button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Why Hmm & Languages */
+  .why-hmm-section,
+  .languages-section,
+  .team-section {
+    padding: var(--space-3xl) 0;
+  }
+
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .why-card {
+    padding: 22px 18px;
+  }
+
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .team-card {
+    padding: 22px 18px;
+  }
+
+  /* Final CTA */
+  .final-cta-section {
+    padding: var(--space-2xl) 0;
+  }
+
+  .final-cta-band {
+    padding: 28px 20px;
+  }
+
+  .final-cta-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: var(--space-3xl) 0 var(--space-xl);
+  }
+
   .footer-top-row {
     grid-template-columns: 1fr;
+    gap: 28px;
   }
 
-  .responsible-callout {
-    grid-template-columns: 1fr;
+  .footer-bottom-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
   }
 
-  .hero-stamp--left,
-  .hero-stamp--right {
-    display: none;
+  .footer-legal {
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
-  .hero-scroll-wrapper {
-    height: 140vh;
+  /* Floating Scroll-To-Top */
+  .scroll-to-top-btn {
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    right: 16px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* --- E. Compact Mobile Devices (<= 380px) --- */
+@media (max-width: 380px) {
+  .navbar__logo-text {
+    font-size: 1.35rem;
+  }
+
+  .hero-headline {
+    font-size: 1.65rem;
+  }
+
+  .stat-callout__number {
+    font-size: 2.2rem;
+  }
+
+  .btn-clarity,
+  .btn-ghost {
+    padding: 10px 16px;
+    font-size: 0.875rem;
+  }
+
+  .language-chip-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .lang-pill__native {
+    font-size: 0.875rem;
+  }
+}
+
+/* --- F. Touch Device Ergonomics (Mobile & Tablet) --- */
+@media (hover: none) and (pointer: coarse) {
+  .btn-clarity,
+  .btn-ghost,
+  .nav-link,
+  .lang-pill,
+  .sample-doc-btn,
+  .checklist-item,
+  .switcher-pill,
+  .mobile-drawer__link {
+    min-height: 44px;
+  }
+
+  .btn-play-pause {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .btn-single-task-audio {
+    min-width: 36px;
+    min-height: 36px;
   }
 }
