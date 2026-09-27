@@ -39,69 +39,62 @@ export default function Hero() {
 
     if (!container || !pinTarget) return;
 
-    // Normalize scroll to eliminate mobile address-bar resize jank
-    try {
-      ScrollTrigger.normalizeScroll(true);
-    } catch {
-      // Ignore if not supported in test environment
-    }
-
-    // Master scroll-scrubbed timeline with smoothed scrub: 1
+    // Master scroll-scrubbed timeline with responsive scrub
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1, // Smoothed interpolation instead of rigid 1:1
+          scrub: 0.8,
           pin: pinTarget,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          fastScrollEnd: true,
           onUpdate: (self) => {
             container.style.setProperty('--scrub-progress', self.progress);
           }
         }
       });
 
-      // Initial state: only compositor-friendly properties (transform & opacity)
+      // Initial state: cramped text visible, resolved text and subhead hidden
       gsap.set(cramped, { opacity: 1, scale: 1, transformOrigin: 'left center' });
-      gsap.set(resolved, { opacity: 0, scale: 0.94, y: 12, transformOrigin: 'left center' });
+      gsap.set(resolved, { opacity: 0, scale: 0.96, y: 14, transformOrigin: 'left center' });
       gsap.set(subhead, { opacity: 0, y: 16 });
       gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
 
-      // Step 1: Cramped text cross-fades out and scales down gently (no font-size / letter-spacing animation)
+      // Step 1: Cramped text untangles and releases tension
       tl.to(cramped, {
         opacity: 0,
-        scale: 0.97,
+        scale: 1.02,
+        letterSpacing: '-0.01em',
         duration: 0.4,
         ease: 'power1.inOut'
       }, 0);
 
-      // Background messy document textures fade away via opacity and transform only
+      // Background messy document textures fade away as clarity arrives
       tl.to(bgTextures, {
         opacity: 0,
-        scale: 0.96,
-        duration: 0.4,
+        scale: 0.95,
+        duration: 0.35,
         ease: 'power1.out'
       }, 0.05);
 
-      // Step 2: "Oh. Now I get it." cross-fades in and scales to 1
+      // Step 2: "Oh. Now I get it." cross-fades in with confidence
       tl.to(resolved, {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.45,
+        duration: 0.4,
         ease: 'power2.out'
-      }, 0.25);
+      }, 0.2);
 
-      // Step 3: Subhead and CTA fade in
+      // Step 3: Subhead and CTA buttons fade in promptly
       tl.to(subhead, {
         opacity: 1,
         y: 0,
         duration: 0.35,
         ease: 'power1.out'
-      }, 0.55);
+      }, 0.35);
     }, container);
 
     return () => {
