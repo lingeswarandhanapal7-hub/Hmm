@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hmm — Promotional Poster (A4 Print Ready) | Gear5coders</title>
-  <meta name="description" content="Official A4 promotional poster for Hmm: Understand Any Document, Instantly. Designed by Gear5coders.">
+  <title>Hmm — Understand Any Document, Instantly | Gear5coders Poster</title>
+  <meta name="description" content="Official A4 promotional poster for Hmm: Understand Any Document, Instantly. Designed by Team Gear5coders.">
   
   <!-- Google Fonts: Fraunces, Inter & Regional Indian Scripts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..800;1,9..144,400..800&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@500;700&family=Noto+Sans+Devanagari:wght@500;700&family=Noto+Sans+Kannada:wght@500;700&family=Noto+Sans+Malayalam:wght@500;700&family=Noto+Sans+Tamil:wght@500;700&family=Noto+Sans+Telugu:wght@500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="./poster.css">
   <style id="dynamic-page-style">
@@ -18,13 +18,15 @@
 </head>
 <body data-paper-size="a4">
 
-  <!-- Screen Viewport Preview Controls (Hidden automatically during print) -->
-  <header class="poster-toolbar" role="toolbar" aria-label="Poster Export Controls">
+  <!-- ===================================================================
+       SCREEN PREVIEW TOOLBAR (Hidden in Print Mode)
+       =================================================================== -->
+  <header class="poster-toolbar" role="toolbar" aria-label="Poster Controls">
     <div class="poster-toolbar__brand">
       <span>Hmm Poster</span>
     </div>
 
-    <!-- Paper Size Switcher (A4 Default · A3 Alternate) -->
+    <!-- Paper Size Switcher -->
     <div class="poster-size-switch" role="radiogroup" aria-label="Paper Size">
       <button type="button" class="poster-size-btn is-active" id="btn-size-a4" onclick="setPaperSize('a4')">
         A4 <span class="poster-size-dim">(210×297mm)</span>
@@ -34,6 +36,7 @@
       </button>
     </div>
 
+    <!-- Print / Export PDF -->
     <button type="button" class="poster-toolbar__btn" onclick="window.print()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 6 2 18 2 18 9"></polyline>
@@ -42,262 +45,422 @@
       </svg>
       <span id="print-btn-label">Print A4 / PDF</span>
     </button>
+
     <button type="button" class="poster-toolbar__btn poster-toolbar__btn--secondary" onclick="toggleZoom()">
       <span id="zoom-label">Fit Screen</span>
     </button>
+
     <a href="../" class="poster-toolbar__btn poster-toolbar__btn--secondary">
       <span>Back to Website →</span>
     </a>
   </header>
 
-  <!-- Screen Stage Area -->
+  <!-- ===================================================================
+       SCREEN STAGE FRAME
+       =================================================================== -->
   <main class="poster-screen-stage">
-    
-    <!-- THE POSTER SHEET (A4 Default: 210mm x 297mm · A3 Supported: 297mm x 420mm) -->
+
+    <!-- THE A4 POSTER SHEET -->
     <article class="poster-sheet" id="poster-artboard">
 
-      <!-- ===================================================================
-           1. HEADER BAND
-           =================================================================== -->
-      <header class="poster-header">
-        <div class="poster-header__top-row">
-          <div class="poster-brand" aria-label="Hmm">
-            <span class="poster-brand__wordmark">Hmm</span>
-            <span class="poster-brand__dot" aria-hidden="true"></span>
-          </div>
-
-          <div class="poster-header__kicker">
-            <span class="poster-header__kicker-dot"></span>
-            <span>Document Clarity Engine · Team Gear5coders</span>
-          </div>
-        </div>
-
-        <h1 class="poster-tagline-title">
-          Understand Any Document, Instantly.
-        </h1>
-
-        <p class="poster-tagline-subtitle">
-          Government notices. Medical reports. Prescriptions. Explained simply, in your own language — read or heard.
-        </p>
-      </header>
-
-      <!-- ===================================================================
-           2. THE SIGNATURE VISUAL — CONFUSING → CLEAR (SIDE BY SIDE)
-           =================================================================== -->
-      <section class="poster-signature-visual" aria-label="Comparison: Confusing legal notice resolved into plain clarity">
+      <!-- =================================================================
+           1. TOP HERO: BRAND, DOODLES & HEADLINE
+           ================================================================= -->
+      <header class="poster-hero">
         
-        <!-- LEFT: Confusing / Cramped Side -->
-        <div class="signature-side--confused">
-          <div class="confused-header">
-            <div class="confused-kicker-tag">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="8" x2="12" y2="12"></line>
-                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-              </svg>
-              <span>Before · Dense Jargon</span>
-            </div>
-            <h2 class="confused-headline">“Hmm... what does this even mean?”</h2>
-          </div>
+        <!-- Left Document Doodle -->
+        <svg class="doodle-paper-top-left" viewBox="0 0 60 70" fill="none" stroke="#222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 5 H40 L52 18 V65 H10 Z" fill="#F4EEDF"/>
+          <path d="M40 5 V18 H52" fill="#E8DFCC"/>
+          <line x1="18" y1="28" x2="38" y2="28" stroke="#888" stroke-width="2"/>
+          <line x1="18" y1="36" x2="44" y2="36" stroke="#888" stroke-width="2"/>
+          <line x1="18" y1="44" x2="36" y2="44" stroke="#888" stroke-width="2"/>
+          <rect x="18" y="52" width="6" height="6" stroke="#E7A928" stroke-width="2" fill="none"/>
+        </svg>
 
-          <!-- Cramped Document Fragment Mockup -->
-          <div class="confused-document-card">
-            <div class="confused-doc-meta">
-              <span class="confused-doc-title">MUNICIPAL REVENUE DEPT</span>
-              <span class="confused-stamp">§ 148(B) PENAL</span>
-            </div>
+        <!-- Right Megaphone Doodle -->
+        <svg class="doodle-megaphone-top-right" viewBox="0 0 60 60" fill="none" stroke="#222" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M28 20 L48 10 V42 L28 32 Z" fill="#E8DFCC"/>
+          <rect x="12" y="20" width="16" height="12" rx="2" fill="#C24536" stroke="#222"/>
+          <path d="M18 32 V46 H24 V32" fill="#222"/>
+          <!-- Sound wave dashes -->
+          <line x1="52" y1="18" x2="57" y2="15" stroke="#E7A928" stroke-width="3"/>
+          <line x1="53" y1="26" x2="59" y2="26" stroke="#E7A928" stroke-width="3"/>
+          <line x1="52" y1="34" x2="57" y2="37" stroke="#E7A928" stroke-width="3"/>
+        </svg>
 
-            <div class="confused-jargon-text">
-              FORM VII (RULE 18) DEMURRAGE & RE-ASSESSMENT DEMAND NOTICE UNDER SEC 148(B) r/w 13(2).<br><br>
-              To Defaulting Property Assessee: Whereas the assessment ledger exhibits an outstanding principal municipal impost of <mark>INR 14,250.00</mark> together with accrued penal demurrage of <mark>INR 2,850.00</mark>.<br><br>
-              Notice is hereby served that failing remittance within fifteen (15) solar days from publication hereof, distress warrant and <mark>statutory attachment of immovable premises</mark> shall issue forthwith without further administrative recourse...
-            </div>
+        <!-- Main Hmm Brand Wordmark with Yellow Rays and Underline -->
+        <div class="brand-title-wrap">
+          <div class="brand-title-row">
+            <span class="brand-logo-text">Hmm</span>
 
-            <div class="confused-caption">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-              </svg>
-              <span>Creates panic, paralysis, and costly reliance on touts</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- RIGHT: Resolved / Clear Side -->
-        <div class="signature-side--resolved">
-          <div class="resolved-header">
-            <div class="resolved-kicker-tag">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-              </svg>
-              <span>After · Plain Language Spoken in Your Tongue</span>
-            </div>
-            <h2 class="resolved-headline">“Oh. Now I get it.”</h2>
-          </div>
-
-          <!-- Native Script Regional Translations -->
-          <div class="resolved-native-translation-box">
-            <div class="resolved-tamil-line">
-              <strong>தமிழ்:</strong> “ரூ. 14,250 வரியை அக்டோபர் 15-க்குள் செலுத்தினால், ரூ. 2,850 அபராதக் கட்டணம் முழுமையாக தள்ளுபடி செய்யப்படும்.”
-            </div>
-            <div class="resolved-hindi-line">
-              <strong>हिन्दी:</strong> “15 अक्टूबर तक ₹14,250 का टैक्स जमा करने पर ₹2,850 का जुर्माना पूरी तरह माफ़ हो जाएगा।”
-            </div>
-          </div>
-
-          <!-- Concrete Action Card -->
-          <div class="resolved-action-card">
-            <div class="resolved-action-header">
-              <div class="resolved-action-title">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E7A928" stroke-width="3">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-                <span>What to do next — Action Card</span>
-              </div>
-            </div>
-
-            <ul class="resolved-action-list">
-              <li class="resolved-action-item">
-                <span class="resolved-check-icon">✓</span>
-                <span><strong>Pay ₹14,250 before Oct 15</strong> at Ward 42 counter or online portal.</span>
-              </li>
-              <li class="resolved-action-item">
-                <span class="resolved-check-icon">✓</span>
-                <span><strong>Save ₹2,850 penalty</strong> automatically under the seasonal amnesty rule.</span>
-              </li>
-              <li class="resolved-action-item">
-                <span class="resolved-check-icon">✓</span>
-                <span><strong>Zero legal action:</strong> No court notice or middleman fee required.</span>
-              </li>
-            </ul>
-
-            <div class="resolved-grounded-note">
-              <span>⚖ Grounded in Municipal Taxation Act Rule 18 (Statutory Amnesty Waiver).</span>
-            </div>
-          </div>
-
-        </div>
-
-      </section>
-
-      <!-- ===================================================================
-           3. THREE-ICON FEATURE ROW (SCAN · UNDERSTAND · ACT)
-           =================================================================== -->
-      <section class="poster-features-row" aria-label="Core Capabilities">
-        
-        <!-- Step 1: Scan -->
-        <div class="feature-pill-card">
-          <div class="feature-pill-card__top">
-            <div class="feature-icon-circle">
-              <!-- Camera Icon -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
-                <circle cx="12" cy="13" r="4"></circle>
-              </svg>
-            </div>
-            <div class="feature-label-wrap">
-              <span class="feature-step-tag">Step 1</span>
-              <h3 class="feature-main-label">Scan</h3>
-            </div>
-          </div>
-          <p class="feature-desc-text">
-            <strong>Scan any document.</strong> Snap a photo of any crumpled notice, lab report, or doctor's prescription. Multimodal OCR extracts every clause.
-          </p>
-        </div>
-
-        <!-- Step 2: Understand -->
-        <div class="feature-pill-card">
-          <div class="feature-pill-card__top">
-            <div class="feature-icon-circle">
-              <!-- Speech Bubble & Audio Wave Icon -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                <path d="M9 10h.01"></path>
-                <path d="M12 10h.01"></path>
-                <path d="M15 10h.01"></path>
-              </svg>
-            </div>
-            <div class="feature-label-wrap">
-              <span class="feature-step-tag">Step 2</span>
-              <h3 class="feature-main-label">Understand</h3>
-            </div>
-          </div>
-          <p class="feature-desc-text">
-            <strong>Hear it in your language.</strong> Plain-language summary spoken aloud with warm regional voice synthesis so elderly and low-literacy users understand instantly.
-          </p>
-        </div>
-
-        <!-- Step 3: Act -->
-        <div class="feature-pill-card">
-          <div class="feature-pill-card__top">
-            <div class="feature-icon-circle">
-              <!-- Checklist & Shield Icon -->
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M9 11l3 3L22 4"></path>
-                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
-              </svg>
-            </div>
-            <div class="feature-label-wrap">
-              <span class="feature-step-tag">Step 3</span>
-              <h3 class="feature-main-label">Act</h3>
-            </div>
-          </div>
-          <p class="feature-desc-text">
-            <strong>Know what to do next.</strong> An interactive checklist grounded in real rules with clear deadlines and exact office locations. Zero speculation.
-          </p>
-        </div>
-
-      </section>
-
-      <!-- ===================================================================
-           4. LANGUAGE SHOWCASE STRIP (GENUINE NATIVE SCRIPTS)
-           =================================================================== -->
-      <section class="poster-languages-strip" aria-label="Supported Regional Languages">
-        <span class="languages-strip__label">Native Voice & Text in 8 Languages:</span>
-        <div class="languages-chip-track">
-          <span class="lang-badge-chip lang-badge-chip--ta">தமிழ் <span class="lang-badge-chip__roman">Tamil</span></span>
-          <span class="lang-badge-chip lang-badge-chip--hi">हिन्दी <span class="lang-badge-chip__roman">Hindi</span></span>
-          <span class="lang-badge-chip lang-badge-chip--te">తెలుగు <span class="lang-badge-chip__roman">Telugu</span></span>
-          <span class="lang-badge-chip lang-badge-chip--kn">ಕನ್ನಡ <span class="lang-badge-chip__roman">Kannada</span></span>
-          <span class="lang-badge-chip lang-badge-chip--bn">বাংলা <span class="lang-badge-chip__roman">Bengali</span></span>
-          <span class="lang-badge-chip">मराठी <span class="lang-badge-chip__roman">Marathi</span></span>
-          <span class="lang-badge-chip">മലയാളം <span class="lang-badge-chip__roman">Malayalam</span></span>
-          <span class="lang-badge-chip">English <span class="lang-badge-chip__roman">Simple</span></span>
-        </div>
-      </section>
-
-      <!-- ===================================================================
-           5. FOOTER BAND (TEAM CREDITS & LIVE QR CODE)
-           =================================================================== -->
-      <footer class="poster-footer">
-        
-        <div class="footer-credits">
-          <div class="footer-team-row">
-            <span class="footer-team-badge">Team Gear5coders</span>
-          </div>
-          <div class="footer-team-members">
-            Lingeswaran D (Lead) · Lingesh R · Krishniya K · Kiruthik V · Harsithaa P
-          </div>
-          <div class="footer-url-text">
-            hmm-rho-eight.vercel.app
-          </div>
-        </div>
-
-        <!-- Live QR Code Card -->
-        <div class="poster-qr-block">
-          <div class="qr-code-canvas-box">
-            <!-- High-Resolution Precision Scannable SVG QR Code pointing directly to https://hmm-rho-eight.vercel.app/ -->
-            <svg viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="QR Code to https://hmm-rho-eight.vercel.app/">
-              <rect fill="white" width="290" height="290"/>
-              <path fill="#22262B" d="M 0,0 l 10,0 0,10 -10,0 z M 10,0 l 10,0 0,10 -10,0 z M 20,0 l 10,0 0,10 -10,0 z M 30,0 l 10,0 0,10 -10,0 z M 40,0 l 10,0 0,10 -10,0 z M 50,0 l 10,0 0,10 -10,0 z M 60,0 l 10,0 0,10 -10,0 z M 90,0 l 10,0 0,10 -10,0 z M 150,0 l 10,0 0,10 -10,0 z M 160,0 l 10,0 0,10 -10,0 z M 190,0 l 10,0 0,10 -10,0 z M 200,0 l 10,0 0,10 -10,0 z M 220,0 l 10,0 0,10 -10,0 z M 230,0 l 10,0 0,10 -10,0 z M 240,0 l 10,0 0,10 -10,0 z M 250,0 l 10,0 0,10 -10,0 z M 260,0 l 10,0 0,10 -10,0 z M 270,0 l 10,0 0,10 -10,0 z M 280,0 l 10,0 0,10 -10,0 z M 0,10 l 10,0 0,10 -10,0 z M 60,10 l 10,0 0,10 -10,0 z M 80,10 l 10,0 0,10 -10,0 z M 90,10 l 10,0 0,10 -10,0 z M 110,10 l 10,0 0,10 -10,0 z M 120,10 l 10,0 0,10 -10,0 z M 170,10 l 10,0 0,10 -10,0 z M 220,10 l 10,0 0,10 -10,0 z M 280,10 l 10,0 0,10 -10,0 z M 0,20 l 10,0 0,10 -10,0 z M 20,20 l 10,0 0,10 -10,0 z M 30,20 l 10,0 0,10 -10,0 z M 40,20 l 10,0 0,10 -10,0 z M 60,20 l 10,0 0,10 -10,0 z M 90,20 l 10,0 0,10 -10,0 z M 100,20 l 10,0 0,10 -10,0 z M 110,20 l 10,0 0,10 -10,0 z M 140,20 l 10,0 0,10 -10,0 z M 160,20 l 10,0 0,10 -10,0 z M 180,20 l 10,0 0,10 -10,0 z M 190,20 l 10,0 0,10 -10,0 z M 200,20 l 10,0 0,10 -10,0 z M 220,20 l 10,0 0,10 -10,0 z M 240,20 l 10,0 0,10 -10,0 z M 250,20 l 10,0 0,10 -10,0 z M 260,20 l 10,0 0,10 -10,0 z M 280,20 l 10,0 0,10 -10,0 z M 0,30 l 10,0 0,10 -10,0 z M 20,30 l 10,0 0,10 -10,0 z M 30,30 l 10,0 0,10 -10,0 z M 40,30 l 10,0 0,10 -10,0 z M 60,30 l 10,0 0,10 -10,0 z M 80,30 l 10,0 0,10 -10,0 z M 90,30 l 10,0 0,10 -10,0 z M 110,30 l 10,0 0,10 -10,0 z M 160,30 l 10,0 0,10 -10,0 z M 170,30 l 10,0 0,10 -10,0 z M 190,30 l 10,0 0,10 -10,0 z M 220,30 l 10,0 0,10 -10,0 z M 240,30 l 10,0 0,10 -10,0 z M 250,30 l 10,0 0,10 -10,0 z M 260,30 l 10,0 0,10 -10,0 z M 280,30 l 10,0 0,10 -10,0 z M 0,40 l 10,0 0,10 -10,0 z M 20,40 l 10,0 0,10 -10,0 z M 30,40 l 10,0 0,10 -10,0 z M 40,40 l 10,0 0,10 -10,0 z M 60,40 l 10,0 0,10 -10,0 z M 100,40 l 10,0 0,10 -10,0 z M 120,40 l 10,0 0,10 -10,0 z M 130,40 l 10,0 0,10 -10,0 z M 140,40 l 10,0 0,10 -10,0 z M 150,40 l 10,0 0,10 -10,0 z M 180,40 l 10,0 0,10 -10,0 z M 190,40 l 10,0 0,10 -10,0 z M 220,40 l 10,0 0,10 -10,0 z M 240,40 l 10,0 0,10 -10,0 z M 250,40 l 10,0 0,10 -10,0 z M 260,40 l 10,0 0,10 -10,0 z M 280,40 l 10,0 0,10 -10,0 z M 0,50 l 10,0 0,10 -10,0 z M 60,50 l 10,0 0,10 -10,0 z M 80,50 l 10,0 0,10 -10,0 z M 100,50 l 10,0 0,10 -10,0 z M 130,50 l 10,0 0,10 -10,0 z M 140,50 l 10,0 0,10 -10,0 z M 150,50 l 10,0 0,10 -10,0 z M 160,50 l 10,0 0,10 -10,0 z M 220,50 l 10,0 0,10 -10,0 z M 280,50 l 10,0 0,10 -10,0 z M 0,60 l 10,0 0,10 -10,0 z M 10,60 l 10,0 0,10 -10,0 z M 20,60 l 10,0 0,10 -10,0 z M 30,60 l 10,0 0,10 -10,0 z M 40,60 l 10,0 0,10 -10,0 z M 50,60 l 10,0 0,10 -10,0 z M 60,60 l 10,0 0,10 -10,0 z M 80,60 l 10,0 0,10 -10,0 z M 100,60 l 10,0 0,10 -10,0 z M 120,60 l 10,0 0,10 -10,0 z M 140,60 l 10,0 0,10 -10,0 z M 160,60 l 10,0 0,10 -10,0 z M 180,60 l 10,0 0,10 -10,0 z M 200,60 l 10,0 0,10 -10,0 z M 220,60 l 10,0 0,10 -10,0 z M 230,60 l 10,0 0,10 -10,0 z M 240,60 l 10,0 0,10 -10,0 z M 250,60 l 10,0 0,10 -10,0 z M 260,60 l 10,0 0,10 -10,0 z M 270,60 l 10,0 0,10 -10,0 z M 280,60 l 10,0 0,10 -10,0 z M 120,70 l 10,0 0,10 -10,0 z M 130,70 l 10,0 0,10 -10,0 z M 150,70 l 10,0 0,10 -10,0 z M 200,70 l 10,0 0,10 -10,0 z M 0,80 l 10,0 0,10 -10,0 z M 10,80 l 10,0 0,10 -10,0 z M 20,80 l 10,0 0,10 -10,0 z M 30,80 l 10,0 0,10 -10,0 z M 40,80 l 10,0 0,10 -10,0 z M 60,80 l 10,0 0,10 -10,0 z M 70,80 l 10,0 0,10 -10,0 z M 80,80 l 10,0 0,10 -10,0 z M 90,80 l 10,0 0,10 -10,0 z M 100,80 l 10,0 0,10 -10,0 z M 120,80 l 10,0 0,10 -10,0 z M 140,80 l 10,0 0,10 -10,0 z M 150,80 l 10,0 0,10 -10,0 z M 170,80 l 10,0 0,10 -10,0 z M 200,80 l 10,0 0,10 -10,0 z M 210,80 l 10,0 0,10 -10,0 z M 230,80 l 10,0 0,10 -10,0 z M 250,80 l 10,0 0,10 -10,0 z M 270,80 l 10,0 0,10 -10,0 z M 0,90 l 10,0 0,10 -10,0 z M 10,90 l 10,0 0,10 -10,0 z M 30,90 l 10,0 0,10 -10,0 z M 50,90 l 10,0 0,10 -10,0 z M 70,90 l 10,0 0,10 -10,0 z M 90,90 l 10,0 0,10 -10,0 z M 150,90 l 10,0 0,10 -10,0 z M 160,90 l 10,0 0,10 -10,0 z M 190,90 l 10,0 0,10 -10,0 z M 200,90 l 10,0 0,10 -10,0 z M 220,90 l 10,0 0,10 -10,0 z M 230,90 l 10,0 0,10 -10,0 z M 240,90 l 10,0 0,10 -10,0 z M 280,90 l 10,0 0,10 -10,0 z M 0,100 l 10,0 0,10 -10,0 z M 20,100 l 10,0 0,10 -10,0 z M 30,100 l 10,0 0,10 -10,0 z M 40,100 l 10,0 0,10 -10,0 z M 50,100 l 10,0 0,10 -10,0 z M 60,100 l 10,0 0,10 -10,0 z M 70,100 l 10,0 0,10 -10,0 z M 90,100 l 10,0 0,10 -10,0 z M 110,100 l 10,0 0,10 -10,0 z M 120,100 l 10,0 0,10 -10,0 z M 170,100 l 10,0 0,10 -10,0 z M 180,100 l 10,0 0,10 -10,0 z M 210,100 l 10,0 0,10 -10,0 z M 230,100 l 10,0 0,10 -10,0 z M 240,100 l 10,0 0,10 -10,0 z M 10,110 l 10,0 0,10 -10,0 z M 30,110 l 10,0 0,10 -10,0 z M 40,110 l 10,0 0,10 -10,0 z M 90,110 l 10,0 0,10 -10,0 z M 100,110 l 10,0 0,10 -10,0 z M 110,110 l 10,0 0,10 -10,0 z M 140,110 l 10,0 0,10 -10,0 z M 160,110 l 10,0 0,10 -10,0 z M 180,110 l 10,0 0,10 -10,0 z M 210,110 l 10,0 0,10 -10,0 z M 220,110 l 10,0 0,10 -10,0 z M 230,110 l 10,0 0,10 -10,0 z M 250,110 l 10,0 0,10 -10,0 z M 270,110 l 10,0 0,10 -10,0 z M 10,120 l 10,0 0,10 -10,0 z M 20,120 l 10,0 0,10 -10,0 z M 40,120 l 10,0 0,10 -10,0 z M 50,120 l 10,0 0,10 -10,0 z M 60,120 l 10,0 0,10 -10,0 z M 90,120 l 10,0 0,10 -10,0 z M 110,120 l 10,0 0,10 -10,0 z M 170,120 l 10,0 0,10 -10,0 z M 190,120 l 10,0 0,10 -10,0 z M 250,120 l 10,0 0,10 -10,0 z M 260,120 l 10,0 0,10 -10,0 z M 10,130 l 10,0 0,10 -10,0 z M 20,130 l 10,0 0,10 -10,0 z M 50,130 l 10,0 0,10 -10,0 z M 70,130 l 10,0 0,10 -10,0 z M 100,130 l 10,0 0,10 -10,0 z M 120,130 l 10,0 0,10 -10,0 z M 130,130 l 10,0 0,10 -10,0 z M 140,130 l 10,0 0,10 -10,0 z M 150,130 l 10,0 0,10 -10,0 z M 180,130 l 10,0 0,10 -10,0 z M 190,130 l 10,0 0,10 -10,0 z M 200,130 l 10,0 0,10 -10,0 z M 210,130 l 10,0 0,10 -10,0 z M 220,130 l 10,0 0,10 -10,0 z M 240,130 l 10,0 0,10 -10,0 z M 280,130 l 10,0 0,10 -10,0 z M 0,140 l 10,0 0,10 -10,0 z M 10,140 l 10,0 0,10 -10,0 z M 60,140 l 10,0 0,10 -10,0 z M 80,140 l 10,0 0,10 -10,0 z M 90,140 l 10,0 0,10 -10,0 z M 100,140 l 10,0 0,10 -10,0 z M 130,140 l 10,0 0,10 -10,0 z M 140,140 l 10,0 0,10 -10,0 z M 150,140 l 10,0 0,10 -10,0 z M 160,140 l 10,0 0,10 -10,0 z M 170,140 l 10,0 0,10 -10,0 z M 180,140 l 10,0 0,10 -10,0 z M 200,140 l 10,0 0,10 -10,0 z M 210,140 l 10,0 0,10 -10,0 z M 220,140 l 10,0 0,10 -10,0 z M 230,140 l 10,0 0,10 -10,0 z M 240,140 l 10,0 0,10 -10,0 z M 250,140 l 10,0 0,10 -10,0 z M 260,140 l 10,0 0,10 -10,0 z M 0,150 l 10,0 0,10 -10,0 z M 10,150 l 10,0 0,10 -10,0 z M 20,150 l 10,0 0,10 -10,0 z M 70,150 l 10,0 0,10 -10,0 z M 80,150 l 10,0 0,10 -10,0 z M 100,150 l 10,0 0,10 -10,0 z M 120,150 l 10,0 0,10 -10,0 z M 130,150 l 10,0 0,10 -10,0 z M 160,150 l 10,0 0,10 -10,0 z M 190,150 l 10,0 0,10 -10,0 z M 200,150 l 10,0 0,10 -10,0 z M 210,150 l 10,0 0,10 -10,0 z M 230,150 l 10,0 0,10 -10,0 z M 270,150 l 10,0 0,10 -10,0 z M 0,160 l 10,0 0,10 -10,0 z M 10,160 l 10,0 0,10 -10,0 z M 20,160 l 10,0 0,10 -10,0 z M 40,160 l 10,0 0,10 -10,0 z M 50,160 l 10,0 0,10 -10,0 z M 60,160 l 10,0 0,10 -10,0 z M 70,160 l 10,0 0,10 -10,0 z M 80,160 l 10,0 0,10 -10,0 z M 100,160 l 10,0 0,10 -10,0 z M 120,160 l 10,0 0,10 -10,0 z M 140,160 l 10,0 0,10 -10,0 z M 170,160 l 10,0 0,10 -10,0 z M 250,160 l 10,0 0,10 -10,0 z M 260,160 l 10,0 0,10 -10,0 z M 0,170 l 10,0 0,10 -10,0 z M 30,170 l 10,0 0,10 -10,0 z M 70,170 l 10,0 0,10 -10,0 z M 80,170 l 10,0 0,10 -10,0 z M 90,170 l 10,0 0,10 -10,0 z M 180,170 l 10,0 0,10 -10,0 z M 190,170 l 10,0 0,10 -10,0 z M 200,170 l 10,0 0,10 -10,0 z M 210,170 l 10,0 0,10 -10,0 z M 220,170 l 10,0 0,10 -10,0 z M 230,170 l 10,0 0,10 -10,0 z M 240,170 l 10,0 0,10 -10,0 z M 260,170 l 10,0 0,10 -10,0 z M 280,170 l 10,0 0,10 -10,0 z M 0,180 l 10,0 0,10 -10,0 z M 20,180 l 10,0 0,10 -10,0 z M 30,180 l 10,0 0,10 -10,0 z M 60,180 l 10,0 0,10 -10,0 z M 80,180 l 10,0 0,10 -10,0 z M 100,180 l 10,0 0,10 -10,0 z M 110,180 l 10,0 0,10 -10,0 z M 120,180 l 10,0 0,10 -10,0 z M 150,180 l 10,0 0,10 -10,0 z M 200,180 l 10,0 0,10 -10,0 z M 220,180 l 10,0 0,10 -10,0 z M 230,180 l 10,0 0,10 -10,0 z M 240,180 l 10,0 0,10 -10,0 z M 260,180 l 10,0 0,10 -10,0 z M 0,190 l 10,0 0,10 -10,0 z M 20,190 l 10,0 0,10 -10,0 z M 30,190 l 10,0 0,10 -10,0 z M 50,190 l 10,0 0,10 -10,0 z M 70,190 l 10,0 0,10 -10,0 z M 110,190 l 10,0 0,10 -10,0 z M 140,190 l 10,0 0,10 -10,0 z M 150,190 l 10,0 0,10 -10,0 z M 220,190 l 10,0 0,10 -10,0 z M 230,190 l 10,0 0,10 -10,0 z M 270,190 l 10,0 0,10 -10,0 z M 0,200 l 10,0 0,10 -10,0 z M 20,200 l 10,0 0,10 -10,0 z M 30,200 l 10,0 0,10 -10,0 z M 40,200 l 10,0 0,10 -10,0 z M 50,200 l 10,0 0,10 -10,0 z M 60,200 l 10,0 0,10 -10,0 z M 70,200 l 10,0 0,10 -10,0 z M 110,200 l 10,0 0,10 -10,0 z M 150,200 l 10,0 0,10 -10,0 z M 160,200 l 10,0 0,10 -10,0 z M 170,200 l 10,0 0,10 -10,0 z M 190,200 l 10,0 0,10 -10,0 z M 200,200 l 10,0 0,10 -10,0 z M 210,200 l 10,0 0,10 -10,0 z M 220,200 l 10,0 0,10 -10,0 z M 230,200 l 10,0 0,10 -10,0 z M 240,200 l 10,0 0,10 -10,0 z M 260,200 l 10,0 0,10 -10,0 z M 270,200 l 10,0 0,10 -10,0 z M 280,200 l 10,0 0,10 -10,0 z M 80,210 l 10,0 0,10 -10,0 z M 90,210 l 10,0 0,10 -10,0 z M 120,210 l 10,0 0,10 -10,0 z M 130,210 l 10,0 0,10 -10,0 z M 140,210 l 10,0 0,10 -10,0 z M 160,210 l 10,0 0,10 -10,0 z M 170,210 l 10,0 0,10 -10,0 z M 180,210 l 10,0 0,10 -10,0 z M 200,210 l 10,0 0,10 -10,0 z M 240,210 l 10,0 0,10 -10,0 z M 250,210 l 10,0 0,10 -10,0 z M 260,210 l 10,0 0,10 -10,0 z M 270,210 l 10,0 0,10 -10,0 z M 280,210 l 10,0 0,10 -10,0 z M 0,220 l 10,0 0,10 -10,0 z M 10,220 l 10,0 0,10 -10,0 z M 20,220 l 10,0 0,10 -10,0 z M 30,220 l 10,0 0,10 -10,0 z M 40,220 l 10,0 0,10 -10,0 z M 50,220 l 10,0 0,10 -10,0 z M 60,220 l 10,0 0,10 -10,0 z M 80,220 l 10,0 0,10 -10,0 z M 130,220 l 10,0 0,10 -10,0 z M 140,220 l 10,0 0,10 -10,0 z M 150,220 l 10,0 0,10 -10,0 z M 190,220 l 10,0 0,10 -10,0 z M 200,220 l 10,0 0,10 -10,0 z M 220,220 l 10,0 0,10 -10,0 z M 240,220 l 10,0 0,10 -10,0 z M 250,220 l 10,0 0,10 -10,0 z M 260,220 l 10,0 0,10 -10,0 z M 0,230 l 10,0 0,10 -10,0 z M 60,230 l 10,0 0,10 -10,0 z M 90,230 l 10,0 0,10 -10,0 z M 100,230 l 10,0 0,10 -10,0 z M 120,230 l 10,0 0,10 -10,0 z M 130,230 l 10,0 0,10 -10,0 z M 150,230 l 10,0 0,10 -10,0 z M 180,230 l 10,0 0,10 -10,0 z M 190,230 l 10,0 0,10 -10,0 z M 200,230 l 10,0 0,10 -10,0 z M 240,230 l 10,0 0,10 -10,0 z M 0,240 l 10,0 0,10 -10,0 z M 20,240 l 10,0 0,10 -10,0 z M 30,240 l 10,0 0,10 -10,0 z M 40,240 l 10,0 0,10 -10,0 z M 60,240 l 10,0 0,10 -10,0 z M 80,240 l 10,0 0,10 -10,0 z M 90,240 l 10,0 0,10 -10,0 z M 120,240 l 10,0 0,10 -10,0 z M 140,240 l 10,0 0,10 -10,0 z M 150,240 l 10,0 0,10 -10,0 z M 160,240 l 10,0 0,10 -10,0 z M 170,240 l 10,0 0,10 -10,0 z M 180,240 l 10,0 0,10 -10,0 z M 200,240 l 10,0 0,10 -10,0 z M 210,240 l 10,0 0,10 -10,0 z M 220,240 l 10,0 0,10 -10,0 z M 230,240 l 10,0 0,10 -10,0 z M 240,240 l 10,0 0,10 -10,0 z M 260,240 l 10,0 0,10 -10,0 z M 270,240 l 10,0 0,10 -10,0 z M 0,250 l 10,0 0,10 -10,0 z M 20,250 l 10,0 0,10 -10,0 z M 30,250 l 10,0 0,10 -10,0 z M 40,250 l 10,0 0,10 -10,0 z M 60,250 l 10,0 0,10 -10,0 z M 80,250 l 10,0 0,10 -10,0 z M 90,250 l 10,0 0,10 -10,0 z M 160,250 l 10,0 0,10 -10,0 z M 170,250 l 10,0 0,10 -10,0 z M 180,250 l 10,0 0,10 -10,0 z M 190,250 l 10,0 0,10 -10,0 z M 210,250 l 10,0 0,10 -10,0 z M 250,250 l 10,0 0,10 -10,0 z M 260,250 l 10,0 0,10 -10,0 z M 270,250 l 10,0 0,10 -10,0 z M 280,250 l 10,0 0,10 -10,0 z M 0,260 l 10,0 0,10 -10,0 z M 20,260 l 10,0 0,10 -10,0 z M 30,260 l 10,0 0,10 -10,0 z M 40,260 l 10,0 0,10 -10,0 z M 60,260 l 10,0 0,10 -10,0 z M 80,260 l 10,0 0,10 -10,0 z M 90,260 l 10,0 0,10 -10,0 z M 110,260 l 10,0 0,10 -10,0 z M 120,260 l 10,0 0,10 -10,0 z M 150,260 l 10,0 0,10 -10,0 z M 160,260 l 10,0 0,10 -10,0 z M 170,260 l 10,0 0,10 -10,0 z M 190,260 l 10,0 0,10 -10,0 z M 210,260 l 10,0 0,10 -10,0 z M 220,260 l 10,0 0,10 -10,0 z M 230,260 l 10,0 0,10 -10,0 z M 240,260 l 10,0 0,10 -10,0 z M 250,260 l 10,0 0,10 -10,0 z M 260,260 l 10,0 0,10 -10,0 z M 270,260 l 10,0 0,10 -10,0 z M 0,270 l 10,0 0,10 -10,0 z M 60,270 l 10,0 0,10 -10,0 z M 80,270 l 10,0 0,10 -10,0 z M 100,270 l 10,0 0,10 -10,0 z M 110,270 l 10,0 0,10 -10,0 z M 140,270 l 10,0 0,10 -10,0 z M 150,270 l 10,0 0,10 -10,0 z M 180,270 l 10,0 0,10 -10,0 z M 200,270 l 10,0 0,10 -10,0 z M 220,270 l 10,0 0,10 -10,0 z M 240,270 l 10,0 0,10 -10,0 z M 250,270 l 10,0 0,10 -10,0 z M 270,270 l 10,0 0,10 -10,0 z M 0,280 l 10,0 0,10 -10,0 z M 10,280 l 10,0 0,10 -10,0 z M 20,280 l 10,0 0,10 -10,0 z M 30,280 l 10,0 0,10 -10,0 z M 40,280 l 10,0 0,10 -10,0 z M 50,280 l 10,0 0,10 -10,0 z M 60,280 l 10,0 0,10 -10,0 z M 80,280 l 10,0 0,10 -10,0 z M 90,280 l 10,0 0,10 -10,0 z M 100,280 l 10,0 0,10 -10,0 z M 110,280 l 10,0 0,10 -10,0 z M 150,280 l 10,0 0,10 -10,0 z M 170,280 l 10,0 0,10 -10,0 z M 190,280 l 10,0 0,10 -10,0 z M 260,280 l 10,0 0,10 -10,0 z " />
+            <!-- Hand-drawn 3 Rays Doodle over 'm' -->
+            <svg class="brand-rays-svg" viewBox="0 0 35 30" fill="none" stroke="#F5B01E" stroke-width="3.5" stroke-linecap="round">
+              <line x1="6" y1="24" x2="2" y2="8"/>
+              <line x1="18" y1="22" x2="20" y2="4"/>
+              <line x1="28" y1="25" x2="34" y2="12"/>
             </svg>
           </div>
 
-          <div class="qr-content">
-            <span class="qr-cta-pill">Scan to try it</span>
-            <span class="qr-subtext">Point your phone camera to test live OCR demo</span>
+          <!-- Hand-drawn curved underline brush -->
+          <svg class="brand-swoosh-svg" viewBox="0 0 120 14" fill="none">
+            <path d="M3 10 C 35 3, 85 4, 117 8 C 88 12, 38 12, 3 10 Z" fill="#F5B01E"/>
+          </svg>
+        </div>
+
+        <h1 class="poster-main-heading">Understand Any Document, Instantly</h1>
+        <p class="poster-sub-heading">
+          Government notices. Medical reports. Prescriptions.
+          <span>Explained simply, in your own language — read or heard.</span>
+        </p>
+
+      </header>
+
+      <!-- =================================================================
+           2. CENTERPIECE: TORN-PAPER STORY SPLIT (CONFUSION VS CLARITY)
+           ================================================================= -->
+      <section class="poster-story-stage" aria-label="Before and After Document Breakdown">
+        
+        <!-- ======================= LEFT: CONFUSION ======================= -->
+        <div class="story-col-confusion">
+          
+          <!-- Chalkboard Confusion Bubble -->
+          <div class="bubble-confusion-wrap">
+            <div class="speech-bubble-black">
+              Hmm... what does this even mean?
+            </div>
+            <div class="confusion-marks">
+              <span class="question-marks">???</span>
+              <!-- Tangle Scribble Doodle -->
+              <svg class="scribble-icon" viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M12 20c4-8 16-8 16 0s-16 8-16 0c0-6 12-10 16-2s-14 12-10 14 14-8 10-14-12 10-6 14 12-10 8-12"/>
+              </svg>
+            </div>
           </div>
+
+          <!-- Inner Split: Sticky Notes Column + Tilted Tax Letter -->
+          <div class="confusion-content-split">
+            
+            <!-- Sticky Question Tags with Callout Arrows -->
+            <div class="sticky-tags-column">
+              
+              <div class="sticky-note-item">
+                <span class="sticky-pill">Section 143(1) ?</span>
+                <svg class="sticky-arrow-svg" viewBox="0 0 30 15" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 7 C 12 7, 18 9, 26 12"/>
+                  <polyline points="21 8 27 12 24 15"/>
+                </svg>
+              </div>
+
+              <div class="sticky-note-item">
+                <span class="sticky-pill">u/s 220 ?</span>
+                <svg class="sticky-arrow-svg" viewBox="0 0 30 15" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 7 C 10 7, 16 7, 26 7"/>
+                  <polyline points="21 3 27 7 21 11"/>
+                </svg>
+              </div>
+
+              <div class="sticky-note-item">
+                <span class="sticky-pill">Assessment Year ?</span>
+                <svg class="sticky-arrow-svg" viewBox="0 0 30 15" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 7 C 12 7, 18 5, 26 3"/>
+                  <polyline points="21 1 27 3 23 7"/>
+                </svg>
+              </div>
+
+              <div class="sticky-note-item">
+                <span class="sticky-pill">Demand ₹ 12,430/- ?</span>
+                <svg class="sticky-arrow-svg" viewBox="0 0 30 15" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 7 C 12 7, 18 3, 26 1"/>
+                  <polyline points="20 0 26 1 23 5"/>
+                </svg>
+              </div>
+
+            </div>
+
+            <!-- Realistic Tilted Government Tax Notice -->
+            <div class="official-letter-wrap">
+              <div class="official-tax-notice">
+                
+                <div class="notice-emblem-header">
+                  <!-- Ashoka Lion Emblem Silhouette -->
+                  <svg class="ashoka-emblem-svg" viewBox="0 0 32 32" fill="#222">
+                    <path d="M16 2a3 3 0 0 0-3 3c0 .8.3 1.5.8 2H10a2 2 0 0 0-2 2v2c0 1.5 1 2.8 2.3 3.1A6 6 0 0 0 9 17v4h14v-4a6 6 0 0 0-1.3-2.9 3.2 3.2 0 0 0 2.3-3.1V9a2 2 0 0 0-2-2h-3.8c.5-.5.8-1.2.8-2a3 3 0 0 0-3-3zm0 2c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-6 20h12v2H10v-2zm-2 3h16v2H8v-2z"/>
+                  </svg>
+                  <div class="dept-name">GOVERNMENT OF INDIA<br>INCOME TAX DEPARTMENT</div>
+                </div>
+
+                <div class="notice-title-bar">
+                  NOTICE UNDER SECTION 143(1)
+                </div>
+
+                <div class="notice-meta-line">
+                  DIN: ITBA/COM/F/17/2023-24/1045607890<br>
+                  Assessment Year: 2023-24
+                </div>
+
+                <p class="notice-body-paragraph">
+                  <strong>Sir/Madam,</strong><br>
+                  This is to inform you that a sum of <strong>₹ 12,430/-</strong> is payable by you towards demand raised u/s 143(1) of the Income-tax Act, 1961. Please pay the amount within 30 days from the date of this notice, failing which further proceedings u/s 220 shall be initiated.
+                </p>
+
+                <div class="notice-footer-row">
+                  <div class="notice-authority">
+                    Income Tax Department<br>
+                    Centralized Processing Centre<br>
+                    Bengaluru - 560500
+                  </div>
+                  <div class="notice-barcode" aria-hidden="true"></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ======================= CENTER: TORN PAPER DIVIDER ======================= -->
+        <svg class="torn-divider-svg" viewBox="0 0 30 300" preserveAspectRatio="none">
+          <path d="M 0 0 
+                   Q 8 20, 2 40 
+                   Q 15 60, 4 80 
+                   Q 14 100, 2 120 
+                   Q 16 140, 5 160 
+                   Q 12 180, 3 200 
+                   Q 15 220, 4 240 
+                   Q 14 260, 2 280 
+                   Q 16 290, 5 300 
+                   L 30 300 L 30 0 Z" 
+                fill="#FFFDF9"/>
+        </svg>
+
+        <!-- ======================= RIGHT: CLARITY ======================= -->
+        <div class="story-col-clarity">
+          
+          <div class="clarity-header-banner">
+            <div class="clarity-badge-row">
+              <span class="oh-badge-pill">Oh. Now I get it.</span>
+
+              <!-- Glowing Lightbulb with Bright Radiating Rays -->
+              <div class="lightbulb-icon-wrap">
+                <svg class="lightbulb-svg" viewBox="0 0 36 36" fill="none">
+                  <!-- Yellow Radiating Rays -->
+                  <line x1="18" y1="2" x2="18" y2="6" stroke="#F5B01E" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="6" y1="8" x2="9" y2="11" stroke="#F5B01E" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="30" y1="8" x2="27" y2="11" stroke="#F5B01E" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="2" y1="18" x2="6" y2="18" stroke="#F5B01E" stroke-width="2.5" stroke-linecap="round"/>
+                  <line x1="34" y1="18" x2="30" y2="18" stroke="#F5B01E" stroke-width="2.5" stroke-linecap="round"/>
+                  <!-- Bulb Body -->
+                  <path d="M12 18 C 12 14, 15 11, 18 11 C 21 11, 24 14, 24 18 C 24 20.5, 22.5 22, 21.5 24 H 14.5 C 13.5 22, 12 20.5, 12 18 Z" fill="#F5B01E" stroke="#D48E06" stroke-width="1.5"/>
+                  <rect x="15" y="24" width="6" height="3" rx="1" fill="#7C8B7A"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Authentic Tamil Script Headline with Sparkles -->
+            <div class="tamil-headline-row">
+              <span class="tamil-clear-text">இப்போது புரிகிறது.</span>
+              <svg class="clarity-sparkles-svg" viewBox="0 0 24 24" fill="none" stroke="#F5B01E" stroke-width="2" stroke-linecap="round">
+                <path d="M12 2v4M12 18v4M2 12h4M18 12h4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Sleek "Income Tax Notice (Simplified)" Card -->
+          <div class="simplified-notice-card">
+            
+            <div class="card-header-bar">
+              <!-- Ashoka Lion Emblem Badge -->
+              <svg class="card-emblem-icon" viewBox="0 0 32 32" fill="#222">
+                <path d="M16 2a3 3 0 0 0-3 3c0 .8.3 1.5.8 2H10a2 2 0 0 0-2 2v2c0 1.5 1 2.8 2.3 3.1A6 6 0 0 0 9 17v4h14v-4a6 6 0 0 0-1.3-2.9 3.2 3.2 0 0 0 2.3-3.1V9a2 2 0 0 0-2-2h-3.8c.5-.5.8-1.2.8-2a3 3 0 0 0-3-3zm0 2c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm-6 20h12v2H10v-2zm-2 3h16v2H8v-2z"/>
+              </svg>
+              <div class="card-title-group">
+                <span class="card-title-main">Income Tax Notice</span>
+                <span class="card-title-sub">(Simplified)</span>
+              </div>
+            </div>
+
+            <div class="breakdown-row-list">
+              
+              <!-- Row 1: Assessment Year -->
+              <div class="breakdown-item">
+                <div class="item-left">
+                  <div class="item-icon-circle item-icon-circle--cal">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                  </div>
+                  <div class="item-text-stack">
+                    <span class="item-label">Assessment Year</span>
+                    <span class="item-desc">This is for the financial year 2023–24.</span>
+                  </div>
+                </div>
+                <span class="item-pill-tag">2023–24</span>
+              </div>
+
+              <!-- Row 2: Amount to Pay (Highlighted Gold) -->
+              <div class="breakdown-item breakdown-item--highlight">
+                <div class="item-left">
+                  <div class="item-icon-circle item-icon-circle--pay">
+                    ₹
+                  </div>
+                  <div class="item-text-stack">
+                    <span class="item-label">Amount to Pay</span>
+                    <span class="item-desc">You need to pay ₹12,430/- to the Income Tax Department.</span>
+                  </div>
+                </div>
+                <span class="item-pill-tag item-pill-tag--gold">₹ 12,430/-</span>
+              </div>
+
+              <!-- Row 3: Due Date -->
+              <div class="breakdown-item">
+                <div class="item-left">
+                  <div class="item-icon-circle item-icon-circle--time">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                  </div>
+                  <div class="item-text-stack">
+                    <span class="item-label">Due Date</span>
+                    <span class="item-desc">Pay within 30 days from the date of this notice.</span>
+                  </div>
+                </div>
+                <span class="item-pill-tag">30 days</span>
+              </div>
+
+              <!-- Row 4: If You Don't Pay -->
+              <div class="breakdown-item">
+                <div class="item-left">
+                  <div class="item-icon-circle item-icon-circle--info">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                      <polyline points="14 2 14 8 20 8"></polyline>
+                      <line x1="16" y1="13" x2="8" y2="13"></line>
+                      <line x1="16" y1="17" x2="8" y2="17"></line>
+                    </svg>
+                  </div>
+                  <div class="item-text-stack">
+                    <span class="item-label">If You Don't Pay</span>
+                    <span class="item-desc">Further legal action may be taken under section 220 of the Income-tax Act.</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           3. THREE-PILLAR PROCESS ROW (SCAN · UNDERSTAND · ACT)
+           ================================================================= -->
+      <section class="poster-process-row" aria-label="How Hmm Works in 3 Steps">
+        
+        <!-- Step 1: Scan -->
+        <div class="process-card">
+          <div class="process-icon-disc process-icon-disc--scan">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+          </div>
+          <h2 class="process-card-title">Scan</h2>
+          <p class="process-card-desc">Scan any document</p>
+        </div>
+
+        <!-- Step 2: Understand -->
+        <div class="process-card">
+          <div class="process-icon-disc process-icon-disc--understand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+              <line x1="9" y1="10" x2="15" y2="10"></line>
+            </svg>
+          </div>
+          <h2 class="process-card-title">Understand</h2>
+          <p class="process-card-desc">Hear it in your language</p>
+        </div>
+
+        <!-- Step 3: Act -->
+        <div class="process-card">
+          <div class="process-icon-disc process-icon-disc--act">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <polyline points="9 11 12 14 22 4"></polyline>
+              <line x1="9" y1="17" x2="15" y2="17"></line>
+            </svg>
+          </div>
+          <h2 class="process-card-title">Act</h2>
+          <p class="process-card-desc">Know what to do next</p>
+        </div>
+
+      </section>
+
+      <!-- =================================================================
+           4. REGIONAL LANGUAGE SHOWCASE PILLS
+           ================================================================= -->
+      <section class="poster-languages-strip" aria-label="Supported Indian Languages">
+        <span class="lang-pill lang-pill--tamil">தமிழ்</span>
+        <span class="lang-pill lang-pill--hindi">हिन्दी</span>
+        <span class="lang-pill lang-pill--telugu">తెలుగు</span>
+        <span class="lang-pill lang-pill--kannada">ಕನ್ನಡ</span>
+        <span class="lang-pill lang-pill--bengali">বাংলা</span>
+      </section>
+
+      <!-- =================================================================
+           5. FOOTER: HERITAGE SILHOUETTE, LIVE QR CODE & TEAM GEAR5CODERS
+           ================================================================= -->
+      <footer class="poster-footer-wrap">
+        
+        <!-- Indian Architectural Heritage Monuments Skyline Silhouette -->
+        <svg class="footer-skyline-bg" viewBox="0 0 1000 120" preserveAspectRatio="none" fill="#9C8B72">
+          <!-- Gateway of India, Minarets, Gopurams, Domes -->
+          <path d="M 0 120 L 0 110 Q 20 105 40 110 L 60 95 L 70 60 L 75 60 L 80 95 L 90 95 L 95 40 L 100 20 L 105 40 L 110 95 L 130 95 Q 145 70 160 95 L 180 95 L 185 50 L 195 50 L 200 95 L 220 95 Q 240 85 260 95 L 270 40 L 285 25 L 300 40 L 310 95 L 330 95 L 340 60 L 350 60 L 360 95 Q 380 75 400 95 L 420 95 L 430 30 L 440 10 L 450 30 L 460 95 L 480 95 Q 500 80 520 95 L 540 95 L 545 45 L 555 45 L 560 95 L 580 95 Q 600 70 620 95 L 640 40 L 650 20 L 660 40 L 670 95 L 690 95 L 700 55 L 710 55 L 720 95 Q 740 80 760 95 L 780 35 L 795 20 L 810 35 L 820 95 L 840 95 L 850 50 L 860 50 L 870 95 Q 890 75 910 95 L 930 95 L 940 35 L 945 15 L 950 35 L 960 95 L 980 105 L 1000 110 L 1000 120 Z"/>
+        </svg>
+
+        <div class="footer-content-row">
+          
+          <!-- Exact High-Resolution Scannable Vector QR Code -->
+          <div class="qr-code-interactive-card" title="Scan to open https://hmm-rho-eight.vercel.app/">
+            <svg viewBox="0 0 290 290" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="QR Code to https://hmm-rho-eight.vercel.app/">
+              <rect fill="white" width="290" height="290"/>
+              <path fill="#1C2024" d="M 0,0 l 10,0 0,10 -10,0 z M 10,0 l 10,0 0,10 -10,0 z M 20,0 l 10,0 0,10 -10,0 z M 30,0 l 10,0 0,10 -10,0 z M 40,0 l 10,0 0,10 -10,0 z M 50,0 l 10,0 0,10 -10,0 z M 60,0 l 10,0 0,10 -10,0 z M 90,0 l 10,0 0,10 -10,0 z M 150,0 l 10,0 0,10 -10,0 z M 160,0 l 10,0 0,10 -10,0 z M 190,0 l 10,0 0,10 -10,0 z M 200,0 l 10,0 0,10 -10,0 z M 220,0 l 10,0 0,10 -10,0 z M 230,0 l 10,0 0,10 -10,0 z M 240,0 l 10,0 0,10 -10,0 z M 250,0 l 10,0 0,10 -10,0 z M 260,0 l 10,0 0,10 -10,0 z M 270,0 l 10,0 0,10 -10,0 z M 280,0 l 10,0 0,10 -10,0 z M 0,10 l 10,0 0,10 -10,0 z M 60,10 l 10,0 0,10 -10,0 z M 80,10 l 10,0 0,10 -10,0 z M 90,10 l 10,0 0,10 -10,0 z M 110,10 l 10,0 0,10 -10,0 z M 120,10 l 10,0 0,10 -10,0 z M 170,10 l 10,0 0,10 -10,0 z M 220,10 l 10,0 0,10 -10,0 z M 280,10 l 10,0 0,10 -10,0 z M 0,20 l 10,0 0,10 -10,0 z M 20,20 l 10,0 0,10 -10,0 z M 30,20 l 10,0 0,10 -10,0 z M 40,20 l 10,0 0,10 -10,0 z M 60,20 l 10,0 0,10 -10,0 z M 90,20 l 10,0 0,10 -10,0 z M 100,20 l 10,0 0,10 -10,0 z M 110,20 l 10,0 0,10 -10,0 z M 140,20 l 10,0 0,10 -10,0 z M 160,20 l 10,0 0,10 -10,0 z M 180,20 l 10,0 0,10 -10,0 z M 190,20 l 10,0 0,10 -10,0 z M 200,20 l 10,0 0,10 -10,0 z M 220,20 l 10,0 0,10 -10,0 z M 240,20 l 10,0 0,10 -10,0 z M 250,20 l 10,0 0,10 -10,0 z M 260,20 l 10,0 0,10 -10,0 z M 280,20 l 10,0 0,10 -10,0 z M 0,30 l 10,0 0,10 -10,0 z M 20,30 l 10,0 0,10 -10,0 z M 30,30 l 10,0 0,10 -10,0 z M 40,30 l 10,0 0,10 -10,0 z M 60,30 l 10,0 0,10 -10,0 z M 80,30 l 10,0 0,10 -10,0 z M 90,30 l 10,0 0,10 -10,0 z M 110,30 l 10,0 0,10 -10,0 z M 160,30 l 10,0 0,10 -10,0 z M 170,30 l 10,0 0,10 -10,0 z M 190,30 l 10,0 0,10 -10,0 z M 220,30 l 10,0 0,10 -10,0 z M 240,30 l 10,0 0,10 -10,0 z M 250,30 l 10,0 0,10 -10,0 z M 260,30 l 10,0 0,10 -10,0 z M 280,30 l 10,0 0,10 -10,0 z M 0,40 l 10,0 0,10 -10,0 z M 20,40 l 10,0 0,10 -10,0 z M 30,40 l 10,0 0,10 -10,0 z M 40,40 l 10,0 0,10 -10,0 z M 60,40 l 10,0 0,10 -10,0 z M 100,40 l 10,0 0,10 -10,0 z M 120,40 l 10,0 0,10 -10,0 z M 130,40 l 10,0 0,10 -10,0 z M 140,40 l 10,0 0,10 -10,0 z M 150,40 l 10,0 0,10 -10,0 z M 180,40 l 10,0 0,10 -10,0 z M 190,40 l 10,0 0,10 -10,0 z M 220,40 l 10,0 0,10 -10,0 z M 240,40 l 10,0 0,10 -10,0 z M 250,40 l 10,0 0,10 -10,0 z M 260,40 l 10,0 0,10 -10,0 z M 280,40 l 10,0 0,10 -10,0 z M 0,50 l 10,0 0,10 -10,0 z M 60,50 l 10,0 0,10 -10,0 z M 80,50 l 10,0 0,10 -10,0 z M 100,50 l 10,0 0,10 -10,0 z M 130,50 l 10,0 0,10 -10,0 z M 140,50 l 10,0 0,10 -10,0 z M 150,50 l 10,0 0,10 -10,0 z M 160,50 l 10,0 0,10 -10,0 z M 220,50 l 10,0 0,10 -10,0 z M 280,50 l 10,0 0,10 -10,0 z M 0,60 l 10,0 0,10 -10,0 z M 10,60 l 10,0 0,10 -10,0 z M 20,60 l 10,0 0,10 -10,0 z M 30,60 l 10,0 0,10 -10,0 z M 40,60 l 10,0 0,10 -10,0 z M 50,60 l 10,0 0,10 -10,0 z M 60,60 l 10,0 0,10 -10,0 z M 80,60 l 10,0 0,10 -10,0 z M 100,60 l 10,0 0,10 -10,0 z M 120,60 l 10,0 0,10 -10,0 z M 140,60 l 10,0 0,10 -10,0 z M 160,60 l 10,0 0,10 -10,0 z M 180,60 l 10,0 0,10 -10,0 z M 200,60 l 10,0 0,10 -10,0 z M 220,60 l 10,0 0,10 -10,0 z M 230,60 l 10,0 0,10 -10,0 z M 240,60 l 10,0 0,10 -10,0 z M 250,60 l 10,0 0,10 -10,0 z M 260,60 l 10,0 0,10 -10,0 z M 270,60 l 10,0 0,10 -10,0 z M 280,60 l 10,0 0,10 -10,0 z M 120,70 l 10,0 0,10 -10,0 z M 130,70 l 10,0 0,10 -10,0 z M 150,70 l 10,0 0,10 -10,0 z M 200,70 l 10,0 0,10 -10,0 z M 0,80 l 10,0 0,10 -10,0 z M 10,80 l 10,0 0,10 -10,0 z M 20,80 l 10,0 0,10 -10,0 z M 30,80 l 10,0 0,10 -10,0 z M 40,80 l 10,0 0,10 -10,0 z M 60,80 l 10,0 0,10 -10,0 z M 70,80 l 10,0 0,10 -10,0 z M 80,80 l 10,0 0,10 -10,0 z M 90,80 l 10,0 0,10 -10,0 z M 100,80 l 10,0 0,10 -10,0 z M 120,80 l 10,0 0,10 -10,0 z M 140,80 l 10,0 0,10 -10,0 z M 150,80 l 10,0 0,10 -10,0 z M 170,80 l 10,0 0,10 -10,0 z M 200,80 l 10,0 0,10 -10,0 z M 210,80 l 10,0 0,10 -10,0 z M 230,80 l 10,0 0,10 -10,0 z M 250,80 l 10,0 0,10 -10,0 z M 270,80 l 10,0 0,10 -10,0 z M 0,90 l 10,0 0,10 -10,0 z M 10,90 l 10,0 0,10 -10,0 z M 30,90 l 10,0 0,10 -10,0 z M 50,90 l 10,0 0,10 -10,0 z M 70,90 l 10,0 0,10 -10,0 z M 90,90 l 10,0 0,10 -10,0 z M 150,90 l 10,0 0,10 -10,0 z M 160,90 l 10,0 0,10 -10,0 z M 190,90 l 10,0 0,10 -10,0 z M 200,90 l 10,0 0,10 -10,0 z M 220,90 l 10,0 0,10 -10,0 z M 230,90 l 10,0 0,10 -10,0 z M 240,90 l 10,0 0,10 -10,0 z M 280,90 l 10,0 0,10 -10,0 z M 0,100 l 10,0 0,10 -10,0 z M 20,100 l 10,0 0,10 -10,0 z M 30,100 l 10,0 0,10 -10,0 z M 40,100 l 10,0 0,10 -10,0 z M 50,100 l 10,0 0,10 -10,0 z M 60,100 l 10,0 0,10 -10,0 z M 70,100 l 10,0 0,10 -10,0 z M 90,100 l 10,0 0,10 -10,0 z M 110,100 l 10,0 0,10 -10,0 z M 120,100 l 10,0 0,10 -10,0 z M 170,100 l 10,0 0,10 -10,0 z M 180,100 l 10,0 0,10 -10,0 z M 210,100 l 10,0 0,10 -10,0 z M 230,100 l 10,0 0,10 -10,0 z M 240,100 l 10,0 0,10 -10,0 z M 10,110 l 10,0 0,10 -10,0 z M 30,110 l 10,0 0,10 -10,0 z M 40,110 l 10,0 0,10 -10,0 z M 90,110 l 10,0 0,10 -10,0 z M 100,110 l 10,0 0,10 -10,0 z M 110,110 l 10,0 0,10 -10,0 z M 140,110 l 10,0 0,10 -10,0 z M 160,110 l 10,0 0,10 -10,0 z M 180,110 l 10,0 0,10 -10,0 z M 210,110 l 10,0 0,10 -10,0 z M 220,110 l 10,0 0,10 -10,0 z M 230,110 l 10,0 0,10 -10,0 z M 250,110 l 10,0 0,10 -10,0 z M 270,110 l 10,0 0,10 -10,0 z M 10,120 l 10,0 0,10 -10,0 z M 20,120 l 10,0 0,10 -10,0 z M 40,120 l 10,0 0,10 -10,0 z M 50,120 l 10,0 0,10 -10,0 z M 60,120 l 10,0 0,10 -10,0 z M 90,120 l 10,0 0,10 -10,0 z M 110,120 l 10,0 0,10 -10,0 z M 170,120 l 10,0 0,10 -10,0 z M 190,120 l 10,0 0,10 -10,0 z M 250,120 l 10,0 0,10 -10,0 z M 260,120 l 10,0 0,10 -10,0 z M 10,130 l 10,0 0,10 -10,0 z M 20,130 l 10,0 0,10 -10,0 z M 50,130 l 10,0 0,10 -10,0 z M 70,130 l 10,0 0,10 -10,0 z M 100,130 l 10,0 0,10 -10,0 z M 120,130 l 10,0 0,10 -10,0 z M 130,130 l 10,0 0,10 -10,0 z M 140,130 l 10,0 0,10 -10,0 z M 150,130 l 10,0 0,10 -10,0 z M 180,130 l 10,0 0,10 -10,0 z M 190,130 l 10,0 0,10 -10,0 z M 200,130 l 10,0 0,10 -10,0 z M 210,130 l 10,0 0,10 -10,0 z M 220,130 l 10,0 0,10 -10,0 z M 240,130 l 10,0 0,10 -10,0 z M 280,130 l 10,0 0,10 -10,0 z M 0,140 l 10,0 0,10 -10,0 z M 10,140 l 10,0 0,10 -10,0 z M 60,140 l 10,0 0,10 -10,0 z M 80,140 l 10,0 0,10 -10,0 z M 90,140 l 10,0 0,10 -10,0 z M 100,140 l 10,0 0,10 -10,0 z M 130,140 l 10,0 0,10 -10,0 z M 140,140 l 10,0 0,10 -10,0 z M 150,140 l 10,0 0,10 -10,0 z M 160,140 l 10,0 0,10 -10,0 z M 170,140 l 10,0 0,10 -10,0 z M 180,140 l 10,0 0,10 -10,0 z M 200,140 l 10,0 0,10 -10,0 z M 210,140 l 10,0 0,10 -10,0 z M 220,140 l 10,0 0,10 -10,0 z M 230,140 l 10,0 0,10 -10,0 z M 240,140 l 10,0 0,10 -10,0 z M 250,140 l 10,0 0,10 -10,0 z M 260,140 l 10,0 0,10 -10,0 z M 0,150 l 10,0 0,10 -10,0 z M 10,150 l 10,0 0,10 -10,0 z M 20,150 l 10,0 0,10 -10,0 z M 70,150 l 10,0 0,10 -10,0 z M 80,150 l 10,0 0,10 -10,0 z M 100,150 l 10,0 0,10 -10,0 z M 120,150 l 10,0 0,10 -10,0 z M 130,150 l 10,0 0,10 -10,0 z M 160,150 l 10,0 0,10 -10,0 z M 190,150 l 10,0 0,10 -10,0 z M 200,150 l 10,0 0,10 -10,0 z M 210,150 l 10,0 0,10 -10,0 z M 230,150 l 10,0 0,10 -10,0 z M 270,150 l 10,0 0,10 -10,0 z M 0,160 l 10,0 0,10 -10,0 z M 10,160 l 10,0 0,10 -10,0 z M 20,160 l 10,0 0,10 -10,0 z M 40,160 l 10,0 0,10 -10,0 z M 50,160 l 10,0 0,10 -10,0 z M 60,160 l 10,0 0,10 -10,0 z M 70,160 l 10,0 0,10 -10,0 z M 80,160 l 10,0 0,10 -10,0 z M 100,160 l 10,0 0,10 -10,0 z M 120,160 l 10,0 0,10 -10,0 z M 140,160 l 10,0 0,10 -10,0 z M 170,160 l 10,0 0,10 -10,0 z M 250,160 l 10,0 0,10 -10,0 z M 260,160 l 10,0 0,10 -10,0 z M 0,170 l 10,0 0,10 -10,0 z M 30,170 l 10,0 0,10 -10,0 z M 70,170 l 10,0 0,10 -10,0 z M 80,170 l 10,0 0,10 -10,0 z M 90,170 l 10,0 0,10 -10,0 z M 180,170 l 10,0 0,10 -10,0 z M 190,170 l 10,0 0,10 -10,0 z M 200,170 l 10,0 0,10 -10,0 z M 210,170 l 10,0 0,10 -10,0 z M 220,170 l 10,0 0,10 -10,0 z M 230,170 l 10,0 0,10 -10,0 z M 240,170 l 10,0 0,10 -10,0 z M 260,170 l 10,0 0,10 -10,0 z M 280,170 l 10,0 0,10 -10,0 z M 0,180 l 10,0 0,10 -10,0 z M 20,180 l 10,0 0,10 -10,0 z M 30,180 l 10,0 0,10 -10,0 z M 60,180 l 10,0 0,10 -10,0 z M 80,180 l 10,0 0,10 -10,0 z M 100,180 l 10,0 0,10 -10,0 z M 110,180 l 10,0 0,10 -10,0 z M 120,180 l 10,0 0,10 -10,0 z M 150,180 l 10,0 0,10 -10,0 z M 200,180 l 10,0 0,10 -10,0 z M 220,180 l 10,0 0,10 -10,0 z M 230,180 l 10,0 0,10 -10,0 z M 240,180 l 10,0 0,10 -10,0 z M 260,180 l 10,0 0,10 -10,0 z M 0,190 l 10,0 0,10 -10,0 z M 20,190 l 10,0 0,10 -10,0 z M 30,190 l 10,0 0,10 -10,0 z M 50,190 l 10,0 0,10 -10,0 z M 70,190 l 10,0 0,10 -10,0 z M 110,190 l 10,0 0,10 -10,0 z M 140,190 l 10,0 0,10 -10,0 z M 150,190 l 10,0 0,10 -10,0 z M 220,190 l 10,0 0,10 -10,0 z M 230,190 l 10,0 0,10 -10,0 z M 270,190 l 10,0 0,10 -10,0 z M 0,200 l 10,0 0,10 -10,0 z M 20,200 l 10,0 0,10 -10,0 z M 30,200 l 10,0 0,10 -10,0 z M 40,200 l 10,0 0,10 -10,0 z M 50,200 l 10,0 0,10 -10,0 z M 60,200 l 10,0 0,10 -10,0 z M 70,200 l 10,0 0,10 -10,0 z M 110,200 l 10,0 0,10 -10,0 z M 150,200 l 10,0 0,10 -10,0 z M 160,200 l 10,0 0,10 -10,0 z M 170,200 l 10,0 0,10 -10,0 z M 190,200 l 10,0 0,10 -10,0 z M 200,200 l 10,0 0,10 -10,0 z M 210,200 l 10,0 0,10 -10,0 z M 220,200 l 10,0 0,10 -10,0 z M 230,200 l 10,0 0,10 -10,0 z M 240,200 l 10,0 0,10 -10,0 z M 260,200 l 10,0 0,10 -10,0 z M 270,200 l 10,0 0,10 -10,0 z M 280,200 l 10,0 0,10 -10,0 z M 80,210 l 10,0 0,10 -10,0 z M 90,210 l 10,0 0,10 -10,0 z M 120,210 l 10,0 0,10 -10,0 z M 130,210 l 10,0 0,10 -10,0 z M 140,210 l 10,0 0,10 -10,0 z M 160,210 l 10,0 0,10 -10,0 z M 170,210 l 10,0 0,10 -10,0 z M 180,210 l 10,0 0,10 -10,0 z M 200,210 l 10,0 0,10 -10,0 z M 240,210 l 10,0 0,10 -10,0 z M 250,210 l 10,0 0,10 -10,0 z M 260,210 l 10,0 0,10 -10,0 z M 270,210 l 10,0 0,10 -10,0 z M 280,210 l 10,0 0,10 -10,0 z M 0,220 l 10,0 0,10 -10,0 z M 10,220 l 10,0 0,10 -10,0 z M 20,220 l 10,0 0,10 -10,0 z M 30,220 l 10,0 0,10 -10,0 z M 40,220 l 10,0 0,10 -10,0 z M 50,220 l 10,0 0,10 -10,0 z M 60,220 l 10,0 0,10 -10,0 z M 80,220 l 10,0 0,10 -10,0 z M 130,220 l 10,0 0,10 -10,0 z M 140,220 l 10,0 0,10 -10,0 z M 150,220 l 10,0 0,10 -10,0 z M 190,220 l 10,0 0,10 -10,0 z M 200,220 l 10,0 0,10 -10,0 z M 220,220 l 10,0 0,10 -10,0 z M 240,220 l 10,0 0,10 -10,0 z M 250,220 l 10,0 0,10 -10,0 z M 260,220 l 10,0 0,10 -10,0 z M 0,230 l 10,0 0,10 -10,0 z M 60,230 l 10,0 0,10 -10,0 z M 90,230 l 10,0 0,10 -10,0 z M 100,230 l 10,0 0,10 -10,0 z M 120,230 l 10,0 0,10 -10,0 z M 130,230 l 10,0 0,10 -10,0 z M 150,230 l 10,0 0,10 -10,0 z M 180,230 l 10,0 0,10 -10,0 z M 190,230 l 10,0 0,10 -10,0 z M 200,230 l 10,0 0,10 -10,0 z M 240,230 l 10,0 0,10 -10,0 z M 0,240 l 10,0 0,10 -10,0 z M 20,240 l 10,0 0,10 -10,0 z M 30,240 l 10,0 0,10 -10,0 z M 40,240 l 10,0 0,10 -10,0 z M 60,240 l 10,0 0,10 -10,0 z M 80,240 l 10,0 0,10 -10,0 z M 90,240 l 10,0 0,10 -10,0 z M 120,240 l 10,0 0,10 -10,0 z M 140,240 l 10,0 0,10 -10,0 z M 150,240 l 10,0 0,10 -10,0 z M 160,240 l 10,0 0,10 -10,0 z M 170,240 l 10,0 0,10 -10,0 z M 180,240 l 10,0 0,10 -10,0 z M 200,240 l 10,0 0,10 -10,0 z M 210,240 l 10,0 0,10 -10,0 z M 220,240 l 10,0 0,10 -10,0 z M 230,240 l 10,0 0,10 -10,0 z M 240,240 l 10,0 0,10 -10,0 z M 260,240 l 10,0 0,10 -10,0 z M 270,240 l 10,0 0,10 -10,0 z M 0,250 l 10,0 0,10 -10,0 z M 20,250 l 10,0 0,10 -10,0 z M 30,250 l 10,0 0,10 -10,0 z M 40,250 l 10,0 0,10 -10,0 z M 60,250 l 10,0 0,10 -10,0 z M 80,250 l 10,0 0,10 -10,0 z M 90,250 l 10,0 0,10 -10,0 z M 160,250 l 10,0 0,10 -10,0 z M 170,250 l 10,0 0,10 -10,0 z M 180,250 l 10,0 0,10 -10,0 z M 190,250 l 10,0 0,10 -10,0 z M 210,250 l 10,0 0,10 -10,0 z M 250,250 l 10,0 0,10 -10,0 z M 260,250 l 10,0 0,10 -10,0 z M 270,250 l 10,0 0,10 -10,0 z M 280,250 l 10,0 0,10 -10,0 z M 0,260 l 10,0 0,10 -10,0 z M 20,260 l 10,0 0,10 -10,0 z M 30,260 l 10,0 0,10 -10,0 z M 40,260 l 10,0 0,10 -10,0 z M 60,260 l 10,0 0,10 -10,0 z M 80,260 l 10,0 0,10 -10,0 z M 90,260 l 10,0 0,10 -10,0 z M 110,260 l 10,0 0,10 -10,0 z M 120,260 l 10,0 0,10 -10,0 z M 150,260 l 10,0 0,10 -10,0 z M 160,260 l 10,0 0,10 -10,0 z M 170,260 l 10,0 0,10 -10,0 z M 190,260 l 10,0 0,10 -10,0 z M 210,260 l 10,0 0,10 -10,0 z M 220,260 l 10,0 0,10 -10,0 z M 230,260 l 10,0 0,10 -10,0 z M 240,260 l 10,0 0,10 -10,0 z M 250,260 l 10,0 0,10 -10,0 z M 260,260 l 10,0 0,10 -10,0 z M 270,260 l 10,0 0,10 -10,0 z M 0,270 l 10,0 0,10 -10,0 z M 60,270 l 10,0 0,10 -10,0 z M 80,270 l 10,0 0,10 -10,0 z M 100,270 l 10,0 0,10 -10,0 z M 110,270 l 10,0 0,10 -10,0 z M 140,270 l 10,0 0,10 -10,0 z M 150,270 l 10,0 0,10 -10,0 z M 180,270 l 10,0 0,10 -10,0 z M 200,270 l 10,0 0,10 -10,0 z M 220,270 l 10,0 0,10 -10,0 z M 240,270 l 10,0 0,10 -10,0 z M 250,270 l 10,0 0,10 -10,0 z M 270,270 l 10,0 0,10 -10,0 z M 0,280 l 10,0 0,10 -10,0 z M 10,280 l 10,0 0,10 -10,0 z M 20,280 l 10,0 0,10 -10,0 z M 30,280 l 10,0 0,10 -10,0 z M 40,280 l 10,0 0,10 -10,0 z M 50,280 l 10,0 0,10 -10,0 z M 60,280 l 10,0 0,10 -10,0 z M 80,280 l 10,0 0,10 -10,0 z M 90,280 l 10,0 0,10 -10,0 z M 100,280 l 10,0 0,10 -10,0 z M 110,280 l 10,0 0,10 -10,0 z M 150,280 l 10,0 0,10 -10,0 z M 170,280 l 10,0 0,10 -10,0 z M 190,280 l 10,0 0,10 -10,0 z M 260,280 l 10,0 0,10 -10,0 z " />
+            </svg>
+          </div>
+
+          <!-- Hand-drawn curved arrow with "Scan to try it" badge -->
+          <div class="qr-callout-bubble">
+            <!-- Hand-drawn curved arrow pointing to the QR code on the left -->
+            <svg class="qr-curved-arrow-svg" viewBox="0 0 35 25" fill="none" stroke="#222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M 32 18 C 22 22, 12 18, 5 8"/>
+              <polyline points="12 6 4 7 7 14"/>
+            </svg>
+            <span class="qr-scan-badge">
+              Scan to try it
+              <svg class="qr-sparkle-rays" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="10" y1="2" x2="10" y2="6"/>
+                <line x1="16" y1="4" x2="13" y2="7"/>
+                <line x1="18" y1="10" x2="14" y2="10"/>
+              </svg>
+            </span>
+          </div>
+
+        </div>
+
+        <div class="footer-credits-centered">
+          <div class="team-line-badge">
+            <span class="team-name-text">Gear5coders</span>
+          </div>
+          <a href="https://hmm-rho-eight.vercel.app/" class="footer-live-url" target="_blank" rel="noopener noreferrer">
+            https://hmm-rho-eight.vercel.app/
+          </a>
         </div>
 
       </footer>
@@ -305,8 +468,10 @@
     </article>
   </main>
 
+  <!-- ===================================================================
+       CLIENT LOGIC: PAPER SIZE SWITCHER & DYNAMIC FIT
+       =================================================================== -->
   <script>
-    // State
     let currentPaper = 'a4';
     let isFit = true;
 
@@ -324,13 +489,13 @@
         btnA3.classList.remove('is-active');
         if (printLabel) printLabel.textContent = 'Print A4 / PDF';
         if (dynamicPageStyle) dynamicPageStyle.innerHTML = '@page { size: A4 portrait; margin: 0; }';
-        document.title = 'Hmm — Promotional Poster (A4 Print Ready) | Gear5coders';
+        document.title = 'Hmm — Understand Any Document, Instantly | Gear5coders Poster (A4)';
       } else {
         btnA3.classList.add('is-active');
         btnA4.classList.remove('is-active');
         if (printLabel) printLabel.textContent = 'Print A3 / PDF';
         if (dynamicPageStyle) dynamicPageStyle.innerHTML = '@page { size: A3 portrait; margin: 0; }';
-        document.title = 'Hmm — Promotional Poster (A3 Print Ready) | Gear5coders';
+        document.title = 'Hmm — Understand Any Document, Instantly | Gear5coders Poster (A3)';
       }
 
       fitToScreen();
@@ -356,7 +521,7 @@
       if (!artboard) return;
 
       const availHeight = window.innerHeight - 130;
-      // In A4 mode, natural pixel height at 96 DPI is approx 1122.5px; in A3 mode it is 1587.4px
+      // At standard 96 DPI: A4 height is approx 1122.5px; A3 height is approx 1587.4px
       const naturalHeight = currentPaper === 'a4' ? 1122.5 : 1587.4;
       const scale = Math.min(1, Math.max(0.35, availHeight / naturalHeight));
       artboard.style.transform = `scale(${scale})`;

@@ -1,34 +1,36 @@
 /* ==========================================================================
-   Hmm — Promotional Poster (A3 Portrait: 297 x 420 mm)
-   Team Gear5coders · Document Clarity Engine
+   Hmm — Promotional Poster (Creative A4/A3 Editorial Edition)
+   Crafted for Team Gear5coders · Inspired by Hand-Drawn Indian Editorial Design
    ========================================================================== */
 
 :root {
   /* Brand Color Tokens */
-  --color-paper: #EFEBE1;
-  --color-paper-light: #F7F5EE;
-  --color-paper-card: #FAF8F2;
-  --color-paper-dark: #E4DECFCF;
-  --color-paper-shadow: rgba(34, 38, 43, 0.08);
+  --c-paper: #FAF6EE;
+  --c-paper-warm: #F4EEDF;
+  --c-paper-dark: #E8DFCC;
+  --c-paper-card: #FFFFFF;
+  --c-paper-shadow: rgba(45, 35, 20, 0.14);
 
-  --color-ink: #22262B;
-  --color-ink-muted: #575D65;
-  --color-ink-faint: #89909A;
-  --color-ink-cramped: #6B727D;
+  --c-ink: #1C2024;
+  --c-ink-soft: #383E46;
+  --c-ink-muted: #626974;
+  --c-ink-faint: #9299A4;
 
-  --color-clarity: #E7A928;
-  --color-clarity-light: #FDF6E8;
-  --color-clarity-glow: rgba(231, 169, 40, 0.25);
+  --c-clarity: #F5B01E;
+  --c-clarity-dark: #D48E06;
+  --c-clarity-light: #FFF8E7;
 
-  --color-seal: #A63A2E;
-  --color-seal-light: #F9EBE9;
+  --c-seal: #B83A2C;
+  --c-seal-light: #FDF1EF;
 
-  --color-calm: #7C8B7A;
-  --color-calm-light: #EEF2EE;
+  --c-sage: #4E7C62;
+  --c-sage-light: #EFF7F2;
 
-  --color-line: #CFC7B4;
-  --color-line-light: #DFDACD;
-  --color-line-dark: #B5AD99;
+  --c-amber: #E87A18;
+  --c-amber-light: #FFF2E8;
+
+  --c-line: #DDD5C2;
+  --c-line-dark: #C6BC9F;
 
   /* Typography */
   --font-display: 'Fraunces', Georgia, serif;
@@ -40,13 +42,13 @@
   --font-bengali: 'Noto Sans Bengali', sans-serif;
   --font-malayalam: 'Noto Sans Malayalam', sans-serif;
 
-  /* A3 Dimensions (Exact: 297mm x 420mm) */
-  --poster-width: 297mm;
-  --poster-height: 420mm;
+  /* Master Canvas Dimensions (Calibrated for A4: 210 x 297 mm) */
+  --canvas-w: 210mm;
+  --canvas-h: 297mm;
 }
 
 /* --------------------------------------------------------------------------
-   Page & Print Configuration (Default: A4 portrait: 210 x 297 mm)
+   Page & Print Configuration (Default: A4 portrait)
    -------------------------------------------------------------------------- */
 @page {
   size: A4 portrait;
@@ -62,30 +64,30 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #2E3238;
+  background-color: #23272C;
   font-family: var(--font-body);
-  color: var(--color-ink);
+  color: var(--c-ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Screen Preview Canvas / Artboard Frame */
+/* Screen Stage Canvas */
 .poster-screen-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  padding: 95px 20px 80px;
-  background-color: #26292E;
+  padding: 90px 20px 80px;
+  background-color: #1E2226;
   background-image: 
     radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   background-size: 24px 24px, 48px 48px, 48px 48px;
 }
 
-/* Floating Screen Toolbar */
+/* Floating Toolbar */
 .poster-toolbar {
   position: fixed;
   top: 20px;
@@ -93,21 +95,21 @@ html, body {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 8px 16px;
-  background: rgba(34, 38, 43, 0.94);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 30px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  padding: 8px 18px;
+  background: rgba(28, 32, 36, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 40px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5);
   color: #fff;
   font-size: 0.875rem;
 }
 
 .poster-toolbar__brand {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1rem;
-  color: var(--color-clarity);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--c-clarity);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -115,41 +117,10 @@ html, body {
   border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.poster-toolbar__btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: var(--color-clarity);
-  color: var(--color-ink);
-  font-weight: 600;
-  font-size: 0.8125rem;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-}
-
-.poster-toolbar__btn:hover {
-  background: #f1b83d;
-  transform: translateY(-1px);
-}
-
-.poster-toolbar__btn--secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.poster-toolbar__btn--secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Size Switcher */
 .poster-size-switch {
   display: flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 20px;
   padding: 3px;
@@ -162,7 +133,7 @@ html, body {
   gap: 5px;
   padding: 5px 12px;
   background: transparent;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.7);
   font-size: 0.75rem;
   font-weight: 600;
   border: none;
@@ -178,10 +149,10 @@ html, body {
 }
 
 .poster-size-btn.is-active {
-  background: var(--color-clarity);
-  color: var(--color-ink);
+  background: var(--c-clarity);
+  color: var(--c-ink);
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(231, 169, 40, 0.35);
+  box-shadow: 0 2px 8px rgba(245, 176, 30, 0.4);
 }
 
 .poster-size-dim {
@@ -190,744 +161,933 @@ html, body {
   font-weight: 500;
 }
 
+.poster-toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  background: var(--c-clarity);
+  color: var(--c-ink);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  font-family: var(--font-body);
+}
+
+.poster-toolbar__btn:hover {
+  background: #f7bb3c;
+  transform: translateY(-1px);
+}
+
+.poster-toolbar__btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: 500;
+}
+
+.poster-toolbar__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
 /* --------------------------------------------------------------------------
-   The Main Poster Canvas (A4 Default: 210x297mm · A3 Supported: 297x420mm)
+   THE A4 POSTER SHEET
    -------------------------------------------------------------------------- */
 .poster-sheet {
-  width: var(--poster-width);
-  height: var(--poster-height);
-  max-width: var(--poster-width);
-  max-height: var(--poster-height);
-  background-color: var(--color-paper);
+  width: var(--canvas-w);
+  height: var(--canvas-h);
+  min-width: var(--canvas-w);
+  min-height: var(--canvas-h);
+  max-width: var(--canvas-w);
+  max-height: var(--canvas-h);
+  background-color: var(--c-paper);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+  box-shadow: 
+    0 25px 80px rgba(0, 0, 0, 0.55),
+    0 4px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 16mm 18mm 14mm;
+  padding: 8mm 9mm 6.5mm;
   transform-origin: top center;
   box-sizing: border-box;
 
-  /* Default A4 scaling: 210mm x 297mm (1 / sqrt(2) ≈ 0.70710678) */
-  zoom: 0.70710678;
-
-  /* Authentic physical parchment noise */
+  /* Rich subtle grain texture */
   background-image: 
-    radial-gradient(rgba(34, 38, 43, 0.04) 1px, transparent 0),
-    linear-gradient(135deg, rgba(231, 169, 40, 0.02) 0%, transparent 40%),
-    linear-gradient(315deg, rgba(166, 58, 46, 0.02) 0%, transparent 40%);
-  background-size: 16px 16px, 100% 100%, 100% 100%;
+    radial-gradient(rgba(45, 35, 20, 0.05) 1px, transparent 0),
+    linear-gradient(135deg, rgba(245, 176, 30, 0.03) 0%, transparent 50%),
+    linear-gradient(315deg, rgba(184, 58, 44, 0.02) 0%, transparent 45%);
+  background-size: 14px 14px, 100% 100%, 100% 100%;
 }
 
 /* Paper Size Modifiers */
-body[data-paper-size="a4"] .poster-sheet {
-  zoom: 0.70710678;
-}
-
 body[data-paper-size="a3"] .poster-sheet {
-  zoom: 1;
+  zoom: 1.41421356; /* Scales A4 proportions up to exact A3 297x420mm */
 }
 
-/* Fine Editorial Frame Border */
-.poster-sheet::before {
-  content: "";
-  position: absolute;
-  inset: 7mm;
-  border: 1px solid var(--color-line);
-  pointer-events: none;
-  z-index: 20;
-}
-
-.poster-sheet::after {
-  content: "";
-  position: absolute;
-  inset: 8.5mm;
-  border: 0.5px solid rgba(207, 199, 180, 0.5);
-  pointer-events: none;
-  z-index: 20;
-}
-
-/* --------------------------------------------------------------------------
-   1. Header Band
-   -------------------------------------------------------------------------- */
-.poster-header {
+/* ==========================================================================
+   1. HERO HEADER WITH PLAYFUL DOODLES
+   ========================================================================== */
+.poster-hero {
   position: relative;
-  z-index: 5;
-  display: flex;
-  flex-direction: column;
-  gap: 3mm;
-  padding-bottom: 5mm;
-  border-bottom: 1.5px solid var(--color-line);
-}
-
-.poster-header__top-row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-}
-
-.poster-brand {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 3mm;
-  text-decoration: none;
-}
-
-.poster-brand__wordmark {
-  font-family: var(--font-display);
-  font-size: 20mm;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  color: var(--color-ink);
-  line-height: 0.9;
-}
-
-.poster-brand__dot {
-  display: inline-block;
-  width: 4mm;
-  height: 4mm;
-  background-color: var(--color-clarity);
-  border-radius: 50%;
-  margin-left: -2mm;
-}
-
-.poster-header__kicker {
-  font-family: var(--font-body);
-  font-size: 3.2mm;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--color-seal);
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-}
-
-.poster-header__kicker-dot {
-  width: 1.5mm;
-  height: 1.5mm;
-  background-color: var(--color-seal);
-  border-radius: 50%;
-}
-
-.poster-tagline-title {
-  font-family: var(--font-display);
-  font-size: 11mm;
-  font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
-  margin-top: 1mm;
-}
-
-.poster-tagline-subtitle {
-  font-family: var(--font-body);
-  font-size: 4.4mm;
-  line-height: 1.45;
-  color: var(--color-ink-muted);
-  max-width: 95%;
-  font-weight: 450;
-}
-
-/* --------------------------------------------------------------------------
-   2. The Signature Visual — Confusing -> Clear Split
-   -------------------------------------------------------------------------- */
-.poster-signature-visual {
-  position: relative;
-  z-index: 5;
-  width: 100%;
-  height: 158mm;
-  margin: 4.5mm 0;
-  background: var(--color-paper-card);
-  border: 1.5px solid var(--color-line);
-  box-shadow: 0 8px 30px var(--color-paper-shadow);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-  border-radius: 2px;
-}
-
-/* Diagonal / Torn Center Cut Effect */
-.poster-signature-visual::before {
-  content: "";
-  position: absolute;
-  top: -10%;
-  bottom: -10%;
-  left: 50%;
-  width: 4px;
-  background: var(--color-line);
-  transform: translateX(-50%) rotate(4deg);
+  text-align: center;
+  padding-bottom: 1mm;
   z-index: 10;
-  box-shadow: 
-    -2px 0 8px rgba(0, 0, 0, 0.08),
-    2px 0 12px rgba(231, 169, 40, 0.2);
 }
 
-.poster-signature-visual::after {
-  content: "";
+/* Floating Doodles in Header */
+.doodle-paper-top-left {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotate(4deg);
-  background: var(--color-paper);
-  border: 1px solid var(--color-line);
-  border-radius: 20px;
-  padding: 1.5mm 4mm;
-  font-size: 2.8mm;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--color-ink-muted);
-  z-index: 15;
-  white-space: nowrap;
+  top: -2mm;
+  left: 3mm;
+  width: 19mm;
+  height: 20mm;
+  opacity: 0.9;
+  transform: rotate(-10deg);
+  pointer-events: none;
 }
 
-/* Left / Confused Side */
-.signature-side--confused {
+.doodle-megaphone-top-right {
+  position: absolute;
+  top: 1mm;
+  right: 5mm;
+  width: 18mm;
+  height: 18mm;
+  opacity: 0.95;
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+/* Main Brand Wordmark */
+.brand-title-wrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
   position: relative;
-  padding: 8mm 9mm;
-  background: #EAE5D9;
-  border-right: 1px solid var(--color-line);
+  margin-bottom: 1.5mm;
+}
+
+.brand-title-row {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.brand-logo-text {
+  font-family: var(--font-display);
+  font-size: 24mm;
+  font-weight: 800;
+  line-height: 0.85;
+  color: var(--c-ink);
+  letter-spacing: -0.04em;
+  font-style: italic;
+}
+
+.brand-rays-svg {
+  position: absolute;
+  top: -5.5mm;
+  right: -8.5mm;
+  width: 11mm;
+  height: 10mm;
+}
+
+.brand-swoosh-svg {
+  width: 42mm;
+  height: 4.5mm;
+  margin-top: 1.5mm;
+}
+
+.poster-main-heading {
+  font-family: var(--font-display);
+  font-size: 7.2mm;
+  font-weight: 800;
+  color: var(--c-ink);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  margin-bottom: 1.2mm;
+}
+
+.poster-sub-heading {
+  font-size: 3.2mm;
+  color: var(--c-ink-soft);
+  line-height: 1.35;
+  max-width: 175mm;
+  margin: 0 auto;
+  font-weight: 500;
+}
+
+.poster-sub-heading span {
+  display: block;
+}
+
+/* ==========================================================================
+   2. CENTERPIECE: TORN-PAPER STORY SPLIT (CONFUSION VS CLARITY)
+   ========================================================================== */
+.poster-story-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: 0.94fr 1.06fr;
+  min-height: 130mm;
+  margin: 1.5mm 0 2mm;
+  border-radius: 6px;
+  overflow: visible;
+}
+
+/* --------------------------------------------------------------------------
+   LEFT SIDE: CONFUSION & BUREAUCRACY
+   -------------------------------------------------------------------------- */
+.story-col-confusion {
+  position: relative;
+  padding: 3.5mm 3mm 3.5mm 3mm;
+  background: #E5DFC9;
+  border-radius: 6px 0 0 6px;
+  box-shadow: inset 0 0 30px rgba(45, 35, 20, 0.15);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  overflow: hidden;
+  justify-content: flex-start;
+  overflow: visible;
 }
 
-.signature-side--confused::before {
+/* Subtle messy background texture */
+.story-col-confusion::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    45deg,
-    rgba(166, 58, 46, 0.015) 0px,
-    rgba(166, 58, 46, 0.015) 2px,
-    transparent 2px,
-    transparent 8px
-  );
+  background-image: 
+    radial-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(45deg, rgba(0,0,0,0.03) 25%, transparent 25%, transparent 75%, rgba(0,0,0,0.03) 75%);
+  background-size: 8px 8px, 16px 16px;
+  opacity: 0.7;
+  border-radius: 6px 0 0 6px;
   pointer-events: none;
 }
 
-.confused-header {
+/* Chalkboard Confusion Bubble */
+.bubble-confusion-wrap {
   position: relative;
-  z-index: 2;
-}
-
-.confused-kicker-tag {
-  display: inline-flex;
+  z-index: 10;
+  display: flex;
   align-items: center;
-  gap: 1.5mm;
-  padding: 1mm 2.5mm;
-  background: rgba(166, 58, 46, 0.1);
-  border: 1px solid rgba(166, 58, 46, 0.25);
-  border-radius: 2px;
-  color: var(--color-seal);
-  font-size: 2.8mm;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 3mm;
-}
-
-.confused-headline {
-  font-family: var(--font-display);
-  font-size: 6.8mm;
-  font-weight: 500;
-  line-height: 1.2;
-  letter-spacing: -0.035em;
-  color: var(--color-ink-cramped);
+  justify-content: space-between;
   margin-bottom: 2mm;
+  padding-right: 2mm;
 }
 
-/* Jargon Raw Document Fragment */
-.confused-document-card {
-  position: relative;
-  z-index: 2;
-  background: #F4EFE6;
-  border: 1px solid var(--color-line);
-  padding: 5mm 6mm;
-  border-radius: 2px;
-  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.04);
-}
-
-.confused-doc-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  border-bottom: 1px dashed var(--color-line);
-  padding-bottom: 2mm;
-  margin-bottom: 3mm;
-}
-
-.confused-doc-title {
-  font-size: 3.4mm;
-  font-weight: 700;
-  color: var(--color-ink);
-}
-
-.confused-stamp {
-  font-family: var(--font-body);
-  font-size: 2.4mm;
-  font-weight: 800;
-  color: var(--color-seal);
-  border: 1.5px dashed var(--color-seal);
-  padding: 0.8mm 2mm;
-  transform: rotate(-3deg);
-  letter-spacing: 0.08em;
-  display: inline-block;
-}
-
-.confused-jargon-text {
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 2.6mm;
-  line-height: 1.5;
-  color: #4A505A;
-  letter-spacing: -0.01em;
-}
-
-.confused-jargon-text mark {
-  background: rgba(166, 58, 46, 0.12);
-  color: var(--color-seal);
-  font-weight: bold;
-  padding: 0 1mm;
-}
-
-.confused-caption {
-  font-size: 3mm;
-  color: var(--color-seal);
-  font-style: italic;
-  margin-top: 3mm;
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-  font-weight: 500;
-}
-
-/* Right / Resolved Side */
-.signature-side--resolved {
-  position: relative;
-  padding: 8mm 9mm;
-  background: var(--color-paper-card);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.resolved-header {
-  position: relative;
-  z-index: 2;
-}
-
-.resolved-kicker-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.5mm;
-  padding: 1mm 2.5mm;
-  background: var(--color-clarity-light);
-  border: 1px solid var(--color-clarity);
-  border-radius: 2px;
-  color: #8C6100;
-  font-size: 2.8mm;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 3mm;
-}
-
-.resolved-headline {
+.speech-bubble-black {
+  background: #1C2024;
+  color: #FFFFFF;
+  padding: 2.6mm 4mm;
+  border-radius: 6px;
   font-family: var(--font-display);
-  font-size: 8mm;
+  font-size: 3.1mm;
   font-weight: 600;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--color-ink);
+  line-height: 1.25;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
   position: relative;
-  display: inline-block;
-  margin-bottom: 3.5mm;
+  max-width: 54mm;
 }
 
-/* Clarity Gold Signature Underline */
-.resolved-headline::after {
+.speech-bubble-black::after {
   content: "";
   position: absolute;
-  bottom: -1.5mm;
-  left: 0;
-  width: 100%;
-  height: 2.5px;
-  background: var(--color-clarity);
-  border-radius: 2px;
+  bottom: -2.8mm;
+  left: 7mm;
+  border-width: 2.8mm 2.8mm 0;
+  border-style: solid;
+  border-color: #1C2024 transparent;
+  display: block;
+  width: 0;
 }
 
-/* Regional Script Demonstration Line */
-.resolved-native-translation-box {
-  background: #FFFDF9;
-  border-left: 3.5px solid var(--color-clarity);
-  border: 1px solid var(--color-line-light);
-  border-left-width: 3.5px;
-  border-left-color: var(--color-clarity);
-  padding: 3.5mm 4.5mm;
-  border-radius: 2px;
-  margin-bottom: 3mm;
-}
-
-.resolved-tamil-line {
-  font-family: var(--font-tamil);
-  font-size: 3.4mm;
-  line-height: 1.55;
-  color: var(--color-ink);
-  font-weight: 500;
-}
-
-.resolved-hindi-line {
-  font-family: var(--font-hindi);
-  font-size: 3.2mm;
-  line-height: 1.55;
-  color: var(--color-ink-muted);
-  margin-top: 1.5mm;
-  border-top: 1px dashed var(--color-line-light);
-  padding-top: 1.5mm;
-}
-
-/* Concrete Action Card */
-.resolved-action-card {
-  background: #FFFFFF;
-  border: 1px solid var(--color-line);
-  border-left: 4.5px solid var(--color-clarity);
-  padding: 3.5mm 4.5mm;
-  border-radius: 2px;
-  box-shadow: 0 4px 14px rgba(34, 38, 43, 0.05);
-}
-
-.resolved-action-header {
+.confusion-marks {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2mm;
-}
-
-.resolved-action-title {
-  font-size: 3.2mm;
-  font-weight: 700;
-  color: var(--color-ink);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  display: flex;
-  align-items: center;
-  gap: 1.5mm;
-}
-
-.resolved-action-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
   gap: 1.8mm;
 }
 
-.resolved-action-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 2mm;
-  font-size: 3.1mm;
-  line-height: 1.35;
-  color: var(--color-ink);
+.question-marks {
+  font-family: var(--font-display);
+  font-size: 7.5mm;
+  font-weight: 800;
+  color: #2D333B;
+  letter-spacing: -0.05em;
+  line-height: 1;
 }
 
-.resolved-check-icon {
-  width: 3.8mm;
-  height: 3.8mm;
-  background: var(--color-calm);
-  color: #fff;
-  border-radius: 2px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2.6mm;
-  flex-shrink: 0;
-  margin-top: 0.3mm;
-}
-
-.resolved-grounded-note {
-  font-size: 2.5mm;
-  color: var(--color-calm);
-  font-weight: 600;
-  margin-top: 2.5mm;
-  display: flex;
-  align-items: center;
-  gap: 1.5mm;
-}
-
-/* --------------------------------------------------------------------------
-   3. Three-Icon Feature Row (Scan · Understand · Act)
-   -------------------------------------------------------------------------- */
-.poster-features-row {
-  position: relative;
-  z-index: 5;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 4.5mm;
-  margin: 3mm 0;
-}
-
-.feature-pill-card {
-  background: var(--color-paper-card);
-  border: 1.5px solid var(--color-line);
-  padding: 5mm 5mm;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  gap: 2.5mm;
-  box-shadow: 0 4px 12px var(--color-paper-shadow);
-}
-
-.feature-pill-card__top {
-  display: flex;
-  align-items: center;
-  gap: 3mm;
-}
-
-.feature-icon-circle {
+.scribble-icon {
   width: 9.5mm;
   height: 9.5mm;
-  border-radius: 2px;
-  background: var(--color-paper);
-  border: 1.5px solid var(--color-line);
+  color: #2D333B;
+}
+
+/* Inner Layout for Left Side: Sticky Notes Column + Tilted Letter */
+.confusion-content-split {
+  position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-ink);
+  align-items: flex-start;
+  margin-top: 1.5mm;
+  height: 100%;
+}
+
+/* Sticky Annotations with Pointing Arrows */
+.sticky-tags-column {
+  width: 26mm;
+  display: flex;
+  flex-direction: column;
+  gap: 4mm;
+  z-index: 15;
   flex-shrink: 0;
+  padding-top: 2mm;
 }
 
-.feature-pill-card:nth-child(1) .feature-icon-circle {
-  color: var(--color-seal);
-  border-color: rgba(166, 58, 46, 0.4);
-  background: var(--color-seal-light);
-}
-
-.feature-pill-card:nth-child(2) .feature-icon-circle {
-  color: #9A6C00;
-  border-color: var(--color-clarity);
-  background: var(--color-clarity-light);
-}
-
-.feature-pill-card:nth-child(3) .feature-icon-circle {
-  color: var(--color-calm);
-  border-color: var(--color-calm);
-  background: var(--color-calm-light);
-}
-
-.feature-label-wrap {
-  display: flex;
-  flex-direction: column;
-}
-
-.feature-step-tag {
-  font-size: 2.4mm;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--color-ink-muted);
-}
-
-.feature-main-label {
-  font-family: var(--font-display);
-  font-size: 4.6mm;
-  font-weight: 600;
-  color: var(--color-ink);
-  line-height: 1.1;
-}
-
-.feature-desc-text {
-  font-size: 3.1mm;
-  line-height: 1.45;
-  color: var(--color-ink-muted);
-}
-
-/* --------------------------------------------------------------------------
-   4. Language Showcase Strip
-   -------------------------------------------------------------------------- */
-.poster-languages-strip {
+.sticky-note-item {
   position: relative;
-  z-index: 5;
-  background: var(--color-paper-light);
-  border: 1px solid var(--color-line);
-  padding: 3mm 4mm;
-  border-radius: 2px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: 2mm 0;
 }
 
-.languages-strip__label {
-  font-size: 2.8mm;
+.sticky-pill {
+  background: #FCE8BD;
+  border: 1px solid #D8BC86;
+  color: #4A3410;
+  font-size: 2.35mm;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-ink-muted);
+  padding: 1.3mm 2mm;
+  border-radius: 3px;
+  box-shadow: 0 2px 7px rgba(60, 45, 20, 0.18);
   white-space: nowrap;
+  line-height: 1.15;
+  transform: rotate(-2deg);
 }
 
-.languages-chip-track {
-  display: flex;
-  align-items: center;
-  gap: 2mm;
-  flex-wrap: wrap;
-  justify-content: flex-end;
+.sticky-arrow-svg {
+  position: absolute;
+  left: calc(100% - 1mm);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8mm;
+  height: 4mm;
+  pointer-events: none;
 }
 
-.lang-badge-chip {
-  padding: 1.5mm 3.2mm;
-  background: var(--color-paper-card);
-  border: 1px solid var(--color-line);
-  border-radius: 2px;
-  font-size: 3.2mm;
-  font-weight: 600;
-  color: var(--color-ink);
-  display: inline-flex;
-  align-items: baseline;
-  gap: 1.5mm;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
-}
-
-.lang-badge-chip--ta { font-family: var(--font-tamil); }
-.lang-badge-chip--hi { font-family: var(--font-hindi); }
-.lang-badge-chip--te { font-family: var(--font-telugu); }
-.lang-badge-chip--kn { font-family: var(--font-kannada); }
-.lang-badge-chip--bn { font-family: var(--font-bengali); }
-
-.lang-badge-chip__roman {
-  font-family: var(--font-body);
-  font-size: 2.3mm;
-  font-weight: 400;
-  color: var(--color-ink-muted);
-}
-
-/* --------------------------------------------------------------------------
-   5. Footer Band
-   -------------------------------------------------------------------------- */
-.poster-footer {
+/* Realistic Tilted Official Government Tax Notice */
+.official-letter-wrap {
+  flex: 1;
   position: relative;
   z-index: 5;
-  padding-top: 4mm;
-  border-top: 1.5px solid var(--color-line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  margin-left: 2mm;
+  transform: rotate(-3.5deg);
+  transition: transform 0.2s ease;
 }
 
-.footer-credits {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2mm;
+.official-tax-notice {
+  background: #FFFFFF;
+  border: 1px solid #D1C8B4;
+  padding: 3.5mm 4mm;
+  border-radius: 2px;
+  box-shadow: 
+    0 12px 28px rgba(40, 32, 20, 0.28),
+    0 2px 8px rgba(40, 32, 20, 0.16);
+  position: relative;
+  font-family: 'Times New Roman', serif;
+  color: #1A1A1A;
 }
 
-.footer-team-row {
-  display: flex;
-  align-items: baseline;
-  gap: 2.5mm;
+/* Subtle aging fold line on letter */
+.official-tax-notice::before {
+  content: "";
+  position: absolute;
+  top: 36%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);
 }
 
-.footer-team-badge {
-  font-family: var(--font-display);
-  font-size: 4.8mm;
-  font-weight: 600;
-  color: var(--color-ink);
+.notice-emblem-header {
+  text-align: center;
+  margin-bottom: 2mm;
 }
 
-.footer-team-role {
-  font-size: 2.8mm;
-  font-weight: 600;
-  color: var(--color-seal);
-  letter-spacing: 0.06em;
+.ashoka-emblem-svg {
+  width: 7mm;
+  height: 7mm;
+  margin: 0 auto 1mm;
+  display: block;
+}
+
+.dept-name {
+  font-size: 2.35mm;
+  font-weight: 700;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
+  color: #111;
+  line-height: 1.15;
 }
 
-.footer-team-members {
-  font-size: 2.9mm;
-  color: var(--color-ink-muted);
+.notice-title-bar {
+  font-size: 2.1mm;
+  font-weight: 700;
+  text-align: center;
+  border-top: 0.6px solid #222;
+  border-bottom: 0.6px solid #222;
+  padding: 0.9mm 0;
+  margin: 1.4mm 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
-.footer-url-text {
-  font-family: var(--font-body);
-  font-size: 3.4mm;
-  font-weight: 600;
-  color: var(--color-ink);
-  letter-spacing: -0.01em;
+.notice-meta-line {
+  font-size: 1.8mm;
+  font-family: 'Courier New', monospace;
+  color: #333;
+  line-height: 1.35;
+  margin-bottom: 1.8mm;
+}
+
+.notice-body-paragraph {
+  font-size: 1.95mm;
+  line-height: 1.4;
+  color: #222;
+  text-align: justify;
+  margin-bottom: 2.5mm;
+}
+
+.notice-footer-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  border-top: 0.6px dashed #999;
+  padding-top: 1.8mm;
   margin-top: 1mm;
 }
 
-/* QR Code Block */
-.poster-qr-block {
-  display: flex;
-  align-items: center;
-  gap: 4mm;
-  background: var(--color-paper-card);
-  border: 1.5px solid var(--color-line);
-  padding: 3mm 4mm;
-  border-radius: 2px;
-  box-shadow: 0 4px 12px var(--color-paper-shadow);
+.notice-authority {
+  font-size: 1.8mm;
+  font-weight: 600;
+  line-height: 1.25;
 }
 
-.qr-code-canvas-box {
-  width: 22mm;
-  height: 22mm;
-  background: #fff;
-  border: 1px solid var(--color-line);
-  padding: 1.5mm;
+.notice-barcode {
+  height: 4mm;
+  width: 27mm;
+  background: repeating-linear-gradient(
+    90deg,
+    #111,
+    #111 1px,
+    transparent 1px,
+    transparent 2.5px,
+    #111 2.5px,
+    #111 4.5px
+  );
+}
+
+/* --------------------------------------------------------------------------
+   THE TORN PAPER DIVIDER (CENTER)
+   -------------------------------------------------------------------------- */
+.torn-divider-svg {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(47% - 5mm);
+  width: 12mm;
+  height: 100%;
+  z-index: 20;
+  pointer-events: none;
+  filter: drop-shadow(-4px 0 6px rgba(45, 35, 20, 0.2));
+}
+
+/* --------------------------------------------------------------------------
+   RIGHT SIDE: CLARITY & ACTION
+   -------------------------------------------------------------------------- */
+.story-col-clarity {
+  position: relative;
+  padding: 3.5mm 3.5mm 3.5mm 8mm; /* Extra left padding to clear the torn edge */
+  background: #FFFDF9;
+  border-radius: 0 6px 6px 0;
+  box-shadow: 
+    0 8px 30px rgba(45, 35, 20, 0.1),
+    inset 0 0 35px rgba(245, 176, 30, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 10;
+}
+
+/* Header badge: Oh. Now I get it. */
+.clarity-header-banner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 2.5mm;
+}
+
+.clarity-badge-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 2.5mm;
+}
+
+.oh-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--c-clarity);
+  color: var(--c-ink);
+  font-family: var(--font-display);
+  font-size: 5.8mm;
+  font-weight: 800;
+  padding: 1.2mm 4.5mm 1.5mm;
+  border-radius: 24px;
+  box-shadow: 0 3px 12px rgba(245, 176, 30, 0.4);
+  letter-spacing: -0.01em;
+}
+
+.lightbulb-icon-wrap {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.qr-code-canvas-box svg,
-.qr-code-canvas-box img {
+.lightbulb-svg {
+  width: 8.5mm;
+  height: 8.5mm;
+}
+
+.tamil-headline-row {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  margin-top: 1.2mm;
+}
+
+.tamil-clear-text {
+  font-family: var(--font-tamil);
+  font-size: 5.6mm;
+  font-weight: 700;
+  color: var(--c-ink);
+  line-height: 1.2;
+}
+
+.clarity-sparkles-svg {
+  width: 6mm;
+  height: 6mm;
+  color: var(--c-clarity);
+}
+
+/* The Clean "Income Tax Notice (Simplified)" Summary Card */
+.simplified-notice-card {
+  background: #FFFFFF;
+  border: 1.5px solid #EFE6D4;
+  border-radius: 8px;
+  box-shadow: 
+    0 10px 30px rgba(45, 35, 20, 0.08),
+    0 2px 6px rgba(45, 35, 20, 0.04);
+  padding: 3.5mm 4mm;
+  position: relative;
+}
+
+/* Card Header */
+.card-header-bar {
+  display: flex;
+  align-items: center;
+  gap: 2.5mm;
+  padding-bottom: 2.2mm;
+  margin-bottom: 2.5mm;
+  border-bottom: 1px solid #EFEAE0;
+}
+
+.card-emblem-icon {
+  width: 6.5mm;
+  height: 6.5mm;
+  flex-shrink: 0;
+}
+
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-title-main {
+  font-family: var(--font-display);
+  font-size: 3.9mm;
+  font-weight: 800;
+  color: var(--c-ink);
+  line-height: 1.15;
+}
+
+.card-title-sub {
+  font-size: 2.6mm;
+  color: var(--c-sage);
+  font-weight: 700;
+}
+
+/* Breakdown Rows */
+.breakdown-row-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.2mm;
+}
+
+.breakdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2mm 2.5mm;
+  border-radius: 5px;
+  background: #FAFAF7;
+  border: 1px solid #F2EEE5;
+}
+
+.breakdown-item--highlight {
+  background: #FFF9EE;
+  border-color: #F6DFAD;
+}
+
+.item-left {
+  display: flex;
+  align-items: center;
+  gap: 2.8mm;
+  flex: 1;
+}
+
+.item-icon-circle {
+  width: 7mm;
+  height: 7mm;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #fff;
+  font-size: 3.5mm;
+  font-weight: 700;
+}
+
+.item-icon-circle--cal {
+  background: #E89A3C;
+}
+
+.item-icon-circle--pay {
+  background: #4E7C62;
+}
+
+.item-icon-circle--time {
+  background: #B83A2C;
+}
+
+.item-icon-circle--info {
+  background: #5A626E;
+}
+
+.item-text-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.item-label {
+  font-size: 2.8mm;
+  font-weight: 700;
+  color: var(--c-ink);
+  line-height: 1.2;
+}
+
+.item-desc {
+  font-size: 2.4mm;
+  color: var(--c-ink-soft);
+  line-height: 1.25;
+}
+
+.item-pill-tag {
+  font-size: 2.7mm;
+  font-weight: 700;
+  padding: 1.2mm 2.8mm;
+  border-radius: 4px;
+  background: #EFEBE1;
+  color: var(--c-ink);
+  white-space: nowrap;
+  margin-left: 2mm;
+  flex-shrink: 0;
+}
+
+.item-pill-tag--gold {
+  background: var(--c-clarity);
+  color: #1A1C1E;
+  font-size: 3.4mm;
+  font-weight: 800;
+  box-shadow: 0 2px 7px rgba(245, 176, 30, 0.4);
+}
+
+/* ==========================================================================
+   3. THREE-PILLAR PROCESS ROW (SCAN · UNDERSTAND · ACT)
+   ========================================================================== */
+.poster-process-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4.5mm;
+  margin: 1.5mm 0 2.5mm;
+}
+
+.process-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: #FFFFFF;
+  border: 1px solid var(--c-line);
+  padding: 3.5mm 3mm 2.8mm;
+  border-radius: 7px;
+  box-shadow: 0 4px 14px rgba(45, 35, 20, 0.05);
+}
+
+.process-icon-disc {
+  width: 14mm;
+  height: 14mm;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  margin-bottom: 2mm;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+}
+
+.process-icon-disc--scan {
+  background: linear-gradient(135deg, #F5B01E, #DD8705);
+}
+
+.process-icon-disc--understand {
+  background: linear-gradient(135deg, #5C8C74, #395E4A);
+}
+
+.process-icon-disc--act {
+  background: linear-gradient(135deg, #C24536, #922518);
+}
+
+.process-icon-disc svg {
+  width: 7mm;
+  height: 7mm;
+}
+
+.process-card-title {
+  font-family: var(--font-display);
+  font-size: 4.4mm;
+  font-weight: 800;
+  color: var(--c-ink);
+  line-height: 1.15;
+  margin-bottom: 1mm;
+}
+
+.process-card-desc {
+  font-size: 2.7mm;
+  color: var(--c-ink-soft);
+  line-height: 1.25;
+}
+
+/* ==========================================================================
+   4. REGIONAL LANGUAGE SHOWCASE PILLS
+   ========================================================================== */
+.poster-languages-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FFFFFF;
+  border: 1px solid var(--c-line);
+  padding: 2.2mm 4mm;
+  border-radius: 30px;
+  margin-bottom: 2.5mm;
+  box-shadow: 0 3px 12px rgba(45, 35, 20, 0.04);
+}
+
+.lang-pill {
+  font-size: 3.6mm;
+  font-weight: 600;
+  padding: 1.5mm 4.5mm;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.lang-pill--tamil {
+  font-family: var(--font-tamil);
+  background: #FEE2D8;
+  color: #8C2815;
+}
+
+.lang-pill--hindi {
+  font-family: var(--font-hindi);
+  background: #FEF3D6;
+  color: #7A5308;
+}
+
+.lang-pill--telugu {
+  font-family: var(--font-telugu);
+  background: #E2F2E9;
+  color: #1E5C35;
+}
+
+.lang-pill--kannada {
+  font-family: var(--font-kannada);
+  background: #E0EFFE;
+  color: #14508A;
+}
+
+.lang-pill--bengali {
+  font-family: var(--font-bengali);
+  background: #F3E8FF;
+  color: #632C92;
+}
+
+/* ==========================================================================
+   5. FOOTER WITH SKYLINE WATERMARK & SCAN-TO-TRY QR CODE
+   ========================================================================== */
+.poster-footer-wrap {
+  position: relative;
+  padding-top: 2mm;
+  margin-top: auto;
+}
+
+/* Heritage Monuments Skyline Silhouette in background */
+.footer-skyline-bg {
+  position: absolute;
+  bottom: 0;
+  left: -9mm;
+  right: -9mm;
+  height: 28mm;
+  pointer-events: none;
+  opacity: 0.22;
+  z-index: 1;
+}
+
+.footer-content-row {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4mm;
+  margin-bottom: 2mm;
+}
+
+/* Scannable QR Code Box */
+.qr-code-interactive-card {
+  width: 20mm;
+  height: 20mm;
+  background: #FFFFFF;
+  border: 1.2px solid var(--c-ink);
+  border-radius: 4px;
+  padding: 1.2mm;
+  box-shadow: 0 4px 14px rgba(45, 35, 20, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code-interactive-card svg {
   width: 100%;
   height: 100%;
   display: block;
 }
 
-.qr-content {
+/* Callout badge pointing to QR */
+.qr-callout-bubble {
   display: flex;
-  flex-direction: column;
-  gap: 1mm;
+  align-items: center;
+  gap: 2mm;
+  position: relative;
 }
 
-.qr-cta-pill {
-  display: inline-flex;
+.qr-curved-arrow-svg {
+  width: 7mm;
+  height: 7mm;
+  transform: rotate(-10deg);
+}
+
+.qr-scan-badge {
+  background: var(--c-clarity);
+  color: var(--c-ink);
+  font-family: var(--font-display);
+  font-size: 3.6mm;
+  font-weight: 800;
+  padding: 1.4mm 3.6mm;
+  border-radius: 20px;
+  box-shadow: 0 2px 9px rgba(245, 176, 30, 0.4);
+  display: flex;
   align-items: center;
   gap: 1.5mm;
-  background: var(--color-clarity);
-  color: var(--color-ink);
-  font-weight: 700;
-  font-size: 3mm;
-  padding: 1mm 2.8mm;
-  border-radius: 2px;
-  width: fit-content;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
 }
 
-.qr-subtext {
-  font-size: 2.8mm;
-  color: var(--color-ink-muted);
-  max-width: 32mm;
-  line-height: 1.3;
+.qr-sparkle-rays {
+  width: 4.5mm;
+  height: 4.5mm;
 }
 
-/* --------------------------------------------------------------------------
-   Print Directives
-   -------------------------------------------------------------------------- */
+/* Brand & Live URL */
+.footer-credits-centered {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+}
+
+.team-line-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3.5mm;
+  margin-bottom: 1mm;
+}
+
+.team-line-badge::before,
+.team-line-badge::after {
+  content: "";
+  display: inline-block;
+  width: 18mm;
+  height: 1px;
+  background: var(--c-line-dark);
+}
+
+.team-name-text {
+  font-family: var(--font-display);
+  font-size: 4.2mm;
+  font-weight: 800;
+  color: var(--c-ink);
+  letter-spacing: -0.01em;
+}
+
+.footer-live-url {
+  font-family: var(--font-body);
+  font-size: 2.9mm;
+  color: var(--c-ink-soft);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+}
+
+.footer-live-url:hover {
+  color: var(--c-clarity-dark);
+}
+
+/* ==========================================================================
+   PRINT DIRECTIVES (Zero Overflow, Exact Vector Fidelity)
+   ========================================================================== */
 @media print {
   body {
     background: transparent !important;
     padding: 0 !important;
+    margin: 0 !important;
   }
 
   .poster-screen-stage {
     padding: 0 !important;
     background: transparent !important;
+    min-height: auto !important;
   }
 
   .poster-toolbar {
@@ -943,22 +1103,22 @@ body[data-paper-size="a3"] .poster-sheet {
     transform: none !important;
   }
 
-  /* Default A4 print: 210mm x 297mm */
+  /* Default A4 print */
   body:not([data-paper-size="a3"]) .poster-sheet,
   body[data-paper-size="a4"] .poster-sheet {
-    width: 297mm !important;
-    height: 420mm !important;
-    max-width: 297mm !important;
-    max-height: 420mm !important;
-    zoom: 0.70710678 !important; /* Exactly 210mm x 297mm A4 portrait */
+    width: 210mm !important;
+    height: 297mm !important;
+    max-width: 210mm !important;
+    max-height: 297mm !important;
+    zoom: 1 !important;
   }
 
-  /* A3 print: 297mm x 420mm */
+  /* A3 print */
   body[data-paper-size="a3"] .poster-sheet {
     width: 297mm !important;
     height: 420mm !important;
     max-width: 297mm !important;
     max-height: 420mm !important;
-    zoom: 1 !important;
+    zoom: 1.41421356 !important;
   }
 }
