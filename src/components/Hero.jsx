@@ -14,7 +14,6 @@ export default function Hero() {
   const bgTexturesRef = useRef(null);
 
   const [isReducedMotion, setIsReducedMotion] = useState(false);
-  const [manualScrubProgress, setManualScrubProgress] = useState(null);
 
   useEffect(() => {
     // Check prefers-reduced-motion
@@ -40,56 +39,61 @@ export default function Hero() {
 
     if (!container || !pinTarget) return;
 
-    // Build the master scroll-scrubbed timeline
+    // Normalize scroll to eliminate mobile address-bar resize jank
+    try {
+      ScrollTrigger.normalizeScroll(true);
+    } catch {
+      // Ignore if not supported in test environment
+    }
+
+    // Master scroll-scrubbed timeline with smoothed scrub: 1
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: container,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: 1, // Smoothed interpolation instead of rigid 1:1
           pin: pinTarget,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          fastScrollEnd: true,
           onUpdate: (self) => {
-            // Expose scrub progress
             container.style.setProperty('--scrub-progress', self.progress);
           }
         }
       });
 
-      // Initial state: cramped text visible, resolved text hidden
-      gsap.set(resolved, { opacity: 0, scale: 0.95, y: 15 });
-      gsap.set(subhead, { opacity: 0, y: 20 });
-      gsap.set(bgTextures, { opacity: 0.75, filter: 'blur(0px)' });
+      // Initial state: only compositor-friendly properties (transform & opacity)
+      gsap.set(cramped, { opacity: 1, scale: 1, transformOrigin: 'left center' });
+      gsap.set(resolved, { opacity: 0, scale: 0.94, y: 12, transformOrigin: 'left center' });
+      gsap.set(subhead, { opacity: 0, y: 16 });
+      gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
 
-      // Step 1: Cramped text untangles and fades out
+      // Step 1: Cramped text cross-fades out and scales down gently (no font-size / letter-spacing animation)
       tl.to(cramped, {
         opacity: 0,
-        letterSpacing: '0.04em',
-        scale: 1.04,
-        filter: 'blur(3px)',
-        duration: 0.45,
+        scale: 0.97,
+        duration: 0.4,
         ease: 'power1.inOut'
       }, 0);
 
-      // Background messy document textures fade away as clarity arrives
+      // Background messy document textures fade away via opacity and transform only
       tl.to(bgTextures, {
         opacity: 0,
         scale: 0.96,
-        filter: 'blur(8px)',
         duration: 0.4,
         ease: 'power1.out'
       }, 0.05);
 
-      // Step 2: "Oh. Now I get it." resolves clearly
+      // Step 2: "Oh. Now I get it." cross-fades in and scales to 1
       tl.to(resolved, {
         opacity: 1,
         scale: 1,
         y: 0,
         duration: 0.45,
         ease: 'power2.out'
-      }, 0.3);
+      }, 0.25);
 
       // Step 3: Subhead and CTA fade in
       tl.to(subhead, {
@@ -114,7 +118,7 @@ export default function Hero() {
       aria-label="Introduction to Hmm"
     >
       <div ref={pinTargetRef} className="hero-pinned-viewport">
-        {/* Faint Background Document Textures (Fades out on scroll) */}
+        {/* Faint Background Document Textures (Fades out on scroll via transform & opacity) */}
         <div
           ref={bgTexturesRef}
           className="hero-doc-textures"
@@ -147,7 +151,7 @@ export default function Hero() {
             <span>Document Clarity Engine</span>
           </div>
 
-          {/* The Transforming Headline Stage */}
+          {/* The Transforming Headline Stage (Pure transform & opacity cross-fade) */}
           <div className="hero-headline-stage">
             {/* 1. Cramped, dense, confusing state */}
             <h1

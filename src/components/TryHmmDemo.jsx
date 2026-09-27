@@ -12,14 +12,18 @@ import {
   FileText,
   Volume2,
   CheckCircle2,
-  ExternalLink,
   RefreshCw,
   Sparkles
 } from 'lucide-react';
-import { LANGUAGES, SAMPLE_DOCUMENTS } from '../data/mockData';
+import {
+  LANGUAGES,
+  SAMPLE_DOCUMENTS,
+  getTranslation,
+  getLocalizedDocumentContent
+} from '../data/mockData';
 
 export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
-  // State
+  // Single source of truth for language selection
   const [selectedDocId, setSelectedDocId] = useState(initialDocId);
   const [customFile, setCustomFile] = useState(null);
   const [customFilePreview, setCustomFilePreview] = useState(null);
@@ -41,6 +45,9 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   // Checklist state for "What to do next"
   const [checkedItems, setCheckedItems] = useState({});
 
+  // Helper to translate any static UI string based on single source of truth (selectedLang)
+  const t = (key) => getTranslation(selectedLang, key);
+
   // Sync initialDocId if changed from parent
   useEffect(() => {
     if (initialDocId) {
@@ -55,6 +62,13 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
 
   // Current active document data
   const currentDoc = SAMPLE_DOCUMENTS.find((d) => d.id === selectedDocId) || SAMPLE_DOCUMENTS[0];
+
+  // Retrieve fully localized content (both explanation AND action items inherit selectedLang)
+  const localizedContent = getLocalizedDocumentContent(currentDoc, selectedLang);
+  const activeSimplifiedText = localizedContent?.simplified || '';
+  const activeAudioText = localizedContent?.audioText || '';
+  const activeActionItems = localizedContent?.actionItems || [];
+  const activeGroundedRule = localizedContent?.groundedRule || '';
 
   // Micro-copy sequence for processing state (deliberate nod to the name Hmm)
   const MICRO_COPIES = ['Hmm...', '...thinking', '...almost there'];
@@ -174,11 +188,7 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   const startAudio = () => {
     stopAudio();
 
-    const textToSpeak =
-      currentDoc.audioText[selectedLang] ||
-      currentDoc.audioText['en'] ||
-      currentDoc.simplified[selectedLang] ||
-      currentDoc.simplified['en'];
+    const textToSpeak = activeAudioText || activeSimplifiedText;
 
     const langCodeMap = {
       ta: 'ta-IN',
@@ -256,49 +266,43 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     }));
   };
 
-  // WhatsApp sharing
+  // WhatsApp sharing using localized content
   const handleShareWhatsApp = () => {
-    const text = `*Explanation by Hmm (${currentDoc.title})*:\n\n${
-      currentDoc.simplified[selectedLang] || currentDoc.simplified['en']
-    }\n\n*Next steps to take*:\n${currentDoc.actionItems
+    const text = `*${t('plainExplanation')} (${currentDoc.title})*:\n\n${activeSimplifiedText}\n\n*${t(
+      'whatToDoNext'
+    )}*:\n${activeActionItems
       .map((item, i) => `${i + 1}. ${item.text}`)
-      .join('\n')}\n\nSimplified with Hmm (Gear5coders) — Understand Any Document, Instantly.`;
+      .join('\n')}\n\n${activeGroundedRule}\n\n— Hmm (Gear5coders)`;
 
     const encoded = encodeURIComponent(text);
     window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank', 'noopener,noreferrer');
   };
 
-  // Download summary as formatted plain text file
+  // Download summary using localized content
   const handleDownloadSummary = () => {
     const content = `==========================================================
-HMM — PLAIN LANGUAGE DOCUMENT SUMMARY
-Grounded in Verified Rules (Gear5coders)
+HMM — ${t('plainExplanation').toUpperCase()}
+${activeGroundedRule}
 ==========================================================
 
-Document: ${currentDoc.title}
-Issuing Authority: ${currentDoc.issuingAuthority}
-Reference Number: ${currentDoc.refNumber}
-Language: ${LANGUAGES.find((l) => l.id === selectedLang)?.name || selectedLang}
+${currentDoc.title}
+${currentDoc.issuingAuthority}
+Ref: ${currentDoc.refNumber}
+Language: ${LANGUAGES.find((l) => l.id === selectedLang)?.name || selectedLang} (${selectedLang})
 
 ----------------------------------------------------------
-WHAT THIS DOCUMENT MEANS IN PLAIN LANGUAGE:
+${t('plainExplanation').toUpperCase()}:
 ----------------------------------------------------------
-${currentDoc.simplified[selectedLang] || currentDoc.simplified['en']}
+${activeSimplifiedText}
 
 ----------------------------------------------------------
-WHAT TO DO NEXT (ACTION CHECKLIST):
+${t('whatToDoNext').toUpperCase()}:
 ----------------------------------------------------------
-${currentDoc.actionItems.map((item, i) => `[ ] ${i + 1}. ${item.text} (${item.priority})`).join('\n')}
+${activeActionItems.map((item, i) => `[ ] ${i + 1}. ${item.text} (${item.priority})`).join('\n')}
 
 ----------------------------------------------------------
-REGULATORY CITATION:
-${currentDoc.groundedRule}
-----------------------------------------------------------
-DISCLAIMER:
-Hmm explains what a document says and flags what deserves a
-professional's attention. It does not diagnose, prescribe, or give
-legal advice — always confirm important decisions with a doctor,
-lawyer, or the relevant authority.
+CITATION:
+${activeGroundedRule}
 ==========================================================`;
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
@@ -311,9 +315,6 @@ lawyer, or the relevant authority.
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
-
-  const activeSimplifiedText =
-    currentDoc.simplified[selectedLang] || currentDoc.simplified['en'];
 
   return (
     <section className="demo-section" id="try-hmm" aria-labelledby="demo-heading">
@@ -335,7 +336,7 @@ lawyer, or the relevant authority.
         <div className="demo-surface paper-sheet">
           {/* Top Bar: Sample Document Quick Switcher */}
           <div className="demo-sample-bar">
-            <span className="sample-bar-label">Try a realistic sample:</span>
+            <span className="sample-bar-label">{t('samplePrompt')}</span>
             <div className="sample-bar-chips" role="radiogroup" aria-label="Sample Documents">
               {SAMPLE_DOCUMENTS.map((doc) => (
                 <button
@@ -364,7 +365,7 @@ lawyer, or the relevant authority.
                 onClick={triggerErrorDemo}
                 title="Test how Hmm handles unreadable or blurry pages with human empathy"
               >
-                <span>Demo Blurry Photo Error</span>
+                <span>{t('demoErrorBtn')}</span>
               </button>
             </div>
           </div>
@@ -375,7 +376,7 @@ lawyer, or the relevant authority.
             <div className="demo-col demo-col--input">
               <div className="input-group-label">
                 <span className="step-badge">1</span>
-                <strong>Document Source</strong>
+                <strong>{t('step1')}</strong>
               </div>
 
               {selectedDocId === 'custom' && customFile ? (
@@ -386,7 +387,7 @@ lawyer, or the relevant authority.
                     <div className="uploaded-file-info">
                       <strong className="file-name">{customFile.name}</strong>
                       <span className="file-size">
-                        {(customFile.size / 1024).toFixed(1)} KB — Uploaded
+                        {(customFile.size / 1024).toFixed(1)} KB — {t('uploaded')}
                       </span>
                     </div>
                     <button
@@ -401,7 +402,7 @@ lawyer, or the relevant authority.
                       title="Choose another document"
                     >
                       <RotateCcw size={14} />
-                      <span>Change</span>
+                      <span>{t('change')}</span>
                     </button>
                   </div>
 
@@ -425,7 +426,7 @@ lawyer, or the relevant authority.
                   <div className="doc-card-ref">Ref: {currentDoc.refNumber}</div>
 
                   <div className="doc-card-raw-snippet">
-                    <div className="snippet-caption">Document Excerpt (Raw OCR):</div>
+                    <div className="snippet-caption">{t('rawOcr')}</div>
                     <pre>{currentDoc.rawExcerpt}</pre>
                   </div>
                 </div>
@@ -460,15 +461,15 @@ lawyer, or the relevant authority.
                   </div>
                   <div className="dropzone-text">
                     <label htmlFor="doc-file-upload" className="dropzone-label-link">
-                      Upload your own document
+                      {t('uploadOwn')}
                     </label>
-                    <span className="dropzone-sub">Drag and drop here, or browse files</span>
+                    <span className="dropzone-sub">{t('dragDrop')}</span>
                   </div>
 
                   {/* Mobile Camera Button */}
                   <label htmlFor="doc-camera-capture" className="btn-camera-capture">
                     <Camera size={15} />
-                    <span>Take Photo</span>
+                    <span>{t('takePhoto')}</span>
                   </label>
                 </div>
               </div>
@@ -478,7 +479,7 @@ lawyer, or the relevant authority.
             <div className="demo-col demo-col--output">
               <div className="input-group-label">
                 <span className="step-badge">2</span>
-                <strong>Choose Regional Language</strong>
+                <strong>{t('step2')}</strong>
               </div>
 
               {/* Language Selector Chips */}
@@ -516,7 +517,7 @@ lawyer, or the relevant authority.
                 >
                   <Sparkles size={18} />
                   <span>
-                    {isProcessing ? 'Simplifying...' : 'Simplify & Explain Document'}
+                    {isProcessing ? t('simplifying') : t('simplifyBtn')}
                   </span>
                 </button>
               </div>
@@ -534,9 +535,9 @@ lawyer, or the relevant authority.
                         {MICRO_COPIES[processStepIndex]}
                       </span>
                       <p className="microcopy-sub">
-                        {processStepIndex === 0 && 'Extracting text and identifying statutory clauses...'}
-                        {processStepIndex === 1 && 'Translating into plain conversational language...'}
-                        {processStepIndex === 2 && 'Grounding action checklist against verified rules...'}
+                        {processStepIndex === 0 && t('thinking0')}
+                        {processStepIndex === 1 && t('thinking1')}
+                        {processStepIndex === 2 && t('thinking2')}
                       </p>
                     </div>
                     <div className="processing-dots-bar">
@@ -555,7 +556,7 @@ lawyer, or the relevant authority.
                     <AlertCircle size={24} className="error-icon" />
                   </div>
                   <div className="error-content">
-                    <h4 className="error-title">Let’s try a clearer photo</h4>
+                    <h4 className="error-title">{t('errorTitle')}</h4>
                     <p className="error-desc">{errorMessage}</p>
                     <div className="error-actions">
                       <button
@@ -566,7 +567,7 @@ lawyer, or the relevant authority.
                           setSelectedDocId('gov-notice');
                         }}
                       >
-                        Reset to Sample Document
+                        {t('resetSample')}
                       </button>
                     </div>
                   </div>
@@ -579,8 +580,8 @@ lawyer, or the relevant authority.
                   {/* Result Header Strip */}
                   <div className="results-header">
                     <div className="results-header-title">
-                      <span className="rubber-stamp">CLARITY ACHIEVED</span>
-                      <h4>Plain Language Explanation</h4>
+                      <span className="rubber-stamp">{t('clarityAchieved')}</span>
+                      <h4>{t('plainExplanation')}</h4>
                     </div>
                     <span className="results-lang-tag">
                       {LANGUAGES.find((l) => l.id === selectedLang)?.native} (
@@ -600,7 +601,8 @@ lawyer, or the relevant authority.
                         type="button"
                         className={`btn-play-pause ${isPlayingAudio ? 'btn-play-pause--playing' : ''}`}
                         onClick={togglePlayAudio}
-                        aria-label={isPlayingAudio ? 'Pause audio explanation' : 'Play audio explanation'}
+                        aria-label={isPlayingAudio ? t('pauseAudio') : t('playAudio')}
+                        title={isPlayingAudio ? t('pauseAudio') : t('playAudio')}
                       >
                         {isPlayingAudio ? <Pause size={18} /> : <Play size={18} fill="currentColor" />}
                       </button>
@@ -609,14 +611,14 @@ lawyer, or the relevant authority.
                         <div className="audio-label-row">
                           <span className="audio-title">
                             <Volume2 size={14} />
-                            Spoken in {LANGUAGES.find((l) => l.id === selectedLang)?.name}
+                            {t('spokenIn')} {LANGUAGES.find((l) => l.id === selectedLang)?.name}
                           </span>
                           <span className="audio-timer">
                             {Math.round((audioProgress / 100) * audioDuration)}s / {audioDuration}s
                           </span>
                         </div>
 
-                        {/* Scrub Bar */}
+                        {/* Scrub Bar (Compositor-friendly transform: scaleX) */}
                         <div
                           className="audio-scrub-bar"
                           role="progressbar"
@@ -626,7 +628,10 @@ lawyer, or the relevant authority.
                         >
                           <div
                             className="audio-scrub-fill"
-                            style={{ width: `${audioProgress}%` }}
+                            style={{
+                              transform: `scaleX(${audioProgress / 100})`,
+                              transformOrigin: 'left'
+                            }}
                           ></div>
                         </div>
                       </div>
@@ -654,15 +659,15 @@ lawyer, or the relevant authority.
                     <div className="action-card-header">
                       <div className="action-card-kicker">
                         <CheckCircle2 size={16} className="action-kicker-icon" />
-                        <span>What to do next — Action Card</span>
+                        <span>{t('whatToDoNext')}</span>
                       </div>
                       <span className="action-card-sub">
-                        Check off items as you complete them
+                        {t('checklistHint')}
                       </span>
                     </div>
 
                     <div className="action-checklist" role="list">
-                      {currentDoc.actionItems.map((item, idx) => {
+                      {activeActionItems.map((item, idx) => {
                         const isDone = !!checkedItems[idx];
                         return (
                           <div
@@ -692,7 +697,7 @@ lawyer, or the relevant authority.
                     </div>
 
                     <div className="action-card-grounding">
-                      <span className="grounding-note">{currentDoc.groundedRule}</span>
+                      <span className="grounding-note">{activeGroundedRule}</span>
                     </div>
                   </div>
 
@@ -704,7 +709,7 @@ lawyer, or the relevant authority.
                       onClick={handleDownloadSummary}
                     >
                       <Download size={15} />
-                      <span>Download Summary</span>
+                      <span>{t('downloadSummary')}</span>
                     </button>
 
                     <button
@@ -713,7 +718,7 @@ lawyer, or the relevant authority.
                       onClick={handleShareWhatsApp}
                     >
                       <Share2 size={15} />
-                      <span>Share via WhatsApp</span>
+                      <span>{t('shareWhatsApp')}</span>
                     </button>
 
                     <button
@@ -725,7 +730,7 @@ lawyer, or the relevant authority.
                       }}
                     >
                       <RotateCcw size={15} />
-                      <span>New Document</span>
+                      <span>{t('newDocument')}</span>
                     </button>
                   </div>
                 </div>
@@ -734,10 +739,7 @@ lawyer, or the relevant authority.
               {/* Initial Idle Hint */}
               {!hasResult && !isProcessing && !hasError && (
                 <div className="demo-idle-hint paper-sheet">
-                  <p>
-                    Select your document on the left, pick your preferred language above, and press{' '}
-                    <strong>"Simplify & Explain Document"</strong> to see the full transformation.
-                  </p>
+                  <p>{t('idleHint')}</p>
                 </div>
               )}
             </div>

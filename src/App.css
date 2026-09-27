@@ -274,6 +274,8 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  contain: layout paint;
+  will-change: transform, opacity;
   transition: opacity 0.2s ease-out;
 }
 
@@ -289,6 +291,7 @@
   border-radius: 4px;
   text-align: center;
   user-select: none;
+  will-change: transform, opacity;
 }
 
 .hero-stamp-sub {
@@ -360,11 +363,12 @@
   font-weight: 500;
   line-height: 1.15;
   text-align: left;
+  font-size: clamp(2.5rem, 5.5vw, 4.2rem);
+  will-change: transform, opacity;
 }
 
-/* Confused / Cramped State */
+/* Confused / Cramped State - Pre-styled, no animated letter-spacing */
 .hero-headline--cramped {
-  font-size: clamp(2.3rem, 5.2vw, 3.8rem);
   letter-spacing: -0.045em;
   color: var(--color-ink-cramped);
   transform: rotate(-0.4deg);
@@ -374,6 +378,7 @@
   left: 0;
   width: 100%;
   display: block;
+  will-change: transform, opacity;
 }
 
 .hero-scan-marker {
@@ -391,13 +396,14 @@
   border: 1px solid rgba(166, 58, 46, 0.2);
 }
 
-/* Resolved / Clear State */
+/* Resolved / Clear State - Pre-styled, cross-faded with transform & opacity */
 .hero-headline--resolved {
-  font-size: clamp(2.6rem, 5.8vw, 4.4rem);
   letter-spacing: -0.015em;
   color: var(--color-ink);
   position: relative;
   z-index: 2;
+  transform-origin: left center;
+  will-change: transform, opacity;
 }
 
 .hero-headline.is-hidden {
@@ -412,6 +418,7 @@
 /* Subhead and CTA Group */
 .hero-resolution-block {
   width: 100%;
+  will-change: transform, opacity;
 }
 
 .hero-resolution-block.is-visible {
@@ -584,6 +591,7 @@
   border-radius: var(--radius-xs);
   box-shadow: 4px 6px 16px var(--color-paper-shadow);
   cursor: pointer;
+  will-change: transform;
   transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.35s ease;
   user-select: none;
 }
@@ -1255,14 +1263,15 @@
   height: 2px;
   background: var(--color-clarity);
   box-shadow: 0 0 8px var(--color-clarity);
+  will-change: transform, opacity;
   animation: scan-pass 1.6s infinite ease-in-out;
 }
 
 @keyframes scan-pass {
-  0% { top: 0%; opacity: 0; }
-  30% { opacity: 1; }
-  70% { opacity: 1; }
-  100% { top: 100%; opacity: 0; }
+  0% { transform: translateY(0); opacity: 0; }
+  25% { opacity: 1; }
+  75% { opacity: 1; }
+  100% { transform: translateY(220px); opacity: 0; }
 }
 
 .processing-inner {
@@ -1474,9 +1483,12 @@
 }
 
 .audio-scrub-fill {
+  width: 100%;
   height: 100%;
   background: var(--color-clarity);
-  transition: width 0.15s linear;
+  transform-origin: left center;
+  will-change: transform;
+  transition: transform 0.15s linear;
 }
 
 .btn-speed-toggle {
