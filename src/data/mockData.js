@@ -650,6 +650,82 @@ export function getLocalizedDocumentContent(doc, langCode) {
   };
 }
 
+// Generate the complete speech script combining the plain explanation AND all action checklist tasks
+export function getFullSpokenScript(doc, langCode) {
+  if (!doc) return '';
+  const lang = doc.simplified && doc.simplified[langCode] ? langCode : 'en';
+  const explanation = doc.audioText?.[lang] || doc.simplified?.[lang] || doc.simplified?.['en'] || '';
+  const actionItems = doc.actionItems?.[lang] || doc.actionItems?.['en'] || [];
+
+  const introMap = {
+    en: "Here are the next steps to take.",
+    ta: "அடுத்து செய்ய வேண்டிய முக்கிய பணிகள்.",
+    hi: "आगे करने योग्य आवश्यक कार्य.",
+    te: "తర్వాత చేయవలసిన ముఖ్యమైన పనులు.",
+    kn: "ಮುಂದೆ ಮಾಡಬೇಕಾದ ಪ್ರಮುಖ ಕೆಲಸಗಳು.",
+    bn: "পরবর্তী করণীয় গুরুত্বপূর্ণ কাজগুলি.",
+    mr: "पुढे करावयाची महत्त्वाची कामे.",
+    ml: "അടുത്തതായി ചെയ്യേണ്ട പ്രധാന കാര്യങ്ങൾ."
+  };
+
+  const itemPrefixMap = {
+    en: "Step",
+    ta: "பணி",
+    hi: "कदम",
+    te: "పని",
+    kn: "ಹಂತ",
+    bn: "পদক্ষেপ",
+    mr: "टप्पा",
+    ml: "പടി"
+  };
+
+  const intro = introMap[lang] || introMap.en;
+  const prefix = itemPrefixMap[lang] || itemPrefixMap.en;
+
+  const tasksText = actionItems
+    .map((item, idx) => `${prefix} ${idx + 1}: ${item.text}.`)
+    .join(' ');
+
+  return `${explanation} ${intro} ${tasksText}`;
+}
+
+export function getTasksOnlySpokenScript(doc, langCode) {
+  if (!doc) return '';
+  const lang = doc.simplified && doc.simplified[langCode] ? langCode : 'en';
+  const actionItems = doc.actionItems?.[lang] || doc.actionItems?.['en'] || [];
+
+  const introMap = {
+    en: "What to do next.",
+    ta: "அடுத்து செய்ய வேண்டிய பணிகள்.",
+    hi: "आगे क्या करना है.",
+    te: "తర్వాత చేయవలసిన పనులు.",
+    kn: "ಮುಂದೆ ಏನು ಮಾಡಬೇಕು.",
+    bn: "পরবর্তী করণীয়.",
+    mr: "पुढे काय करावे.",
+    ml: "അടുത്തതായി ചെയ്യേണ്ട കാര്യങ്ങൾ."
+  };
+
+  const itemPrefixMap = {
+    en: "Step",
+    ta: "பணி",
+    hi: "कदम",
+    te: "పని",
+    kn: "ಹಂತ",
+    bn: "পদক্ষেপ",
+    mr: "टप्पा",
+    ml: "പടി"
+  };
+
+  const intro = introMap[lang] || introMap.en;
+  const prefix = itemPrefixMap[lang] || itemPrefixMap.en;
+
+  const tasksText = actionItems
+    .map((item, idx) => `${prefix} ${idx + 1}: ${item.text}.`)
+    .join(' ');
+
+  return `${intro} ${tasksText}`;
+}
+
 export const TEAM_MEMBERS = [
   {
     name: 'Lingeswaran D',

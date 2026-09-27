@@ -13,13 +13,17 @@ import {
   Volume2,
   CheckCircle2,
   RefreshCw,
-  Sparkles
+  Sparkles,
+  VolumeX,
+  ListTodo
 } from 'lucide-react';
 import {
   LANGUAGES,
   SAMPLE_DOCUMENTS,
   getTranslation,
-  getLocalizedDocumentContent
+  getLocalizedDocumentContent,
+  getFullSpokenScript,
+  getTasksOnlySpokenScript
 } from '../data/mockData';
 
 export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
@@ -37,10 +41,18 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
 
   // Audio Player State
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [audioMode, setAudioMode] = useState('full'); // 'full' | 'tasks' | 'single'
+  const [activeSpeakingTaskId, setActiveSpeakingTaskId] = useState(null);
   const [audioProgress, setAudioProgress] = useState(0);
-  const [audioDuration, setAudioDuration] = useState(18); // seconds
+  const [audioDuration, setAudioDuration] = useState(25); // seconds
   const [playbackRate, setPlaybackRate] = useState(1.0);
-  const audioIntervalRef = useRef(null);
+
+  // Refs for Chunked Speech Synthesis (Prevents premature timer cancellation & Chrome 15s freeze)
+  const audioChunksRef = useRef([]);
+  const activeChunkIndexRef = useRef(0);
+  const isAudioCancelledRef = useRef(false);
+  const keepAliveIntervalRef = useRef(null);
+  const audioProgressIntervalRef = useRef(null);
 
   // Checklist state for "What to do next"
   const [checkedItems, setCheckedItems] = useState({});
@@ -60,13 +72,19 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     }
   }, [initialDocId]);
 
+  // Clean up audio on unmount
+  useEffect(() => {
+    return () => {
+      stopAudio();
+    };
+  }, []);
+
   // Current active document data
   const currentDoc = SAMPLE_DOCUMENTS.find((d) => d.id === selectedDocId) || SAMPLE_DOCUMENTS[0];
 
   // Retrieve fully localized content (both explanation AND action items inherit selectedLang)
   const localizedContent = getLocalizedDocumentContent(currentDoc, selectedLang);
   const activeSimplifiedText = localizedContent?.simplified || '';
-  const activeAudioText = localizedContent?.audioText || '';
   const activeActionItems = localizedContent?.actionItems || [];
   const activeGroundedRule = localizedContent?.groundedRule || '';
 
@@ -137,17 +155,14 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     stopAudio();
     setProcessStepIndex(0);
 
-    // Micro-copy step 0: "Hmm..."
     const step1 = setTimeout(() => {
       setProcessStepIndex(1); // "...thinking"
     }, 900);
 
-    // Micro-copy step 2: "...almost there"
     const step2 = setTimeout(() => {
-      setProcessStepIndex(2);
+      setProcessStepIndex(2); // "...almost there"
     }, 1800);
 
-    // Final resolution
     const step3 = setTimeout(() => {
       setIsProcessing(false);
       setHasResult(true);
@@ -176,19 +191,50 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     }, 1200);
   };
 
-  // Audio Playback using Web Speech API + timer progress
+  // =========================================================================
+  // Robust, Non-Stopping Sentence-Chunked Speech Synthesis Engine
+  // =========================================================================
   const togglePlayAudio = () => {
-    if (isPlayingAudio) {
+    if (isPlayingAudio && audioMode === 'full') {
       stopAudio();
     } else {
-      startAudio();
+      startAudio('full');
     }
   };
 
-  const startAudio = () => {
-    stopAudio();
+  const togglePlayTasksOnly = () => {
+    if (isPlayingAudio && audioMode === 'tasks') {
+      stopAudio();
+    } else {
+      startAudio('tasks');
+    }
+  };
 
-    const textToSpeak = activeAudioText || activeSimplifiedText;
+  const speakSingleTask = (taskText, taskIndex) => {
+    if (isPlayingAudio && activeSpeakingTaskId === taskIndex) {
+      stopAudio();
+    } else {
+      startAudio('single', taskText, taskIndex);
+    }
+  };
+
+  const startAudio = (mode = 'full', customText = null, taskId = null) => {
+    stopAudio();
+    isAudioCancelledRef.current = false;
+    setAudioMode(mode);
+    setActiveSpeakingTaskId(taskId);
+
+    let textToSpeak = '';
+    if (customText) {
+      textToSpeak = customText;
+    } else if (mode === 'tasks') {
+      textToSpeak = getTasksOnlySpokenScript(currentDoc, selectedLang);
+    } else {
+      // Full narrative: reads the simplified explanation AND all next-step tasks!
+      textToSpeak = getFullSpokenScript(currentDoc, selectedLang);
+    }
+
+    if (!textToSpeak) return;
 
     const langCodeMap = {
       ta: 'ta-IN',
@@ -200,62 +246,110 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
       ml: 'ml-IN',
       en: 'en-US'
     };
-
     const targetLangCode = langCodeMap[selectedLang] || 'en-US';
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = targetLangCode;
-      utterance.rate = playbackRate;
+    // Sentence splitter: splits across English and Indian scripts (. ! ? । \n)
+    const splitSentences = (text) => {
+      const matches = text.match(/[^.!?।\n]+[.!?।\n]*/g);
+      if (!matches || matches.length === 0) return [text];
+      return matches.map((s) => s.trim()).filter((s) => s.length > 0);
+    };
 
-      // Find best available regional voice
-      const voices = window.speechSynthesis.getVoices();
-      const matchedVoice = voices.find((v) => v.lang.startsWith(targetLangCode.split('-')[0]));
-      if (matchedVoice) {
-        utterance.voice = matchedVoice;
+    const chunks = splitSentences(textToSpeak);
+    audioChunksRef.current = chunks;
+    activeChunkIndexRef.current = 0;
+
+    // Estimate total time based on length and playback speed (~10 characters per sec)
+    const estDuration = Math.max(10, Math.round(textToSpeak.length / (10 * playbackRate)));
+    setAudioDuration(estDuration);
+    setAudioProgress(0);
+    setIsPlayingAudio(true);
+
+    if (!('speechSynthesis' in window)) {
+      // Fallback for environments where speech API is unavailable
+      const stepMs = 250;
+      const increment = (stepMs / (estDuration * 1000)) * 100;
+      audioProgressIntervalRef.current = setInterval(() => {
+        setAudioProgress((prev) => {
+          if (prev >= 100) {
+            stopAudio();
+            return 0;
+          }
+          return prev + increment;
+        });
+      }, stepMs);
+      return;
+    }
+
+    // Cancel any previous residual audio
+    window.speechSynthesis.cancel();
+
+    // Chrome 14-second Speech Freeze Keep-Alive Ping
+    keepAliveIntervalRef.current = setInterval(() => {
+      if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 7000);
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchedVoice = voices.find((v) => v.lang.startsWith(targetLangCode.split('-')[0]));
+
+    // Sequential chunk executor: each chunk is short (3-6s), never hitting Chrome's 14s timeout
+    const playChunk = (index) => {
+      if (isAudioCancelledRef.current) return;
+      if (index >= chunks.length) {
+        // Naturally reached the very end of all tasks!
+        stopAudio();
+        return;
       }
 
+      const chunkText = chunks[index];
+      const utterance = new SpeechSynthesisUtterance(chunkText);
+      // CRITICAL: Anchor to window to prevent Chrome GC from dropping utterance mid-sentence!
+      window.__hmmActiveUtterance = utterance;
+
+      utterance.lang = targetLangCode;
+      utterance.rate = playbackRate;
+      if (matchedVoice) utterance.voice = matchedVoice;
+
       utterance.onend = () => {
-        stopAudio();
+        if (isAudioCancelledRef.current) return;
+        activeChunkIndexRef.current = index + 1;
+        const progress = Math.min(100, Math.round(((index + 1) / chunks.length) * 100));
+        setAudioProgress(progress);
+        playChunk(index + 1);
       };
-      utterance.onerror = () => {
-        // Fallback to simulated audio ticker
+
+      utterance.onerror = (e) => {
+        if (isAudioCancelledRef.current) return;
+        activeChunkIndexRef.current = index + 1;
+        playChunk(index + 1);
       };
 
       window.speechSynthesis.speak(utterance);
-    }
+    };
 
-    // Audio progress ticker
-    setIsPlayingAudio(true);
-    setAudioProgress(0);
-    const duration = Math.max(12, Math.round(textToSpeak.length / 14));
-    setAudioDuration(duration);
-
-    const stepMs = 200;
-    const increment = (stepMs / (duration * 1000)) * 100;
-
-    audioIntervalRef.current = setInterval(() => {
-      setAudioProgress((prev) => {
-        if (prev >= 100) {
-          stopAudio();
-          return 0;
-        }
-        return prev + increment;
-      });
-    }, stepMs);
+    playChunk(0);
   };
 
   const stopAudio = () => {
+    isAudioCancelledRef.current = true;
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
-    if (audioIntervalRef.current) {
-      clearInterval(audioIntervalRef.current);
-      audioIntervalRef.current = null;
+    if (keepAliveIntervalRef.current) {
+      clearInterval(keepAliveIntervalRef.current);
+      keepAliveIntervalRef.current = null;
+    }
+    if (audioProgressIntervalRef.current) {
+      clearInterval(audioProgressIntervalRef.current);
+      audioProgressIntervalRef.current = null;
     }
     setIsPlayingAudio(false);
     setAudioProgress(0);
+    setActiveSpeakingTaskId(null);
+    setAudioMode('full');
   };
 
   // Toggle checklist items
@@ -594,27 +688,41 @@ ${activeGroundedRule}
                     <p className="results-body-text">{activeSimplifiedText}</p>
                   </div>
 
-                  {/* Audio Player to Hear It Spoken */}
+                  {/* Audio Player: Reads Full Narrative (Explanation + All Tasks) */}
                   <div className="audio-player-card">
                     <div className="audio-player-controls">
                       <button
                         type="button"
-                        className={`btn-play-pause ${isPlayingAudio ? 'btn-play-pause--playing' : ''}`}
+                        className={`btn-play-pause ${
+                          isPlayingAudio && audioMode === 'full' ? 'btn-play-pause--playing' : ''
+                        }`}
                         onClick={togglePlayAudio}
-                        aria-label={isPlayingAudio ? t('pauseAudio') : t('playAudio')}
-                        title={isPlayingAudio ? t('pauseAudio') : t('playAudio')}
+                        aria-label={isPlayingAudio && audioMode === 'full' ? t('pauseAudio') : t('playAudio')}
+                        title={
+                          isPlayingAudio && audioMode === 'full'
+                            ? t('pauseAudio')
+                            : `${t('playAudio')} (Explanation & Tasks)`
+                        }
                       >
-                        {isPlayingAudio ? <Pause size={18} /> : <Play size={18} fill="currentColor" />}
+                        {isPlayingAudio && audioMode === 'full' ? (
+                          <Pause size={18} />
+                        ) : (
+                          <Play size={18} fill="currentColor" />
+                        )}
                       </button>
 
                       <div className="audio-progress-wrap">
                         <div className="audio-label-row">
                           <span className="audio-title">
                             <Volume2 size={14} />
-                            {t('spokenIn')} {LANGUAGES.find((l) => l.id === selectedLang)?.name}
+                            {isPlayingAudio
+                              ? audioMode === 'tasks'
+                                ? `${t('spokenIn')} ${LANGUAGES.find((l) => l.id === selectedLang)?.name} — Tasks`
+                                : `${t('spokenIn')} ${LANGUAGES.find((l) => l.id === selectedLang)?.name} — Full Summary & Tasks`
+                              : `${t('spokenIn')} ${LANGUAGES.find((l) => l.id === selectedLang)?.name}`}
                           </span>
                           <span className="audio-timer">
-                            {Math.round((audioProgress / 100) * audioDuration)}s / {audioDuration}s
+                            {audioProgress}% • {audioDuration}s est.
                           </span>
                         </div>
 
@@ -644,7 +752,7 @@ ${activeGroundedRule}
                           const nextRate = playbackRate === 1.0 ? 1.25 : playbackRate === 1.25 ? 0.8 : 1.0;
                           setPlaybackRate(nextRate);
                           if (isPlayingAudio) {
-                            startAudio();
+                            startAudio(audioMode);
                           }
                         }}
                         title="Adjust speech rate"
@@ -661,6 +769,31 @@ ${activeGroundedRule}
                         <CheckCircle2 size={16} className="action-kicker-icon" />
                         <span>{t('whatToDoNext')}</span>
                       </div>
+
+                      {/* Listen to Tasks Only Button */}
+                      <button
+                        type="button"
+                        className={`btn-ghost btn-sm btn-tasks-audio ${
+                          isPlayingAudio && audioMode === 'tasks' ? 'btn-tasks-audio--playing' : ''
+                        }`}
+                        onClick={togglePlayTasksOnly}
+                        title="Read only the action tasks aloud"
+                      >
+                        {isPlayingAudio && audioMode === 'tasks' ? (
+                          <>
+                            <Pause size={13} />
+                            <span>{t('pauseAudio')}</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 size={13} />
+                            <span>Read tasks aloud</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
+
+                    <div className="action-card-sub-row">
                       <span className="action-card-sub">
                         {t('checklistHint')}
                       </span>
@@ -669,10 +802,13 @@ ${activeGroundedRule}
                     <div className="action-checklist" role="list">
                       {activeActionItems.map((item, idx) => {
                         const isDone = !!checkedItems[idx];
+                        const isSpeakingThis = isPlayingAudio && activeSpeakingTaskId === idx;
                         return (
                           <div
                             key={idx}
-                            className={`checklist-item ${isDone ? 'checklist-item--checked' : ''}`}
+                            className={`checklist-item ${isDone ? 'checklist-item--checked' : ''} ${
+                              isSpeakingThis ? 'checklist-item--speaking' : ''
+                            }`}
                             onClick={() => toggleCheckItem(idx)}
                             role="checkbox"
                             aria-checked={isDone}
@@ -691,6 +827,20 @@ ${activeGroundedRule}
                               <span className="checklist-text">{item.text}</span>
                               <span className="checklist-priority-badge">{item.priority}</span>
                             </div>
+
+                            {/* Individual task read button */}
+                            <button
+                              type="button"
+                              className={`btn-single-task-audio ${isSpeakingThis ? 'btn-single-task-audio--active' : ''}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                speakSingleTask(item.text, idx);
+                              }}
+                              title="Listen to this task"
+                              aria-label="Listen to this task"
+                            >
+                              {isSpeakingThis ? <VolumeX size={14} /> : <Volume2 size={14} />}
+                            </button>
                           </div>
                         );
                       })}

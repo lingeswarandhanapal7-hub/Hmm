@@ -1515,9 +1515,42 @@
 
 .action-card-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+  margin-bottom: 6px;
+  gap: 12px;
+}
+
+.action-card-sub-row {
+  margin-bottom: 12px;
+}
+
+.btn-tasks-audio {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: var(--color-paper-light);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-xs);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: all var(--transition-quick);
+  white-space: nowrap;
+}
+
+.btn-tasks-audio:hover {
+  background: var(--color-paper);
+  border-color: var(--color-ink);
+}
+
+.btn-tasks-audio--playing {
+  background: var(--color-clarity-light);
+  border-color: var(--color-clarity);
+  color: var(--color-ink);
+  animation: pulse-border 1.5s infinite;
 }
 
 .action-card-kicker {
@@ -1547,7 +1580,7 @@
 
 .checklist-item {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 12px;
   padding: 10px 12px;
   background: #fff;
@@ -1561,6 +1594,12 @@
 .checklist-item:hover {
   border-color: var(--color-line);
   background: var(--color-paper-light);
+}
+
+.checklist-item--speaking {
+  border-color: var(--color-clarity) !important;
+  background: var(--color-clarity-light) !important;
+  box-shadow: 0 0 0 2px rgba(231, 169, 40, 0.25);
 }
 
 .checklist-item--checked {
@@ -1582,7 +1621,6 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  margin-top: 2px;
   background: #fff;
 }
 
@@ -1596,6 +1634,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
+  flex: 1;
 }
 
 .checklist-text {
@@ -1609,6 +1648,34 @@
   font-weight: 600;
   color: var(--color-calm);
   letter-spacing: 0.02em;
+}
+
+.btn-single-task-audio {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: all var(--transition-quick);
+}
+
+.btn-single-task-audio:hover {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  border-color: var(--color-line);
+}
+
+.btn-single-task-audio--active {
+  background: var(--color-clarity);
+  color: var(--color-ink);
+  border-color: var(--color-clarity);
 }
 
 .action-card-grounding {

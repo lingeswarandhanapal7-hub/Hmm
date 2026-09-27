@@ -30,10 +30,17 @@ export default function Navbar({ onOpenDemo }) {
         "Welcome to Hmm. We turn confusing government notices, medical reports, and prescriptions into plain language you can read or hear in your own language. Upload a photo of any document to get a simple explanation and a clear action card telling you what to do next.";
       
       const utterance = new SpeechSynthesisUtterance(pageSummary);
+      window.__navbarUtterance = utterance;
       utterance.rate = 0.95;
       utterance.pitch = 1.0;
-      utterance.onend = () => setIsReadingAloud(false);
-      utterance.onerror = () => setIsReadingAloud(false);
+      utterance.onend = () => {
+        window.__navbarUtterance = null;
+        setIsReadingAloud(false);
+      };
+      utterance.onerror = () => {
+        window.__navbarUtterance = null;
+        setIsReadingAloud(false);
+      };
       
       window.speechSynthesis.speak(utterance);
       setIsReadingAloud(true);
