@@ -54,7 +54,7 @@ export default function Footer({ onOpen404Demo }) {
             <ul className="footer-link-list">
               <li>
                 <a
-                  href="https://github.com/Gear5coders"
+                  href="https://github.com/lingeswarandhanapal7-hub/Hmm"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="footer-icon-link"
