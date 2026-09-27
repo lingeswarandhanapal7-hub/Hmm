@@ -1,0 +1,295 @@
+/* ==========================================================================
+   Hmm — Visual Identity & Design System Tokens (Gear5coders)
+   ========================================================================== */
+
+:root {
+  /* Core Brand Tokens */
+  --color-paper: #EFEBE1;
+  --color-paper-light: #F7F5EE;
+  --color-paper-card: #FAF8F2;
+  --color-paper-shadow: rgba(34, 38, 43, 0.06);
+
+  --color-ink: #22262B;
+  --color-ink-muted: #575D65;
+  --color-ink-faint: #89909A;
+  --color-ink-cramped: #6E747E;
+
+  --color-clarity: #E7A928;
+  --color-clarity-light: #FDF5E6;
+  --color-clarity-hover: #D6991D;
+  --color-clarity-active: #C18815;
+
+  --color-seal: #A63A2E;
+  --color-seal-light: #F8EBE9;
+  
+  --color-calm: #7C8B7A;
+  --color-calm-light: #EEF2EE;
+
+  --color-line: #CFC7B4;
+  --color-line-light: #DFDACD;
+  --color-line-focus: #22262B;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-tamil: 'Noto Sans Tamil', sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', sans-serif;
+  --font-telugu: 'Noto Sans Telugu', sans-serif;
+  --font-kannada: 'Noto Sans Kannada', sans-serif;
+  --font-bengali: 'Noto Sans Bengali', sans-serif;
+  --font-malayalam: 'Noto Sans Malayalam', sans-serif;
+
+  /* Spacing Scale */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+
+  /* Layout */
+  --max-content-width: 1140px;
+  --editorial-max-width: 68ch;
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  /* Transitions */
+  --transition-quick: 0.15s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --transition-smooth: 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: var(--font-body);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-size: 16px;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--color-paper);
+  /* Subtle physical parchment paper noise texture via SVG data-uri */
+  background-image: radial-gradient(rgba(34, 38, 43, 0.03) 1px, transparent 0);
+  background-size: 24px 24px;
+  overflow-x: hidden;
+}
+
+/* Accessible Skip Link */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 24px;
+  background: var(--color-clarity);
+  color: var(--color-ink);
+  padding: 10px 18px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 99999;
+  border-radius: var(--radius-xs);
+  transition: top var(--transition-quick);
+  border: 1px solid var(--color-ink);
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+/* Strict Accessible Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-ink);
+  outline-offset: 3px;
+}
+
+/* Layout Utilities */
+.container {
+  width: 100%;
+  max-width: var(--max-content-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(20px, 4vw, 40px);
+  padding-right: clamp(20px, 4vw, 40px);
+}
+
+.editorial-col {
+  max-width: var(--editorial-max-width);
+  text-align: left;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, .font-serif {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-ink);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  text-align: left;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4.4rem);
+}
+
+h2 {
+  font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+}
+
+h3 {
+  font-size: clamp(1.3rem, 2.2vw, 1.75rem);
+}
+
+h4 {
+  font-size: 1.125rem;
+}
+
+p, li, blockquote {
+  text-align: left;
+  max-width: var(--editorial-max-width);
+  color: var(--color-ink);
+}
+
+/* Buttons */
+.btn-clarity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: var(--color-clarity);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 12px 24px;
+  border: 1px solid rgba(34, 38, 43, 0.2);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-quick);
+  box-shadow: 0 2px 0 rgba(34, 38, 43, 0.08);
+}
+
+.btn-clarity:hover:not(:disabled) {
+  background-color: var(--color-clarity-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 rgba(34, 38, 43, 0.12);
+}
+
+.btn-clarity:active:not(:disabled) {
+  background-color: var(--color-clarity-active);
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 rgba(34, 38, 43, 0.1);
+}
+
+.btn-clarity:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
+  box-shadow: none;
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: transparent;
+  color: var(--color-ink);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  padding: 11px 22px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all var(--transition-quick);
+}
+
+.btn-ghost:hover {
+  background-color: rgba(34, 38, 43, 0.05);
+}
+
+.btn-ghost:active {
+  background-color: rgba(34, 38, 43, 0.1);
+}
+
+/* Section Header Badges */
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--color-calm);
+  margin-bottom: 12px;
+}
+
+.section-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 1.5px;
+  background-color: var(--color-calm);
+}
+
+/* Rubber Stamp Aesthetic */
+.rubber-stamp {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-seal);
+  border: 1.5px dashed var(--color-seal);
+  padding: 3px 8px;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  opacity: 0.85;
+  user-select: none;
+}
+
+/* Paper Card Style */
+.paper-sheet {
+  background-color: var(--color-paper-card);
+  border: 1px solid var(--color-line);
+  box-shadow: 2px 3px 8px var(--color-paper-shadow);
+  border-radius: var(--radius-xs);
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
