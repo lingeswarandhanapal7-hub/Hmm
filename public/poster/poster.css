@@ -1,0 +1,890 @@
+/* ==========================================================================
+   Hmm — Promotional Poster (A3 Portrait: 297 x 420 mm)
+   Team Gear5coders · Document Clarity Engine
+   ========================================================================== */
+
+:root {
+  /* Brand Color Tokens */
+  --color-paper: #EFEBE1;
+  --color-paper-light: #F7F5EE;
+  --color-paper-card: #FAF8F2;
+  --color-paper-dark: #E4DECFCF;
+  --color-paper-shadow: rgba(34, 38, 43, 0.08);
+
+  --color-ink: #22262B;
+  --color-ink-muted: #575D65;
+  --color-ink-faint: #89909A;
+  --color-ink-cramped: #6B727D;
+
+  --color-clarity: #E7A928;
+  --color-clarity-light: #FDF6E8;
+  --color-clarity-glow: rgba(231, 169, 40, 0.25);
+
+  --color-seal: #A63A2E;
+  --color-seal-light: #F9EBE9;
+
+  --color-calm: #7C8B7A;
+  --color-calm-light: #EEF2EE;
+
+  --color-line: #CFC7B4;
+  --color-line-light: #DFDACD;
+  --color-line-dark: #B5AD99;
+
+  /* Typography */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-tamil: 'Noto Sans Tamil', sans-serif;
+  --font-hindi: 'Noto Sans Devanagari', sans-serif;
+  --font-telugu: 'Noto Sans Telugu', sans-serif;
+  --font-kannada: 'Noto Sans Kannada', sans-serif;
+  --font-bengali: 'Noto Sans Bengali', sans-serif;
+  --font-malayalam: 'Noto Sans Malayalam', sans-serif;
+
+  /* A3 Dimensions (Exact: 297mm x 420mm) */
+  --poster-width: 297mm;
+  --poster-height: 420mm;
+}
+
+/* --------------------------------------------------------------------------
+   Page & Print Configuration
+   -------------------------------------------------------------------------- */
+@page {
+  size: A3 portrait;
+  margin: 0;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #2E3238;
+  font-family: var(--font-body);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Screen Preview Canvas / Artboard Frame */
+.poster-screen-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  padding: 95px 20px 80px;
+  background-color: #26292E;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px, 48px 48px, 48px 48px;
+}
+
+/* Floating Screen Toolbar */
+.poster-toolbar {
+  position: fixed;
+  top: 20px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: rgba(34, 38, 43, 0.94);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-size: 0.875rem;
+}
+
+.poster-toolbar__brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--color-clarity);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-right: 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.poster-toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: var(--color-clarity);
+  color: var(--color-ink);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.poster-toolbar__btn:hover {
+  background: #f1b83d;
+  transform: translateY(-1px);
+}
+
+.poster-toolbar__btn--secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.poster-toolbar__btn--secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* --------------------------------------------------------------------------
+   The Main A3 Poster Canvas
+   -------------------------------------------------------------------------- */
+.poster-sheet {
+  width: var(--poster-width);
+  height: var(--poster-height);
+  max-width: var(--poster-width);
+  max-height: var(--poster-height);
+  background-color: var(--color-paper);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16mm 18mm 14mm;
+  transform-origin: top center;
+  box-sizing: border-box;
+
+  /* Authentic physical parchment noise */
+  background-image: 
+    radial-gradient(rgba(34, 38, 43, 0.04) 1px, transparent 0),
+    linear-gradient(135deg, rgba(231, 169, 40, 0.02) 0%, transparent 40%),
+    linear-gradient(315deg, rgba(166, 58, 46, 0.02) 0%, transparent 40%);
+  background-size: 16px 16px, 100% 100%, 100% 100%;
+}
+
+/* Fine Editorial Frame Border */
+.poster-sheet::before {
+  content: "";
+  position: absolute;
+  inset: 7mm;
+  border: 1px solid var(--color-line);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.poster-sheet::after {
+  content: "";
+  position: absolute;
+  inset: 8.5mm;
+  border: 0.5px solid rgba(207, 199, 180, 0.5);
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* --------------------------------------------------------------------------
+   1. Header Band
+   -------------------------------------------------------------------------- */
+.poster-header {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 3mm;
+  padding-bottom: 5mm;
+  border-bottom: 1.5px solid var(--color-line);
+}
+
+.poster-header__top-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.poster-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 3mm;
+  text-decoration: none;
+}
+
+.poster-brand__wordmark {
+  font-family: var(--font-display);
+  font-size: 20mm;
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  color: var(--color-ink);
+  line-height: 0.9;
+}
+
+.poster-brand__dot {
+  display: inline-block;
+  width: 4mm;
+  height: 4mm;
+  background-color: var(--color-clarity);
+  border-radius: 50%;
+  margin-left: -2mm;
+}
+
+.poster-header__kicker {
+  font-family: var(--font-body);
+  font-size: 3.2mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-seal);
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+}
+
+.poster-header__kicker-dot {
+  width: 1.5mm;
+  height: 1.5mm;
+  background-color: var(--color-seal);
+  border-radius: 50%;
+}
+
+.poster-tagline-title {
+  font-family: var(--font-display);
+  font-size: 11mm;
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  margin-top: 1mm;
+}
+
+.poster-tagline-subtitle {
+  font-family: var(--font-body);
+  font-size: 4.4mm;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+  max-width: 95%;
+  font-weight: 450;
+}
+
+/* --------------------------------------------------------------------------
+   2. The Signature Visual — Confusing -> Clear Split
+   -------------------------------------------------------------------------- */
+.poster-signature-visual {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  height: 158mm;
+  margin: 4.5mm 0;
+  background: var(--color-paper-card);
+  border: 1.5px solid var(--color-line);
+  box-shadow: 0 8px 30px var(--color-paper-shadow);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+/* Diagonal / Torn Center Cut Effect */
+.poster-signature-visual::before {
+  content: "";
+  position: absolute;
+  top: -10%;
+  bottom: -10%;
+  left: 50%;
+  width: 4px;
+  background: var(--color-line);
+  transform: translateX(-50%) rotate(4deg);
+  z-index: 10;
+  box-shadow: 
+    -2px 0 8px rgba(0, 0, 0, 0.08),
+    2px 0 12px rgba(231, 169, 40, 0.2);
+}
+
+.poster-signature-visual::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(4deg);
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 20px;
+  padding: 1.5mm 4mm;
+  font-size: 2.8mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-ink-muted);
+  z-index: 15;
+  white-space: nowrap;
+}
+
+/* Left / Confused Side */
+.signature-side--confused {
+  position: relative;
+  padding: 8mm 9mm;
+  background: #EAE5D9;
+  border-right: 1px solid var(--color-line);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.signature-side--confused::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(166, 58, 46, 0.015) 0px,
+    rgba(166, 58, 46, 0.015) 2px,
+    transparent 2px,
+    transparent 8px
+  );
+  pointer-events: none;
+}
+
+.confused-header {
+  position: relative;
+  z-index: 2;
+}
+
+.confused-kicker-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  padding: 1mm 2.5mm;
+  background: rgba(166, 58, 46, 0.1);
+  border: 1px solid rgba(166, 58, 46, 0.25);
+  border-radius: 2px;
+  color: var(--color-seal);
+  font-size: 2.8mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 3mm;
+}
+
+.confused-headline {
+  font-family: var(--font-display);
+  font-size: 6.8mm;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: -0.035em;
+  color: var(--color-ink-cramped);
+  margin-bottom: 2mm;
+}
+
+/* Jargon Raw Document Fragment */
+.confused-document-card {
+  position: relative;
+  z-index: 2;
+  background: #F4EFE6;
+  border: 1px solid var(--color-line);
+  padding: 5mm 6mm;
+  border-radius: 2px;
+  box-shadow: 2px 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.confused-doc-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px dashed var(--color-line);
+  padding-bottom: 2mm;
+  margin-bottom: 3mm;
+}
+
+.confused-doc-title {
+  font-size: 3.4mm;
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.confused-stamp {
+  font-family: var(--font-body);
+  font-size: 2.4mm;
+  font-weight: 800;
+  color: var(--color-seal);
+  border: 1.5px dashed var(--color-seal);
+  padding: 0.8mm 2mm;
+  transform: rotate(-3deg);
+  letter-spacing: 0.08em;
+  display: inline-block;
+}
+
+.confused-jargon-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 2.6mm;
+  line-height: 1.5;
+  color: #4A505A;
+  letter-spacing: -0.01em;
+}
+
+.confused-jargon-text mark {
+  background: rgba(166, 58, 46, 0.12);
+  color: var(--color-seal);
+  font-weight: bold;
+  padding: 0 1mm;
+}
+
+.confused-caption {
+  font-size: 3mm;
+  color: var(--color-seal);
+  font-style: italic;
+  margin-top: 3mm;
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  font-weight: 500;
+}
+
+/* Right / Resolved Side */
+.signature-side--resolved {
+  position: relative;
+  padding: 8mm 9mm;
+  background: var(--color-paper-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.resolved-header {
+  position: relative;
+  z-index: 2;
+}
+
+.resolved-kicker-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  padding: 1mm 2.5mm;
+  background: var(--color-clarity-light);
+  border: 1px solid var(--color-clarity);
+  border-radius: 2px;
+  color: #8C6100;
+  font-size: 2.8mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 3mm;
+}
+
+.resolved-headline {
+  font-family: var(--font-display);
+  font-size: 8mm;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  position: relative;
+  display: inline-block;
+  margin-bottom: 3.5mm;
+}
+
+/* Clarity Gold Signature Underline */
+.resolved-headline::after {
+  content: "";
+  position: absolute;
+  bottom: -1.5mm;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: var(--color-clarity);
+  border-radius: 2px;
+}
+
+/* Regional Script Demonstration Line */
+.resolved-native-translation-box {
+  background: #FFFDF9;
+  border-left: 3.5px solid var(--color-clarity);
+  border: 1px solid var(--color-line-light);
+  border-left-width: 3.5px;
+  border-left-color: var(--color-clarity);
+  padding: 3.5mm 4.5mm;
+  border-radius: 2px;
+  margin-bottom: 3mm;
+}
+
+.resolved-tamil-line {
+  font-family: var(--font-tamil);
+  font-size: 3.4mm;
+  line-height: 1.55;
+  color: var(--color-ink);
+  font-weight: 500;
+}
+
+.resolved-hindi-line {
+  font-family: var(--font-hindi);
+  font-size: 3.2mm;
+  line-height: 1.55;
+  color: var(--color-ink-muted);
+  margin-top: 1.5mm;
+  border-top: 1px dashed var(--color-line-light);
+  padding-top: 1.5mm;
+}
+
+/* Concrete Action Card */
+.resolved-action-card {
+  background: #FFFFFF;
+  border: 1px solid var(--color-line);
+  border-left: 4.5px solid var(--color-clarity);
+  padding: 3.5mm 4.5mm;
+  border-radius: 2px;
+  box-shadow: 0 4px 14px rgba(34, 38, 43, 0.05);
+}
+
+.resolved-action-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2mm;
+}
+
+.resolved-action-title {
+  font-size: 3.2mm;
+  font-weight: 700;
+  color: var(--color-ink);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+}
+
+.resolved-action-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.8mm;
+}
+
+.resolved-action-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 2mm;
+  font-size: 3.1mm;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+
+.resolved-check-icon {
+  width: 3.8mm;
+  height: 3.8mm;
+  background: var(--color-calm);
+  color: #fff;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.6mm;
+  flex-shrink: 0;
+  margin-top: 0.3mm;
+}
+
+.resolved-grounded-note {
+  font-size: 2.5mm;
+  color: var(--color-calm);
+  font-weight: 600;
+  margin-top: 2.5mm;
+  display: flex;
+  align-items: center;
+  gap: 1.5mm;
+}
+
+/* --------------------------------------------------------------------------
+   3. Three-Icon Feature Row (Scan · Understand · Act)
+   -------------------------------------------------------------------------- */
+.poster-features-row {
+  position: relative;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 4.5mm;
+  margin: 3mm 0;
+}
+
+.feature-pill-card {
+  background: var(--color-paper-card);
+  border: 1.5px solid var(--color-line);
+  padding: 5mm 5mm;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5mm;
+  box-shadow: 0 4px 12px var(--color-paper-shadow);
+}
+
+.feature-pill-card__top {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+}
+
+.feature-icon-circle {
+  width: 9.5mm;
+  height: 9.5mm;
+  border-radius: 2px;
+  background: var(--color-paper);
+  border: 1.5px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-ink);
+  flex-shrink: 0;
+}
+
+.feature-pill-card:nth-child(1) .feature-icon-circle {
+  color: var(--color-seal);
+  border-color: rgba(166, 58, 46, 0.4);
+  background: var(--color-seal-light);
+}
+
+.feature-pill-card:nth-child(2) .feature-icon-circle {
+  color: #9A6C00;
+  border-color: var(--color-clarity);
+  background: var(--color-clarity-light);
+}
+
+.feature-pill-card:nth-child(3) .feature-icon-circle {
+  color: var(--color-calm);
+  border-color: var(--color-calm);
+  background: var(--color-calm-light);
+}
+
+.feature-label-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.feature-step-tag {
+  font-size: 2.4mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-muted);
+}
+
+.feature-main-label {
+  font-family: var(--font-display);
+  font-size: 4.6mm;
+  font-weight: 600;
+  color: var(--color-ink);
+  line-height: 1.1;
+}
+
+.feature-desc-text {
+  font-size: 3.1mm;
+  line-height: 1.45;
+  color: var(--color-ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   4. Language Showcase Strip
+   -------------------------------------------------------------------------- */
+.poster-languages-strip {
+  position: relative;
+  z-index: 5;
+  background: var(--color-paper-light);
+  border: 1px solid var(--color-line);
+  padding: 3mm 4mm;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 2mm 0;
+}
+
+.languages-strip__label {
+  font-size: 2.8mm;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-ink-muted);
+  white-space: nowrap;
+}
+
+.languages-chip-track {
+  display: flex;
+  align-items: center;
+  gap: 2mm;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.lang-badge-chip {
+  padding: 1.5mm 3.2mm;
+  background: var(--color-paper-card);
+  border: 1px solid var(--color-line);
+  border-radius: 2px;
+  font-size: 3.2mm;
+  font-weight: 600;
+  color: var(--color-ink);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 1.5mm;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.lang-badge-chip--ta { font-family: var(--font-tamil); }
+.lang-badge-chip--hi { font-family: var(--font-hindi); }
+.lang-badge-chip--te { font-family: var(--font-telugu); }
+.lang-badge-chip--kn { font-family: var(--font-kannada); }
+.lang-badge-chip--bn { font-family: var(--font-bengali); }
+
+.lang-badge-chip__roman {
+  font-family: var(--font-body);
+  font-size: 2.3mm;
+  font-weight: 400;
+  color: var(--color-ink-muted);
+}
+
+/* --------------------------------------------------------------------------
+   5. Footer Band
+   -------------------------------------------------------------------------- */
+.poster-footer {
+  position: relative;
+  z-index: 5;
+  padding-top: 4mm;
+  border-top: 1.5px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-credits {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2mm;
+}
+
+.footer-team-row {
+  display: flex;
+  align-items: baseline;
+  gap: 2.5mm;
+}
+
+.footer-team-badge {
+  font-family: var(--font-display);
+  font-size: 4.8mm;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.footer-team-role {
+  font-size: 2.8mm;
+  font-weight: 600;
+  color: var(--color-seal);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.footer-team-members {
+  font-size: 2.9mm;
+  color: var(--color-ink-muted);
+}
+
+.footer-url-text {
+  font-family: var(--font-body);
+  font-size: 3.4mm;
+  font-weight: 600;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+  margin-top: 1mm;
+}
+
+/* QR Code Block */
+.poster-qr-block {
+  display: flex;
+  align-items: center;
+  gap: 4mm;
+  background: var(--color-paper-card);
+  border: 1.5px solid var(--color-line);
+  padding: 3mm 4mm;
+  border-radius: 2px;
+  box-shadow: 0 4px 12px var(--color-paper-shadow);
+}
+
+.qr-code-canvas-box {
+  width: 22mm;
+  height: 22mm;
+  background: #fff;
+  border: 1px solid var(--color-line);
+  padding: 1.5mm;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qr-code-canvas-box svg,
+.qr-code-canvas-box img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.qr-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1mm;
+}
+
+.qr-cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 1.5mm;
+  background: var(--color-clarity);
+  color: var(--color-ink);
+  font-weight: 700;
+  font-size: 3mm;
+  padding: 1mm 2.8mm;
+  border-radius: 2px;
+  width: fit-content;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.qr-subtext {
+  font-size: 2.8mm;
+  color: var(--color-ink-muted);
+  max-width: 32mm;
+  line-height: 1.3;
+}
+
+/* --------------------------------------------------------------------------
+   Print Directives
+   -------------------------------------------------------------------------- */
+@media print {
+  body {
+    background: transparent !important;
+    padding: 0 !important;
+  }
+
+  .poster-screen-stage {
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .poster-toolbar {
+    display: none !important;
+  }
+
+  .poster-sheet {
+    box-shadow: none !important;
+    width: 297mm !important;
+    height: 420mm !important;
+    max-width: 297mm !important;
+    max-height: 420mm !important;
+    margin: 0 !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}

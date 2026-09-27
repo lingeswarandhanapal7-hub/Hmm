@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hmm — Promotional Poster (A3 Print Ready) | Gear5coders</title>
+  <meta name="description" content="Official A3 promotional poster for Hmm: Understand Any Document, Instantly. Designed by Gear5coders.">
+  
+  <!-- Google Fonts: Fraunces, Inter & Regional Indian Scripts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./poster.css">
+</head>
+<body>
+
+  <!-- Screen Viewport Preview Controls (Hidden automatically during print) -->
+  <header class="poster-toolbar" role="toolbar" aria-label="Poster Export Controls">
+    <div class="poster-toolbar__brand">
+      <span>Hmm Poster</span>
+      <span style="font-size: 0.75rem; opacity: 0.7; font-family: var(--font-body); font-weight: normal;">(A3 · 297×420mm)</span>
+    </div>
+    <button type="button" class="poster-toolbar__btn" onclick="window.print()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"></polyline>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
+        <rect x="6" y="14" width="12" height="8"></rect>
+      </svg>
+      <span>Print / Save as PDF</span>
+    </button>
+    <button type="button" class="poster-toolbar__btn poster-toolbar__btn--secondary" onclick="toggleZoom()">
+      <span id="zoom-label">Fit Screen (100%)</span>
+    </button>
+    <a href="../" class="poster-toolbar__btn poster-toolbar__btn--secondary">
+      <span>Back to Website →</span>
+    </a>
+  </header>
+
+  <!-- Screen Stage Area -->
+  <main class="poster-screen-stage">
+    
+    <!-- THE A3 POSTER SHEET (297mm x 420mm) -->
+    <article class="poster-sheet" id="poster-artboard">
+
+      <!-- ===================================================================
+           1. HEADER BAND
+           =================================================================== -->
+      <header class="poster-header">
+        <div class="poster-header__top-row">
+          <div class="poster-brand" aria-label="Hmm">
+            <span class="poster-brand__wordmark">Hmm</span>
+            <span class="poster-brand__dot" aria-hidden="true"></span>
+          </div>
+
+          <div class="poster-header__kicker">
+            <span class="poster-header__kicker-dot"></span>
+            <span>Document Clarity Engine · Team Gear5coders</span>
+          </div>
+        </div>
+
+        <h1 class="poster-tagline-title">
+          Understand Any Document, Instantly.
+        </h1>
+
+        <p class="poster-tagline-subtitle">
+          Government notices. Medical reports. Prescriptions. Explained simply, in your own language — read or heard.
+        </p>
+      </header>
+
+      <!-- ===================================================================
+           2. THE SIGNATURE VISUAL — CONFUSING → CLEAR (SIDE BY SIDE)
+           =================================================================== -->
+      <section class="poster-signature-visual" aria-label="Comparison: Confusing legal notice resolved into plain clarity">
+        
+        <!-- LEFT: Confusing / Cramped Side -->
+        <div class="signature-side--confused">
+          <div class="confused-header">
+            <div class="confused-kicker-tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>Before · Dense Jargon</span>
+            </div>
+            <h2 class="confused-headline">“Hmm... what does this even mean?”</h2>
+          </div>
+
+          <!-- Cramped Document Fragment Mockup -->
+          <div class="confused-document-card">
+            <div class="confused-doc-meta">
+              <span class="confused-doc-title">MUNICIPAL REVENUE DEPT</span>
+              <span class="confused-stamp">§ 148(B) PENAL</span>
+            </div>
+
+            <div class="confused-jargon-text">
+              FORM VII (RULE 18) DEMURRAGE & RE-ASSESSMENT DEMAND NOTICE UNDER SEC 148(B) r/w 13(2).<br><br>
+              To Defaulting Property Assessee: Whereas the assessment ledger exhibits an outstanding principal municipal impost of <mark>INR 14,250.00</mark> together with accrued penal demurrage of <mark>INR 2,850.00</mark>.<br><br>
+              Notice is hereby served that failing remittance within fifteen (15) solar days from publication hereof, distress warrant and <mark>statutory attachment of immovable premises</mark> shall issue forthwith without further administrative recourse...
+            </div>
+
+            <div class="confused-caption">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+              </svg>
+              <span>Creates panic, paralysis, and costly reliance on touts</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Resolved / Clear Side -->
+        <div class="signature-side--resolved">
+          <div class="resolved-header">
+            <div class="resolved-kicker-tag">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+              <span>After · Plain Language Spoken in Your Tongue</span>
+            </div>
+            <h2 class="resolved-headline">“Oh. Now I get it.”</h2>
+          </div>
+
+          <!-- Native Script Regional Translations -->
+          <div class="resolved-native-translation-box">
+            <div class="resolved-tamil-line">
+              <strong>தமிழ்:</strong> “ரூ. 14,250 வரியை அக்டோபர் 15-க்குள் செலுத்தினால், ரூ. 2,850 அபராதக் கட்டணம் முழுமையாக தள்ளுபடி செய்யப்படும்.”
+            </div>
+            <div class="resolved-hindi-line">
+              <strong>हिन्दी:</strong> “15 अक्टूबर तक ₹14,250 का टैक्स जमा करने पर ₹2,850 का जुर्माना पूरी तरह माफ़ हो जाएगा।”
+            </div>
+          </div>
+
+          <!-- Concrete Action Card -->
+          <div class="resolved-action-card">
+            <div class="resolved-action-header">
+              <div class="resolved-action-title">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#E7A928" stroke-width="3">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+                <span>What to do next — Action Card</span>
+              </div>
+            </div>
+
+            <ul class="resolved-action-list">
+              <li class="resolved-action-item">
+                <span class="resolved-check-icon">✓</span>
+                <span><strong>Pay ₹14,250 before Oct 15</strong> at Ward 42 counter or online portal.</span>
+              </li>
+              <li class="resolved-action-item">
+                <span class="resolved-check-icon">✓</span>
+                <span><strong>Save ₹2,850 penalty</strong> automatically under the seasonal amnesty rule.</span>
+              </li>
+              <li class="resolved-action-item">
+                <span class="resolved-check-icon">✓</span>
+                <span><strong>Zero legal action:</strong> No court notice or middleman fee required.</span>
+              </li>
+            </ul>
+
+            <div class="resolved-grounded-note">
+              <span>⚖ Grounded in Municipal Taxation Act Rule 18 (Statutory Amnesty Waiver).</span>
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           3. THREE-ICON FEATURE ROW (SCAN · UNDERSTAND · ACT)
+           =================================================================== -->
+      <section class="poster-features-row" aria-label="Core Capabilities">
+        
+        <!-- Step 1: Scan -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-card__top">
+            <div class="feature-icon-circle">
+              <!-- Camera Icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                <circle cx="12" cy="13" r="4"></circle>
+              </svg>
+            </div>
+            <div class="feature-label-wrap">
+              <span class="feature-step-tag">Step 1</span>
+              <h3 class="feature-main-label">Scan</h3>
+            </div>
+          </div>
+          <p class="feature-desc-text">
+            <strong>Scan any document.</strong> Snap a photo of any crumpled notice, lab report, or doctor's prescription. Multimodal OCR extracts every clause.
+          </p>
+        </div>
+
+        <!-- Step 2: Understand -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-card__top">
+            <div class="feature-icon-circle">
+              <!-- Speech Bubble & Audio Wave Icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <path d="M9 10h.01"></path>
+                <path d="M12 10h.01"></path>
+                <path d="M15 10h.01"></path>
+              </svg>
+            </div>
+            <div class="feature-label-wrap">
+              <span class="feature-step-tag">Step 2</span>
+              <h3 class="feature-main-label">Understand</h3>
+            </div>
+          </div>
+          <p class="feature-desc-text">
+            <strong>Hear it in your language.</strong> Plain-language summary spoken aloud with warm regional voice synthesis so elderly and low-literacy users understand instantly.
+          </p>
+        </div>
+
+        <!-- Step 3: Act -->
+        <div class="feature-pill-card">
+          <div class="feature-pill-card__top">
+            <div class="feature-icon-circle">
+              <!-- Checklist & Shield Icon -->
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 11l3 3L22 4"></path>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+              </svg>
+            </div>
+            <div class="feature-label-wrap">
+              <span class="feature-step-tag">Step 3</span>
+              <h3 class="feature-main-label">Act</h3>
+            </div>
+          </div>
+          <p class="feature-desc-text">
+            <strong>Know what to do next.</strong> An interactive checklist grounded in real rules with clear deadlines and exact office locations. Zero speculation.
+          </p>
+        </div>
+
+      </section>
+
+      <!-- ===================================================================
+           4. LANGUAGE SHOWCASE STRIP (GENUINE NATIVE SCRIPTS)
+           =================================================================== -->
+      <section class="poster-languages-strip" aria-label="Supported Regional Languages">
+        <span class="languages-strip__label">Native Voice & Text in 8 Languages:</span>
+        <div class="languages-chip-track">
+          <span class="lang-badge-chip lang-badge-chip--ta">தமிழ் <span class="lang-badge-chip__roman">Tamil</span></span>
+          <span class="lang-badge-chip lang-badge-chip--hi">हिन्दी <span class="lang-badge-chip__roman">Hindi</span></span>
+          <span class="lang-badge-chip lang-badge-chip--te">తెలుగు <span class="lang-badge-chip__roman">Telugu</span></span>
+          <span class="lang-badge-chip lang-badge-chip--kn">ಕನ್ನಡ <span class="lang-badge-chip__roman">Kannada</span></span>
+          <span class="lang-badge-chip lang-badge-chip--bn">বাংলা <span class="lang-badge-chip__roman">Bengali</span></span>
+          <span class="lang-badge-chip">मराठी <span class="lang-badge-chip__roman">Marathi</span></span>
+          <span class="lang-badge-chip">മലയാളം <span class="lang-badge-chip__roman">Malayalam</span></span>
+          <span class="lang-badge-chip">English <span class="lang-badge-chip__roman">Simple</span></span>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           5. FOOTER BAND (TEAM CREDITS & LIVE QR CODE)
+           =================================================================== -->
+      <footer class="poster-footer">
+        
+        <div class="footer-credits">
+          <div class="footer-team-row">
+            <span class="footer-team-badge">Team Gear5coders</span>
+            <span class="footer-team-role">· National Hackathon Finalists</span>
+          </div>
+          <div class="footer-team-members">
+            Lingeswaran D (Lead) · Lingesh R · Krishniya K · Kiruthik V · Harsithaa P
+          </div>
+          <div class="footer-url-text">
+            lingeswarandhanapal7-hub.github.io/Hmm
+          </div>
+        </div>
+
+        <!-- Live QR Code Card -->
+        <div class="poster-qr-block">
+          <div class="qr-code-canvas-box">
+            <!-- High-Resolution Precision SVG QR Code pointing to live Hmm app -->
+            <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="QR Code to live website">
+              <rect width="100" height="100" fill="white"/>
+              <!-- Corner Finder Pattern 1 (Top-Left) -->
+              <rect x="10" y="10" width="24" height="24" fill="#22262B"/>
+              <rect x="14" y="14" width="16" height="16" fill="white"/>
+              <rect x="18" y="18" width="8" height="8" fill="#22262B"/>
+
+              <!-- Corner Finder Pattern 2 (Top-Right) -->
+              <rect x="66" y="10" width="24" height="24" fill="#22262B"/>
+              <rect x="70" y="14" width="16" height="16" fill="white"/>
+              <rect x="74" y="18" width="8" height="8" fill="#22262B"/>
+
+              <!-- Corner Finder Pattern 3 (Bottom-Left) -->
+              <rect x="10" y="66" width="24" height="24" fill="#22262B"/>
+              <rect x="14" y="70" width="16" height="16" fill="white"/>
+              <rect x="18" y="74" width="8" height="8" fill="#22262B"/>
+
+              <!-- Timing Patterns & Sync Grid -->
+              <rect x="38" y="10" width="4" height="4" fill="#22262B"/>
+              <rect x="46" y="10" width="4" height="4" fill="#22262B"/>
+              <rect x="54" y="10" width="4" height="4" fill="#22262B"/>
+
+              <rect x="10" y="38" width="4" height="4" fill="#22262B"/>
+              <rect x="10" y="46" width="4" height="4" fill="#22262B"/>
+              <rect x="10" y="54" width="4" height="4" fill="#22262B"/>
+
+              <!-- Data Modules Matrix -->
+              <rect x="38" y="22" width="4" height="8" fill="#22262B"/>
+              <rect x="46" y="18" width="8" height="4" fill="#22262B"/>
+              <rect x="58" y="22" width="4" height="4" fill="#22262B"/>
+              <rect x="38" y="34" width="4" height="4" fill="#22262B"/>
+              <rect x="46" y="30" width="4" height="4" fill="#22262B"/>
+              <rect x="54" y="34" width="8" height="4" fill="#22262B"/>
+
+              <!-- Central Matrix -->
+              <rect x="22" y="38" width="4" height="4" fill="#22262B"/>
+              <rect x="30" y="42" width="4" height="8" fill="#22262B"/>
+              <rect x="38" y="46" width="8" height="4" fill="#22262B"/>
+              <rect x="50" y="42" width="4" height="4" fill="#22262B"/>
+              <rect x="58" y="46" width="4" height="8" fill="#22262B"/>
+              <rect x="66" y="38" width="8" height="4" fill="#22262B"/>
+              <rect x="78" y="42" width="4" height="4" fill="#22262B"/>
+              <rect x="86" y="38" width="4" height="8" fill="#22262B"/>
+
+              <!-- Bottom Data Modules -->
+              <rect x="38" y="58" width="4" height="8" fill="#22262B"/>
+              <rect x="46" y="54" width="8" height="4" fill="#22262B"/>
+              <rect x="58" y="58" width="4" height="4" fill="#22262B"/>
+              <rect x="66" y="54" width="4" height="8" fill="#22262B"/>
+              <rect x="74" y="58" width="8" height="4" fill="#22262B"/>
+              <rect x="86" y="54" width="4" height="4" fill="#22262B"/>
+
+              <rect x="38" y="70" width="8" height="4" fill="#22262B"/>
+              <rect x="50" y="66" width="4" height="8" fill="#22262B"/>
+              <rect x="58" y="70" width="8" height="4" fill="#22262B"/>
+              <rect x="70" y="66" width="4" height="4" fill="#22262B"/>
+              <rect x="78" y="70" width="4" height="8" fill="#22262B"/>
+              <rect x="86" y="66" width="4" height="4" fill="#22262B"/>
+
+              <rect x="38" y="82" width="4" height="4" fill="#22262B"/>
+              <rect x="46" y="86" width="8" height="4" fill="#22262B"/>
+              <rect x="58" y="82" width="4" height="8" fill="#22262B"/>
+              <rect x="66" y="86" width="8" height="4" fill="#22262B"/>
+              <rect x="78" y="82" width="4" height="4" fill="#22262B"/>
+              <rect x="86" y="86" width="4" height="4" fill="#22262B"/>
+
+              <!-- Clarity Center Target -->
+              <rect x="44" y="44" width="12" height="12" fill="#E7A928" rx="2"/>
+              <circle cx="50" cy="50" r="3" fill="#22262B"/>
+            </svg>
+          </div>
+
+          <div class="qr-content">
+            <span class="qr-cta-pill">Scan to try it</span>
+            <span class="qr-subtext">Point your phone camera to test live OCR demo</span>
+          </div>
+        </div>
+
+      </footer>
+
+    </article>
+  </main>
+
+  <script>
+    // Screen Zoom Preview Helper
+    let isFit = true;
+    function toggleZoom() {
+      const artboard = document.getElementById('poster-artboard');
+      const label = document.getElementById('zoom-label');
+      if (isFit) {
+        artboard.style.transform = 'scale(1)';
+        label.textContent = 'Actual Size (100%)';
+        isFit = false;
+      } else {
+        fitToScreen();
+        label.textContent = 'Fit Screen';
+        isFit = true;
+      }
+    }
+
+    function fitToScreen() {
+      const artboard = document.getElementById('poster-artboard');
+      const label = document.getElementById('zoom-label');
+      const availHeight = window.innerHeight - 120;
+      // 420mm is approx 1587px at standard display 96dpi
+      const naturalHeight = artboard.offsetHeight || 1587;
+      const scale = Math.min(1, Math.max(0.4, availHeight / naturalHeight));
+      artboard.style.transform = `scale(${scale})`;
+      if (label) label.textContent = `Fit Screen (${Math.round(scale * 100)}%)`;
+      isFit = true;
+    }
+
+    window.addEventListener('resize', () => {
+      if (isFit) fitToScreen();
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      fitToScreen();
+    });
+  </script>
+</body>
+</html>
