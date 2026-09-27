@@ -46,10 +46,10 @@
 }
 
 /* --------------------------------------------------------------------------
-   Page & Print Configuration
+   Page & Print Configuration (Default: A4 portrait: 210 x 297 mm)
    -------------------------------------------------------------------------- */
 @page {
-  size: A3 portrait;
+  size: A4 portrait;
   margin: 0;
 }
 
@@ -145,8 +145,53 @@ html, body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* Size Switcher */
+.poster-size-switch {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 3px;
+}
+
+.poster-size-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.poster-size-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.poster-size-btn.is-active {
+  background: var(--color-clarity);
+  color: var(--color-ink);
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(231, 169, 40, 0.35);
+}
+
+.poster-size-dim {
+  font-size: 0.6875rem;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
 /* --------------------------------------------------------------------------
-   The Main A3 Poster Canvas
+   The Main Poster Canvas (A4 Default: 210x297mm · A3 Supported: 297x420mm)
    -------------------------------------------------------------------------- */
 .poster-sheet {
   width: var(--poster-width);
@@ -164,12 +209,24 @@ html, body {
   transform-origin: top center;
   box-sizing: border-box;
 
+  /* Default A4 scaling: 210mm x 297mm (1 / sqrt(2) ≈ 0.70710678) */
+  zoom: 0.70710678;
+
   /* Authentic physical parchment noise */
   background-image: 
     radial-gradient(rgba(34, 38, 43, 0.04) 1px, transparent 0),
     linear-gradient(135deg, rgba(231, 169, 40, 0.02) 0%, transparent 40%),
     linear-gradient(315deg, rgba(166, 58, 46, 0.02) 0%, transparent 40%);
   background-size: 16px 16px, 100% 100%, 100% 100%;
+}
+
+/* Paper Size Modifiers */
+body[data-paper-size="a4"] .poster-sheet {
+  zoom: 0.70710678;
+}
+
+body[data-paper-size="a3"] .poster-sheet {
+  zoom: 1;
 }
 
 /* Fine Editorial Frame Border */
@@ -879,12 +936,29 @@ html, body {
 
   .poster-sheet {
     box-shadow: none !important;
+    margin: 0 auto !important;
+    page-break-after: avoid !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    transform: none !important;
+  }
+
+  /* Default A4 print: 210mm x 297mm */
+  body:not([data-paper-size="a3"]) .poster-sheet,
+  body[data-paper-size="a4"] .poster-sheet {
     width: 297mm !important;
     height: 420mm !important;
     max-width: 297mm !important;
     max-height: 420mm !important;
-    margin: 0 !important;
-    page-break-after: avoid !important;
-    page-break-inside: avoid !important;
+    zoom: 0.70710678 !important; /* Exactly 210mm x 297mm A4 portrait */
+  }
+
+  /* A3 print: 297mm x 420mm */
+  body[data-paper-size="a3"] .poster-sheet {
+    width: 297mm !important;
+    height: 420mm !important;
+    max-width: 297mm !important;
+    max-height: 420mm !important;
+    zoom: 1 !important;
   }
 }

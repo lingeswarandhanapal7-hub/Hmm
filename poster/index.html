@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hmm — Promotional Poster (A3 Print Ready) | Gear5coders</title>
-  <meta name="description" content="Official A3 promotional poster for Hmm: Understand Any Document, Instantly. Designed by Gear5coders.">
+  <title>Hmm — Promotional Poster (A4 Print Ready) | Gear5coders</title>
+  <meta name="description" content="Official A4 promotional poster for Hmm: Understand Any Document, Instantly. Designed by Gear5coders.">
   
   <!-- Google Fonts: Fraunces, Inter & Regional Indian Scripts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,25 +12,38 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Kannada:wght@400;600;700&family=Noto+Sans+Malayalam:wght@400;600;700&family=Noto+Sans+Tamil:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="./poster.css">
+  <style id="dynamic-page-style">
+    @page { size: A4 portrait; margin: 0; }
+  </style>
 </head>
-<body>
+<body data-paper-size="a4">
 
   <!-- Screen Viewport Preview Controls (Hidden automatically during print) -->
   <header class="poster-toolbar" role="toolbar" aria-label="Poster Export Controls">
     <div class="poster-toolbar__brand">
       <span>Hmm Poster</span>
-      <span style="font-size: 0.75rem; opacity: 0.7; font-family: var(--font-body); font-weight: normal;">(A3 · 297×420mm)</span>
     </div>
+
+    <!-- Paper Size Switcher (A4 Default · A3 Alternate) -->
+    <div class="poster-size-switch" role="radiogroup" aria-label="Paper Size">
+      <button type="button" class="poster-size-btn is-active" id="btn-size-a4" onclick="setPaperSize('a4')">
+        A4 <span class="poster-size-dim">(210×297mm)</span>
+      </button>
+      <button type="button" class="poster-size-btn" id="btn-size-a3" onclick="setPaperSize('a3')">
+        A3 <span class="poster-size-dim">(297×420mm)</span>
+      </button>
+    </div>
+
     <button type="button" class="poster-toolbar__btn" onclick="window.print()">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="6 9 6 2 18 2 18 9"></polyline>
         <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
         <rect x="6" y="14" width="12" height="8"></rect>
       </svg>
-      <span>Print / Save as PDF</span>
+      <span id="print-btn-label">Print A4 / PDF</span>
     </button>
     <button type="button" class="poster-toolbar__btn poster-toolbar__btn--secondary" onclick="toggleZoom()">
-      <span id="zoom-label">Fit Screen (100%)</span>
+      <span id="zoom-label">Fit Screen</span>
     </button>
     <a href="../" class="poster-toolbar__btn poster-toolbar__btn--secondary">
       <span>Back to Website →</span>
@@ -40,7 +53,7 @@
   <!-- Screen Stage Area -->
   <main class="poster-screen-stage">
     
-    <!-- THE A3 POSTER SHEET (297mm x 420mm) -->
+    <!-- THE POSTER SHEET (A4 Default: 210mm x 297mm · A3 Supported: 297mm x 420mm) -->
     <article class="poster-sheet" id="poster-artboard">
 
       <!-- ===================================================================
@@ -293,29 +306,59 @@
   </main>
 
   <script>
-    // Screen Zoom Preview Helper
+    // State
+    let currentPaper = 'a4';
     let isFit = true;
+
+    function setPaperSize(size) {
+      currentPaper = size;
+      document.body.setAttribute('data-paper-size', size);
+
+      const btnA4 = document.getElementById('btn-size-a4');
+      const btnA3 = document.getElementById('btn-size-a3');
+      const printLabel = document.getElementById('print-btn-label');
+      const dynamicPageStyle = document.getElementById('dynamic-page-style');
+
+      if (size === 'a4') {
+        btnA4.classList.add('is-active');
+        btnA3.classList.remove('is-active');
+        if (printLabel) printLabel.textContent = 'Print A4 / PDF';
+        if (dynamicPageStyle) dynamicPageStyle.innerHTML = '@page { size: A4 portrait; margin: 0; }';
+        document.title = 'Hmm — Promotional Poster (A4 Print Ready) | Gear5coders';
+      } else {
+        btnA3.classList.add('is-active');
+        btnA4.classList.remove('is-active');
+        if (printLabel) printLabel.textContent = 'Print A3 / PDF';
+        if (dynamicPageStyle) dynamicPageStyle.innerHTML = '@page { size: A3 portrait; margin: 0; }';
+        document.title = 'Hmm — Promotional Poster (A3 Print Ready) | Gear5coders';
+      }
+
+      fitToScreen();
+    }
+
     function toggleZoom() {
       const artboard = document.getElementById('poster-artboard');
       const label = document.getElementById('zoom-label');
+      if (!artboard) return;
+
       if (isFit) {
         artboard.style.transform = 'scale(1)';
-        label.textContent = 'Actual Size (100%)';
+        label.textContent = `Actual Size (${currentPaper.toUpperCase()})`;
         isFit = false;
       } else {
         fitToScreen();
-        label.textContent = 'Fit Screen';
-        isFit = true;
       }
     }
 
     function fitToScreen() {
       const artboard = document.getElementById('poster-artboard');
       const label = document.getElementById('zoom-label');
-      const availHeight = window.innerHeight - 120;
-      // 420mm is approx 1587px at standard display 96dpi
-      const naturalHeight = artboard.offsetHeight || 1587;
-      const scale = Math.min(1, Math.max(0.4, availHeight / naturalHeight));
+      if (!artboard) return;
+
+      const availHeight = window.innerHeight - 130;
+      // In A4 mode, natural pixel height at 96 DPI is approx 1122.5px; in A3 mode it is 1587.4px
+      const naturalHeight = currentPaper === 'a4' ? 1122.5 : 1587.4;
+      const scale = Math.min(1, Math.max(0.35, availHeight / naturalHeight));
       artboard.style.transform = `scale(${scale})`;
       if (label) label.textContent = `Fit Screen (${Math.round(scale * 100)}%)`;
       isFit = true;
@@ -326,7 +369,7 @@
     });
 
     window.addEventListener('DOMContentLoaded', () => {
-      fitToScreen();
+      setPaperSize('a4');
     });
   </script>
 </body>
