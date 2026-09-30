@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sparkles, FileText, CheckCircle2, ArrowDown } from 'lucide-react';
+import { Sparkles, FileText, CheckCircle2 } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,7 +12,6 @@ export default function Hero() {
   const resolvedTextRef = useRef(null);
   const subheadRef = useRef(null);
   const bgTexturesRef = useRef(null);
-  const scrollCueRef = useRef(null);
 
   const [isReducedMotion, setIsReducedMotion] = useState(false);
 
@@ -32,7 +31,6 @@ export default function Hero() {
     const resolved = resolvedTextRef.current;
     const subhead = subheadRef.current;
     const bgTextures = bgTexturesRef.current;
-    const scrollCue = scrollCueRef.current;
 
     if (!container || !pinTarget) return;
 
@@ -63,9 +61,6 @@ export default function Hero() {
       });
       gsap.set(subhead, { opacity: 0, y: mediaQuery.matches ? 0 : 16 });
       gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
-      if (scrollCue) {
-        gsap.set(scrollCue, { opacity: 1, y: 0 });
-      }
 
       // Step 1: Cramped text untangles and releases tension
       tl.to(cramped, {
@@ -75,16 +70,6 @@ export default function Hero() {
         duration: 0.35,
         ease: 'power1.inOut'
       }, 0);
-
-      // Fade out scroll indicator cue as soon as user begins scrolling
-      if (scrollCue) {
-        tl.to(scrollCue, {
-          opacity: 0,
-          y: -10,
-          duration: 0.15,
-          ease: 'power1.out'
-        }, 0);
-      }
 
       // Background messy document textures fade away as clarity arrives
       tl.to(bgTextures, {
@@ -128,16 +113,6 @@ export default function Hero() {
       window.removeEventListener('load', handleRefresh);
     };
   }, []);
-
-  const handleScrollToUntangle = () => {
-    if (containerRef.current) {
-      const scrollDistance = containerRef.current.offsetHeight * 0.45;
-      window.scrollTo({
-        top: containerRef.current.offsetTop + scrollDistance,
-        behavior: 'smooth'
-      });
-    }
-  };
 
   return (
     <section
@@ -237,20 +212,6 @@ export default function Hero() {
               </div>
             </div>
           </div>
-
-          {/* Interactive Scroll Cue (Visible initially, fades as user untangles document) */}
-          <button
-            ref={scrollCueRef}
-            type="button"
-            className="hero-scroll-cue"
-            onClick={handleScrollToUntangle}
-            aria-label="Scroll down to untangle document"
-          >
-            <span className="hero-scroll-cue-text">Scroll to untangle</span>
-            <div className="hero-scroll-cue-icon-wrap">
-              <ArrowDown size={14} className="hero-scroll-cue-icon" />
-            </div>
-          </button>
         </div>
       </div>
     </section>
