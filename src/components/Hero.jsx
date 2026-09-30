@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Sparkles, FileText, CheckCircle2 } from 'lucide-react';
+import { Sparkles, FileText, CheckCircle2, ArrowDown } from 'lucide-react';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,11 +12,12 @@ export default function Hero() {
   const resolvedTextRef = useRef(null);
   const subheadRef = useRef(null);
   const bgTexturesRef = useRef(null);
+  const scrollCueRef = useRef(null);
 
   const [isReducedMotion, setIsReducedMotion] = useState(false);
 
   useEffect(() => {
-    // Check prefers-reduced-motion
+    // Check prefers-reduced-motion for vestibular-safe transitions
     const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     setIsReducedMotion(mediaQuery.matches);
 
@@ -25,17 +26,13 @@ export default function Hero() {
     };
     mediaQuery.addEventListener('change', handleMotionChange);
 
-    if (mediaQuery.matches) {
-      // In reduced motion mode, show resolved state immediately
-      return () => mediaQuery.removeEventListener('change', handleMotionChange);
-    }
-
     const container = containerRef.current;
     const pinTarget = pinTargetRef.current;
     const cramped = crampedTextRef.current;
     const resolved = resolvedTextRef.current;
     const subhead = subheadRef.current;
     const bgTextures = bgTexturesRef.current;
+    const scrollCue = scrollCueRef.current;
 
     if (!container || !pinTarget) return;
 
@@ -46,7 +43,7 @@ export default function Hero() {
           trigger: container,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.8,
+          scrub: 0.6,
           pin: pinTarget,
           anticipatePin: 1,
           invalidateOnRefresh: true,
@@ -58,24 +55,42 @@ export default function Hero() {
 
       // Initial state: cramped text visible, resolved text and subhead hidden
       gsap.set(cramped, { opacity: 1, scale: 1, transformOrigin: 'left center' });
-      gsap.set(resolved, { opacity: 0, scale: 0.96, y: 14, transformOrigin: 'left center' });
-      gsap.set(subhead, { opacity: 0, y: 16 });
+      gsap.set(resolved, {
+        opacity: 0,
+        scale: mediaQuery.matches ? 1 : 0.96,
+        y: mediaQuery.matches ? 0 : 14,
+        transformOrigin: 'left center'
+      });
+      gsap.set(subhead, { opacity: 0, y: mediaQuery.matches ? 0 : 16 });
       gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
+      if (scrollCue) {
+        gsap.set(scrollCue, { opacity: 1, y: 0 });
+      }
 
       // Step 1: Cramped text untangles and releases tension
       tl.to(cramped, {
         opacity: 0,
-        scale: 1.02,
+        scale: mediaQuery.matches ? 1 : 1.02,
         letterSpacing: '-0.01em',
-        duration: 0.4,
+        duration: 0.35,
         ease: 'power1.inOut'
       }, 0);
+
+      // Fade out scroll indicator cue as soon as user begins scrolling
+      if (scrollCue) {
+        tl.to(scrollCue, {
+          opacity: 0,
+          y: -10,
+          duration: 0.15,
+          ease: 'power1.out'
+        }, 0);
+      }
 
       // Background messy document textures fade away as clarity arrives
       tl.to(bgTextures, {
         opacity: 0,
-        scale: 0.95,
-        duration: 0.35,
+        scale: mediaQuery.matches ? 1 : 0.95,
+        duration: 0.3,
         ease: 'power1.out'
       }, 0.05);
 
@@ -84,9 +99,9 @@ export default function Hero() {
         opacity: 1,
         scale: 1,
         y: 0,
-        duration: 0.4,
+        duration: 0.35,
         ease: 'power2.out'
-      }, 0.2);
+      }, 0.15);
 
       // Step 3: Subhead and CTA buttons fade in promptly
       tl.to(subhead, {
@@ -94,19 +109,40 @@ export default function Hero() {
         y: 0,
         duration: 0.35,
         ease: 'power1.out'
-      }, 0.35);
+      }, 0.25);
     }, container);
+
+    // Refresh ScrollTrigger after web fonts load (critical on Vercel production cold start)
+    const handleRefresh = () => {
+      ScrollTrigger.refresh();
+    };
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(handleRefresh);
+    }
+    window.addEventListener('load', handleRefresh);
 
     return () => {
       ctx.revert();
       mediaQuery.removeEventListener('change', handleMotionChange);
+      window.removeEventListener('load', handleRefresh);
     };
   }, []);
+
+  const handleScrollToUntangle = () => {
+    if (containerRef.current) {
+      const scrollDistance = containerRef.current.offsetHeight * 0.45;
+      window.scrollTo({
+        top: containerRef.current.offsetTop + scrollDistance,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <section
       ref={containerRef}
-      className={`hero-scroll-wrapper ${isReducedMotion ? 'hero-scroll-wrapper--reduced' : ''}`}
+      className="hero-scroll-wrapper"
       id="hero"
       aria-label="Introduction to Hmm"
     >
@@ -149,9 +185,7 @@ export default function Hero() {
             {/* 1. Cramped, dense, confusing state */}
             <h1
               ref={crampedTextRef}
-              className={`hero-headline hero-headline--cramped ${
-                isReducedMotion ? 'is-hidden' : ''
-              }`}
+              className="hero-headline hero-headline--cramped"
             >
               “Hmm... what does this even mean?”
               <span className="hero-scan-marker">§ 148(B) r/w 13(2) [PENAL]</span>
@@ -160,9 +194,7 @@ export default function Hero() {
             {/* 2. Resolved, clear, confident state */}
             <h1
               ref={resolvedTextRef}
-              className={`hero-headline hero-headline--resolved ${
-                isReducedMotion ? 'is-visible' : ''
-              }`}
+              className="hero-headline hero-headline--resolved"
             >
               “Oh. Now I get it.”
             </h1>
@@ -171,7 +203,7 @@ export default function Hero() {
           {/* Subhead and CTA (appears smoothly below resolved headline) */}
           <div
             ref={subheadRef}
-            className={`hero-resolution-block ${isReducedMotion ? 'is-visible' : ''}`}
+            className="hero-resolution-block"
           >
             <p className="hero-subhead">
               Hmm turns confusing government notices, medical reports, and prescriptions into
@@ -205,6 +237,20 @@ export default function Hero() {
               </div>
             </div>
           </div>
+
+          {/* Interactive Scroll Cue (Visible initially, fades as user untangles document) */}
+          <button
+            ref={scrollCueRef}
+            type="button"
+            className="hero-scroll-cue"
+            onClick={handleScrollToUntangle}
+            aria-label="Scroll down to untangle document"
+          >
+            <span className="hero-scroll-cue-text">Scroll to untangle</span>
+            <div className="hero-scroll-cue-icon-wrap">
+              <ArrowDown size={14} className="hero-scroll-cue-icon" />
+            </div>
+          </button>
         </div>
       </div>
     </section>
