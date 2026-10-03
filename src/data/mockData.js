@@ -1,6 +1,7 @@
 // Data and sample documents for Hmm — Built by Linges.D.Waran
 
 export const LANGUAGES = [
+  { id: 'en', name: 'English', native: 'Plain English', script: 'Inter', sample: 'This letter explains your municipal property tax notice in simple terms.' },
   { id: 'ta', name: 'Tamil', native: 'தமிழ்', script: 'Noto Sans Tamil', sample: 'இந்த கடிதம் உங்கள் உள்ளாட்சி வரி கட்டணத்தை பற்றி விளக்குகிறது.' },
   { id: 'hi', name: 'Hindi', native: 'हिन्दी', script: 'Noto Sans Devanagari', sample: 'यह नोटिस आपके स्थानीय संपत्ति कर के बारे में बताता है।' },
   { id: 'te', name: 'Telugu', native: 'తెలుగు', script: 'Noto Sans Telugu', sample: 'ఈ నోటీసు మీ మునిసిపల్ ఆస్తి పన్ను గురించి వివరిస్తుంది.' },
@@ -8,10 +9,10 @@ export const LANGUAGES = [
   { id: 'bn', name: 'Bengali', native: 'বাংলা', script: 'Noto Sans Bengali', sample: 'এই নোটিশটি আপনার স্থানীয় পৌর কর পরিশোধের বিবরণ দেয়।' },
   { id: 'mr', name: 'Marathi', native: 'मराठी', script: 'Noto Sans Devanagari', sample: 'ही नोटीस आपल्या स्थानिक मालमत्ता कराबद्दल माहिती देते.' },
   { id: 'ml', name: 'Malayalam', native: 'മലയാളം', script: 'Noto Sans Malayalam', sample: 'ഈ അറിയിപ്പ് നിങ്ങളുടെ തദ്ദേശ സ്വത്ത് നികുതിയെക്കുറിച്ച് വ്യക്തമാക്കുന്നു.' },
-  { id: 'en', name: 'English', native: 'Plain English', script: 'Inter', sample: 'This letter explains your municipal property tax notice in simple terms.' },
 ];
 
 export const ALL_SUPPORTED_LANGUAGES = [
+  { id: 'en', name: 'Plain English', native: 'English', speakers: 'Global', phrase: 'Oh. Now I get it.' },
   { id: 'ta', name: 'Tamil', native: 'தமிழ்', speakers: '78M+ speakers', phrase: 'இப்ப புரியுது!' },
   { id: 'hi', name: 'Hindi', native: 'हिन्दी', speakers: '600M+ speakers', phrase: 'अब समझ आया!' },
   { id: 'te', name: 'Telugu', native: 'తెలుగు', speakers: '83M+ speakers', phrase: 'ఇప్పుడు అర్థమైంది!' },
@@ -23,7 +24,6 @@ export const ALL_SUPPORTED_LANGUAGES = [
   { id: 'pa', name: 'Punjabi', native: 'ਪੰਜਾਬੀ', speakers: '113M+ speakers', phrase: 'ਹੁਣ ਸਮਝ ਆਇਆ!' },
   { id: 'or', name: 'Odia', native: 'ଓଡ଼ିଆ', speakers: '35M+ speakers', phrase: 'ଏବେ ବୁଝିଲି!' },
   { id: 'as', name: 'Assamese', native: 'অসমীয়া', speakers: '15M+ speakers', phrase: 'এতিয়া বুজি পালোঁ!' },
-  { id: 'en', name: 'Plain English', native: 'English', speakers: 'Global', phrase: 'Oh. Now I get it.' },
 ];
 
 // Single source of truth: UI translation dictionary keyed by language code

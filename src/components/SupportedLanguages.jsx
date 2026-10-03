@@ -3,7 +3,8 @@ import { Volume2, Globe2 } from 'lucide-react';
 import { ALL_SUPPORTED_LANGUAGES } from '../data/mockData';
 
 export default function SupportedLanguages() {
-  const [activeLang, setActiveLang] = useState(ALL_SUPPORTED_LANGUAGES[0]);
+  const defaultLang = ALL_SUPPORTED_LANGUAGES.find((l) => l.id === 'en') || ALL_SUPPORTED_LANGUAGES[0];
+  const [activeLang, setActiveLang] = useState(defaultLang);
 
   const handleSpeakPhrase = (lang) => {
     setActiveLang(lang);
@@ -11,6 +12,7 @@ export default function SupportedLanguages() {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(lang.phrase);
       const langCodeMap = {
+        en: 'en-US',
         ta: 'ta-IN',
         hi: 'hi-IN',
         te: 'te-IN',
@@ -20,7 +22,8 @@ export default function SupportedLanguages() {
         ml: 'ml-IN',
         gu: 'gu-IN',
         pa: 'pa-IN',
-        en: 'en-US'
+        or: 'or-IN',
+        as: 'as-IN'
       };
       utterance.lang = langCodeMap[lang.id] || 'en-US';
       utterance.rate = 0.95;
@@ -85,7 +88,9 @@ export default function SupportedLanguages() {
 
           <div className="lang-callout-quote-box">
             <span className="lang-callout-quote">“{activeLang.phrase}”</span>
-            <span className="lang-callout-meaning">(Meaning: “Oh. Now I get it.”)</span>
+            <span className="lang-callout-meaning">
+              {activeLang.id === 'en' ? '(Clear, plain conversational English)' : '(Meaning: “Oh. Now I get it.”)'}
+            </span>
           </div>
         </div>
       </div>
