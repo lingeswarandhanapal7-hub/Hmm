@@ -12,18 +12,18 @@ export default function Hero() {
   const [isResolved, setIsResolved] = useState(false);
   const isResolvedRef = useRef(false);
   const isAnimatingRef = useRef(false);
-  // canScrollDownRef is FALSE on initial load and stays FALSE until the first scroll untangles and completely finishes!
-  const canScrollDownRef = useRef(false);
-  const gestureInactivityTimerRef = useRef(null);
+  const freezeLockRef = useRef(false);
+  const freezeTimerRef = useRef(null);
   const touchStartYRef = useRef(0);
+  const touchStartedInCrampedRef = useRef(false);
   const activeTimelineRef = useRef(null);
 
-  // Transition: Cramped -> Resolved (Freeze completely on completion)
+  // Transition: Cramped -> Resolved (Freeze briefly during untangle, then unlock)
   const transitionToResolved = useCallback((immediate = false) => {
     if (isAnimatingRef.current || isResolvedRef.current) return;
 
     isAnimatingRef.current = true;
-    canScrollDownRef.current = false; // Strictly enforce lock!
+    freezeLockRef.current = true;
 
     const cramped = crampedTextRef.current;
     const resolved = resolvedTextRef.current;
@@ -32,6 +32,7 @@ export default function Hero() {
 
     if (!cramped || !resolved || !subhead || !bgTextures) {
       isAnimatingRef.current = false;
+      freezeLockRef.current = false;
       return;
     }
 
@@ -47,20 +48,22 @@ export default function Hero() {
       isResolvedRef.current = true;
       setIsResolved(true);
       isAnimatingRef.current = false;
-      canScrollDownRef.current = true;
+      freezeLockRef.current = false;
       return;
     }
+
+    // Fixed 380ms freeze window: swallows trailing inertia from stroke 1 without cascading
+    clearTimeout(freezeTimerRef.current);
+    freezeTimerRef.current = setTimeout(() => {
+      freezeLockRef.current = false;
+      isAnimatingRef.current = false;
+    }, 380);
 
     const tl = gsap.timeline({
       onComplete: () => {
         isAnimatingRef.current = false;
         isResolvedRef.current = true;
         setIsResolved(true);
-        // Fallback inactivity timer: ensure canScrollDown unlocks once gesture settles
-        clearTimeout(gestureInactivityTimerRef.current);
-        gestureInactivityTimerRef.current = setTimeout(() => {
-          canScrollDownRef.current = true;
-        }, 300);
       }
     });
 
@@ -100,11 +103,12 @@ export default function Hero() {
     }, 0.1);
   }, []);
 
-  // Transition: Resolved -> Cramped (If scrolled back up to top and user scrolls up)
+  // Transition: Resolved -> Cramped (If user scrolls back up to top and pulls up)
   const transitionToCramped = useCallback(() => {
     if (isAnimatingRef.current || !isResolvedRef.current) return;
 
     isAnimatingRef.current = true;
+    freezeLockRef.current = true;
 
     const cramped = crampedTextRef.current;
     const resolved = resolvedTextRef.current;
@@ -113,6 +117,7 @@ export default function Hero() {
 
     if (!cramped || !resolved || !subhead || !bgTextures) {
       isAnimatingRef.current = false;
+      freezeLockRef.current = false;
       return;
     }
 
@@ -120,12 +125,17 @@ export default function Hero() {
       activeTimelineRef.current.kill();
     }
 
+    clearTimeout(freezeTimerRef.current);
+    freezeTimerRef.current = setTimeout(() => {
+      freezeLockRef.current = false;
+      isAnimatingRef.current = false;
+    }, 350);
+
     const tl = gsap.timeline({
       onComplete: () => {
         isAnimatingRef.current = false;
         isResolvedRef.current = false;
         setIsResolved(false);
-        canScrollDownRef.current = false; // Lock again so next scroll down freezes in resolved frame!
       }
     });
 
@@ -170,30 +180,26 @@ export default function Hero() {
     // Check if initial scroll is already down (e.g. reload or anchor hash)
     if (window.scrollY > 30) {
       transitionToResolved(true);
-      canScrollDownRef.current = true;
+      freezeLockRef.current = false;
     } else {
       // Set initial cramped state
       gsap.set(cramped, { opacity: 1, scale: 1, transformOrigin: 'left center' });
       gsap.set(resolved, { opacity: 0, scale: 0.96, y: 14, transformOrigin: 'left center' });
       gsap.set(subhead, { opacity: 0, y: 16 });
       gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
-      canScrollDownRef.current = false;
+      freezeLockRef.current = false;
     }
 
     // Window scroll safety guard:
-    // If canScrollDown is false, enforce strict 0 scroll position so browser inertia CANNOT move page!
+    // Only lock to 0 while the untangle freeze is explicitly running
     const handleWindowScroll = () => {
-      if (!canScrollDownRef.current && window.scrollY > 0 && window.scrollY < 150) {
+      if (freezeLockRef.current && window.scrollY > 0 && window.scrollY < 80) {
         window.scrollTo(0, 0);
         return;
       }
 
-      // If user jumped far down via anchor or fast scrollbar drag (> 150px)
-      if (window.scrollY > 150) {
-        if (!isResolvedRef.current) {
-          transitionToResolved(true);
-        }
-        canScrollDownRef.current = true;
+      if (window.scrollY > 80 && !isResolvedRef.current) {
+        transitionToResolved(true);
       }
     };
 
@@ -201,58 +207,42 @@ export default function Hero() {
     const handleWheel = (e) => {
       const isAtTop = window.scrollY <= 10;
 
-      // 1. Initial downward scroll from cramped state:
-      // Untangle into "Oh. Now I get it." and FREEZE completely in this frame!
+      // 1. Initial downward scroll from cramped state: untangle and freeze!
       if (isAtTop && !isResolvedRef.current) {
         if (e.deltaY > 0) {
           e.preventDefault();
           window.scrollTo(0, 0);
           transitionToResolved(false);
-
-          // Prolong inactivity timer so ALL trailing momentum/inertia from this stroke is swallowed!
-          clearTimeout(gestureInactivityTimerRef.current);
-          gestureInactivityTimerRef.current = setTimeout(() => {
-            if (isResolvedRef.current && !isAnimatingRef.current) {
-              canScrollDownRef.current = true; // Unlock ONLY after user has stopped scrolling!
-            }
-          }, 450);
           return;
         }
       }
 
-      // 2. Trailing inertia or momentum while still in the first scroll action:
-      // Keep viewport 100% frozen in the resolved frame!
-      if (isAtTop && (!canScrollDownRef.current || isAnimatingRef.current)) {
+      // 2. During the brief 380ms freeze window, swallow trailing wheel ticks
+      if (isAtTop && freezeLockRef.current) {
         if (e.deltaY > 0) {
           e.preventDefault();
           window.scrollTo(0, 0);
-
-          clearTimeout(gestureInactivityTimerRef.current);
-          gestureInactivityTimerRef.current = setTimeout(() => {
-            if (isResolvedRef.current && !isAnimatingRef.current) {
-              canScrollDownRef.current = true; // Unlock only after gesture silence!
-            }
-          }, 450);
           return;
         }
       }
 
-      // 3. User is at top, resolved, and scrolls UP: animate back to cramped state
-      if (isAtTop && isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current) {
-        if (e.deltaY < -20) {
+      // 3. User is at top, resolved, not locked, and scrolls UP: fold back to cramped
+      if (isAtTop && isResolvedRef.current && !freezeLockRef.current && !isAnimatingRef.current) {
+        if (e.deltaY < -25) {
           e.preventDefault();
           transitionToCramped();
           return;
         }
       }
 
-      // 4. canScrollDownRef is TRUE and user scrolls down AGAIN -> Native scroll moves down!
+      // 4. Second scroll down: NATIVE SCROLL PROCEEDS FREELY INTO SECTION 2!
     };
 
-    // Touch handlers for mobile/tablet devices
+    // Touch handlers for mobile and tablet devices
     const handleTouchStart = (e) => {
       if (e.touches && e.touches.length > 0) {
         touchStartYRef.current = e.touches[0].clientY;
+        touchStartedInCrampedRef.current = !isResolvedRef.current && window.scrollY <= 10;
       }
     };
 
@@ -263,7 +253,7 @@ export default function Hero() {
       const currentY = e.touches[0].clientY;
       const diffY = touchStartYRef.current - currentY; // positive = swiping up to scroll down
 
-      // First swipe up: untangle and freeze!
+      // 1. First swipe up from cramped state: untangle and freeze!
       if (!isResolvedRef.current && diffY > 8) {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
@@ -271,28 +261,31 @@ export default function Hero() {
         return;
       }
 
-      // Trailing movement during first touch swipe:
-      if ((!canScrollDownRef.current || isAnimatingRef.current) && diffY > 0) {
+      // 2. Trailing movement during the first swipe or freeze window:
+      if ((freezeLockRef.current || touchStartedInCrampedRef.current) && diffY > 0) {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
         return;
       }
 
-      // Swipe down at top when resolved: animate back to cramped
-      if (isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current && diffY < -25) {
+      // 3. Swipe down at top when resolved: animate back to cramped
+      if (isResolvedRef.current && !freezeLockRef.current && !isAnimatingRef.current && diffY < -25) {
         if (e.cancelable) e.preventDefault();
         transitionToCramped();
         return;
       }
+
+      // 4. Second swipe up: NATIVE SCROLL PROCEEDS FREELY INTO SECTION 2!
     };
 
     const handleTouchEnd = () => {
-      // When the user lifts their finger from the first swipe, allow the NEXT swipe to scroll down!
+      touchStartedInCrampedRef.current = false;
       if (isResolvedRef.current) {
-        clearTimeout(gestureInactivityTimerRef.current);
-        gestureInactivityTimerRef.current = setTimeout(() => {
-          canScrollDownRef.current = true;
-        }, 200);
+        clearTimeout(freezeTimerRef.current);
+        freezeTimerRef.current = setTimeout(() => {
+          freezeLockRef.current = false;
+          isAnimatingRef.current = false;
+        }, 120);
       }
     };
 
@@ -305,13 +298,10 @@ export default function Hero() {
         e.preventDefault();
         window.scrollTo(0, 0);
         transitionToResolved(false);
-        setTimeout(() => {
-          canScrollDownRef.current = true;
-        }, 400);
-      } else if (!canScrollDownRef.current && ['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+      } else if (freezeLockRef.current && ['ArrowDown', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault();
         window.scrollTo(0, 0);
-      } else if (isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current && ['ArrowUp', 'PageUp'].includes(e.key)) {
+      } else if (isResolvedRef.current && !freezeLockRef.current && !isAnimatingRef.current && ['ArrowUp', 'PageUp'].includes(e.key)) {
         e.preventDefault();
         transitionToCramped();
       }
@@ -331,7 +321,7 @@ export default function Hero() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('keydown', handleKeyDown);
-      clearTimeout(gestureInactivityTimerRef.current);
+      clearTimeout(freezeTimerRef.current);
       if (activeTimelineRef.current) {
         activeTimelineRef.current.kill();
       }
@@ -339,8 +329,10 @@ export default function Hero() {
   }, [transitionToResolved, transitionToCramped]);
 
   const unlockForNav = () => {
-    canScrollDownRef.current = true;
+    freezeLockRef.current = false;
+    isAnimatingRef.current = false;
     isResolvedRef.current = true;
+    setIsResolved(true);
   };
 
   return (
