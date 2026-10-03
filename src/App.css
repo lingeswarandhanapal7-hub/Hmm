@@ -1249,7 +1249,14 @@ footer,
 .dropzone-text {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  align-items: center;
+  gap: 4px;
+}
+
+.dropzone-heading {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-ink);
 }
 
 .dropzone-label-link {
@@ -1261,8 +1268,85 @@ footer,
 }
 
 .dropzone-sub {
-  font-size: 0.75rem;
+  font-size: 0.775rem;
   color: var(--color-ink-muted);
+}
+
+.dropzone-formats-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.format-tag {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--color-paper-card);
+  border: 1px solid var(--color-line);
+  color: var(--color-ink);
+}
+
+.format-tag--pdf {
+  border-color: #b91c1c;
+  color: #b91c1c;
+  background: #fef2f2;
+}
+
+.format-size-limit {
+  font-size: 0.72rem;
+  color: var(--color-ink-muted);
+  margin-left: 2px;
+}
+
+.dropzone-buttons-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-dropzone-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: var(--radius-xs);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-quick);
+  text-decoration: none;
+}
+
+.btn-dropzone-action--primary {
+  background: var(--color-ink);
+  color: var(--color-paper);
+  border: 1px solid var(--color-ink);
+}
+
+.btn-dropzone-action--primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.btn-dropzone-action--secondary {
+  background: var(--color-paper-card);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+}
+
+.btn-dropzone-action--secondary:hover {
+  border-color: var(--color-ink);
+  background: var(--color-paper);
+  transform: translateY(-1px);
 }
 
 .btn-camera-capture {

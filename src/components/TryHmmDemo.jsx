@@ -779,38 +779,53 @@ ${activeGroundedRule}
                     <Upload size={20} />
                   </div>
                   <div className="dropzone-text">
+                    <span className="dropzone-heading">Upload Document, Photo, or PDF</span>
+                    <span className="dropzone-sub">Drag & drop here, browse from device, or use camera</span>
+
+                    <div className="dropzone-formats-badge">
+                      <span className="format-tag">JPG</span>
+                      <span className="format-tag">PNG</span>
+                      <span className="format-tag">WEBP</span>
+                      <span className="format-tag format-tag--pdf">PDF</span>
+                      <span className="format-size-limit">Up to 10MB</span>
+                    </div>
+                  </div>
+
+                  <div className="dropzone-buttons-row">
+                    {/* Primary Button: Upload / Browse File (Image or PDF) */}
                     {user ? (
-                      <label htmlFor="doc-file-upload" className="dropzone-label-link">
-                        {t('uploadOwn')}
+                      <label htmlFor="doc-file-upload" className="btn-dropzone-action btn-dropzone-action--primary">
+                        <FileText size={15} />
+                        <span>Upload Image / PDF</span>
                       </label>
                     ) : (
                       <button
                         type="button"
-                        className="dropzone-label-link-btn"
+                        className="btn-dropzone-action btn-dropzone-action--primary"
                         onClick={handleTriggerUpload}
                       >
-                        {t('uploadOwn')}
+                        <FileText size={15} />
+                        <span>Upload Image / PDF</span>
                       </button>
                     )}
-                    <span className="dropzone-sub">{t('dragDrop')}</span>
-                  </div>
 
-                  {/* Mobile Camera Button */}
-                  {user ? (
-                    <label htmlFor="doc-camera-capture" className="btn-camera-capture">
-                      <Camera size={15} />
-                      <span>{t('takePhoto')}</span>
-                    </label>
-                  ) : (
-                    <button
-                      type="button"
-                      className="btn-camera-capture"
-                      onClick={handleTriggerUpload}
-                    >
-                      <Camera size={15} />
-                      <span>{t('takePhoto')}</span>
-                    </button>
-                  )}
+                    {/* Secondary Button: Camera Photo Capture */}
+                    {user ? (
+                      <label htmlFor="doc-camera-capture" className="btn-dropzone-action btn-dropzone-action--secondary">
+                        <Camera size={15} />
+                        <span>Take Photo</span>
+                      </label>
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn-dropzone-action btn-dropzone-action--secondary"
+                        onClick={handleTriggerUpload}
+                      >
+                        <Camera size={15} />
+                        <span>Take Photo</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
