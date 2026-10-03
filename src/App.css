@@ -296,7 +296,8 @@ footer,
   align-items: flex-start;
   text-align: left;
   max-width: var(--editorial-max-width);
-  padding: 24px 0;
+  padding-top: 24px;
+  padding-bottom: 24px;
 }
 
 /* Faint Document Textures in the background */
@@ -2632,7 +2633,8 @@ footer,
   }
 
   .hero-content-stage {
-    padding: 20px 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
   }
 
   .hero-headline {
