@@ -12,18 +12,18 @@ export default function Hero() {
   const [isResolved, setIsResolved] = useState(false);
   const isResolvedRef = useRef(false);
   const isAnimatingRef = useRef(false);
-  const isLockedRef = useRef(false);
-  const gestureDebounceTimerRef = useRef(null);
-  const cooldownTimerRef = useRef(null);
+  // canScrollDownRef is FALSE on initial load and stays FALSE until the first scroll untangles and completely finishes!
+  const canScrollDownRef = useRef(false);
+  const gestureInactivityTimerRef = useRef(null);
   const touchStartYRef = useRef(0);
   const activeTimelineRef = useRef(null);
 
-  // Transition: Cramped -> Resolved (Freeze on completion)
+  // Transition: Cramped -> Resolved (Freeze completely on completion)
   const transitionToResolved = useCallback((immediate = false) => {
     if (isAnimatingRef.current || isResolvedRef.current) return;
 
     isAnimatingRef.current = true;
-    isLockedRef.current = true;
+    canScrollDownRef.current = false; // Strictly enforce lock!
 
     const cramped = crampedTextRef.current;
     const resolved = resolvedTextRef.current;
@@ -32,7 +32,6 @@ export default function Hero() {
 
     if (!cramped || !resolved || !subhead || !bgTextures) {
       isAnimatingRef.current = false;
-      isLockedRef.current = false;
       return;
     }
 
@@ -48,7 +47,7 @@ export default function Hero() {
       isResolvedRef.current = true;
       setIsResolved(true);
       isAnimatingRef.current = false;
-      isLockedRef.current = false;
+      canScrollDownRef.current = true;
       return;
     }
 
@@ -57,12 +56,8 @@ export default function Hero() {
         isAnimatingRef.current = false;
         isResolvedRef.current = true;
         setIsResolved(true);
-
-        // Keep lock active briefly for momentum cooldown so trailing events from the initial flick are absorbed
-        clearTimeout(cooldownTimerRef.current);
-        cooldownTimerRef.current = setTimeout(() => {
-          isLockedRef.current = false;
-        }, 250);
+        // Note: canScrollDownRef stays FALSE while the initial scroll gesture is active.
+        // It will only be unlocked by the inactivity timer after the user's scroll stroke ends!
       }
     });
 
@@ -72,7 +67,7 @@ export default function Hero() {
     tl.to(cramped, {
       opacity: 0,
       scale: 1.02,
-      duration: 0.3,
+      duration: 0.28,
       ease: 'power2.inOut'
     }, 0);
 
@@ -80,7 +75,7 @@ export default function Hero() {
     tl.to(bgTextures, {
       opacity: 0,
       scale: 0.95,
-      duration: 0.28,
+      duration: 0.26,
       ease: 'power2.out'
     }, 0.02);
 
@@ -89,17 +84,17 @@ export default function Hero() {
       opacity: 1,
       scale: 1,
       y: 0,
-      duration: 0.32,
+      duration: 0.3,
       ease: 'power2.out'
-    }, 0.08);
+    }, 0.06);
 
     // Step 3: Subhead and CTA buttons fade in promptly
     tl.to(subhead, {
       opacity: 1,
       y: 0,
-      duration: 0.32,
+      duration: 0.3,
       ease: 'power1.out'
-    }, 0.12);
+    }, 0.1);
   }, []);
 
   // Transition: Resolved -> Cramped (If scrolled back up to top and user scrolls up)
@@ -107,7 +102,6 @@ export default function Hero() {
     if (isAnimatingRef.current || !isResolvedRef.current) return;
 
     isAnimatingRef.current = true;
-    isLockedRef.current = true;
 
     const cramped = crampedTextRef.current;
     const resolved = resolvedTextRef.current;
@@ -116,7 +110,6 @@ export default function Hero() {
 
     if (!cramped || !resolved || !subhead || !bgTextures) {
       isAnimatingRef.current = false;
-      isLockedRef.current = false;
       return;
     }
 
@@ -129,11 +122,7 @@ export default function Hero() {
         isAnimatingRef.current = false;
         isResolvedRef.current = false;
         setIsResolved(false);
-
-        clearTimeout(cooldownTimerRef.current);
-        cooldownTimerRef.current = setTimeout(() => {
-          isLockedRef.current = false;
-        }, 250);
+        canScrollDownRef.current = false; // Lock again so next scroll down freezes in resolved frame!
       }
     });
 
@@ -142,7 +131,7 @@ export default function Hero() {
     tl.to(subhead, {
       opacity: 0,
       y: 16,
-      duration: 0.2,
+      duration: 0.18,
       ease: 'power2.in'
     }, 0);
 
@@ -150,23 +139,23 @@ export default function Hero() {
       opacity: 0,
       scale: 0.96,
       y: 14,
-      duration: 0.22,
+      duration: 0.2,
       ease: 'power2.in'
-    }, 0.04);
+    }, 0.03);
 
     tl.to(cramped, {
       opacity: 1,
       scale: 1,
-      duration: 0.26,
+      duration: 0.24,
       ease: 'power2.out'
-    }, 0.08);
+    }, 0.06);
 
     tl.to(bgTextures, {
       opacity: 0.75,
       scale: 1,
-      duration: 0.26,
+      duration: 0.24,
       ease: 'power2.out'
-    }, 0.08);
+    }, 0.06);
   }, []);
 
   useEffect(() => {
@@ -175,74 +164,86 @@ export default function Hero() {
     const subhead = subheadRef.current;
     const bgTextures = bgTexturesRef.current;
 
-    // Check if initial scroll is already down (e.g. page reload down or anchor hash)
+    // Check if initial scroll is already down (e.g. reload or anchor hash)
     if (window.scrollY > 30) {
       transitionToResolved(true);
+      canScrollDownRef.current = true;
     } else {
       // Set initial cramped state
       gsap.set(cramped, { opacity: 1, scale: 1, transformOrigin: 'left center' });
       gsap.set(resolved, { opacity: 0, scale: 0.96, y: 14, transformOrigin: 'left center' });
       gsap.set(subhead, { opacity: 0, y: 16 });
       gsap.set(bgTextures, { opacity: 0.75, scale: 1 });
+      canScrollDownRef.current = false;
     }
 
-    // Scroll listener for programmatic jumps / fast scrollbar dragging
+    // Window scroll safety guard:
+    // If canScrollDown is false, enforce strict 0 scroll position so browser inertia CANNOT move page!
     const handleWindowScroll = () => {
-      if (window.scrollY > 30 && !isResolvedRef.current && !isAnimatingRef.current) {
-        transitionToResolved(true);
+      if (!canScrollDownRef.current && window.scrollY > 0 && window.scrollY < 150) {
+        window.scrollTo(0, 0);
+        return;
+      }
+
+      // If user jumped far down via anchor or fast scrollbar drag (> 150px)
+      if (window.scrollY > 150) {
+        if (!isResolvedRef.current) {
+          transitionToResolved(true);
+        }
+        canScrollDownRef.current = true;
       }
     };
 
     // Wheel event handler:
-    // If at top and NOT resolved: freeze in place and animate to resolved frame.
-    // Trailing inertia from that gesture is swallowed until scrolling stops.
     const handleWheel = (e) => {
-      const isAtTop = window.scrollY <= 15;
+      const isAtTop = window.scrollY <= 10;
 
-      // 1. If at top and currently in cramped state, scrolling down triggers untangle & freezes
+      // 1. Initial downward scroll from cramped state:
+      // Untangle into "Oh. Now I get it." and FREEZE completely in this frame!
       if (isAtTop && !isResolvedRef.current) {
         if (e.deltaY > 0) {
           e.preventDefault();
+          window.scrollTo(0, 0);
           transitionToResolved(false);
 
-          // Prolong gesture debounce so trailing inertia events from same flick are absorbed
-          clearTimeout(gestureDebounceTimerRef.current);
-          gestureDebounceTimerRef.current = setTimeout(() => {
-            isLockedRef.current = false;
-          }, 250);
+          // Prolong inactivity timer so ALL trailing momentum/inertia from this stroke is swallowed!
+          clearTimeout(gestureInactivityTimerRef.current);
+          gestureInactivityTimerRef.current = setTimeout(() => {
+            if (isResolvedRef.current && !isAnimatingRef.current) {
+              canScrollDownRef.current = true; // Unlock ONLY after user has stopped scrolling!
+            }
+          }, 450);
           return;
         }
       }
 
-      // 2. While animation is running or cooldown lock is active, absorb downward wheel momentum
-      if (isAtTop && (isAnimatingRef.current || isLockedRef.current)) {
+      // 2. Trailing inertia or momentum while still in the first scroll action:
+      // Keep viewport 100% frozen in the resolved frame!
+      if (isAtTop && (!canScrollDownRef.current || isAnimatingRef.current)) {
         if (e.deltaY > 0) {
           e.preventDefault();
-          clearTimeout(gestureDebounceTimerRef.current);
-          gestureDebounceTimerRef.current = setTimeout(() => {
-            if (!isAnimatingRef.current) {
-              isLockedRef.current = false;
+          window.scrollTo(0, 0);
+
+          clearTimeout(gestureInactivityTimerRef.current);
+          gestureInactivityTimerRef.current = setTimeout(() => {
+            if (isResolvedRef.current && !isAnimatingRef.current) {
+              canScrollDownRef.current = true; // Unlock only after gesture silence!
             }
-          }, 250);
+          }, 450);
           return;
         }
       }
 
-      // 3. If at top and already resolved, scrolling up animates back to cramped
-      if (isAtTop && isResolvedRef.current && !isAnimatingRef.current && !isLockedRef.current) {
-        if (e.deltaY < -15) {
+      // 3. User is at top, resolved, and scrolls UP: animate back to cramped state
+      if (isAtTop && isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current) {
+        if (e.deltaY < -20) {
           e.preventDefault();
           transitionToCramped();
-
-          clearTimeout(gestureDebounceTimerRef.current);
-          gestureDebounceTimerRef.current = setTimeout(() => {
-            isLockedRef.current = false;
-          }, 250);
           return;
         }
       }
 
-      // 4. Otherwise (hero is resolved and user scrolls down again), native scrolling continues!
+      // 4. canScrollDownRef is TRUE and user scrolls down AGAIN -> Native scroll moves down!
     };
 
     // Touch handlers for mobile/tablet devices
@@ -253,29 +254,29 @@ export default function Hero() {
     };
 
     const handleTouchMove = (e) => {
-      const isAtTop = window.scrollY <= 15;
+      const isAtTop = window.scrollY <= 10;
       if (!isAtTop) return;
 
       const currentY = e.touches[0].clientY;
       const diffY = touchStartYRef.current - currentY; // positive = swiping up to scroll down
 
-      // If at top and not resolved: swiping up resolves hero and freezes
+      // First swipe up: untangle and freeze!
       if (!isResolvedRef.current && diffY > 8) {
         if (e.cancelable) e.preventDefault();
+        window.scrollTo(0, 0);
         transitionToResolved(false);
         return;
       }
 
-      // Absorb movement while locked or animating
-      if (isAnimatingRef.current || isLockedRef.current) {
-        if (e.cancelable && diffY > 0) {
-          e.preventDefault();
-        }
+      // Trailing movement during first touch swipe:
+      if ((!canScrollDownRef.current || isAnimatingRef.current) && diffY > 0) {
+        if (e.cancelable) e.preventDefault();
+        window.scrollTo(0, 0);
         return;
       }
 
-      // If resolved and swiping down at top: return to cramped
-      if (isResolvedRef.current && diffY < -20) {
+      // Swipe down at top when resolved: animate back to cramped
+      if (isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current && diffY < -25) {
         if (e.cancelable) e.preventDefault();
         transitionToCramped();
         return;
@@ -283,23 +284,31 @@ export default function Hero() {
     };
 
     const handleTouchEnd = () => {
-      if (!isAnimatingRef.current) {
-        clearTimeout(cooldownTimerRef.current);
-        cooldownTimerRef.current = setTimeout(() => {
-          isLockedRef.current = false;
-        }, 180);
+      // When the user lifts their finger from the first swipe, allow the NEXT swipe to scroll down!
+      if (isResolvedRef.current && !isAnimatingRef.current) {
+        clearTimeout(gestureInactivityTimerRef.current);
+        gestureInactivityTimerRef.current = setTimeout(() => {
+          canScrollDownRef.current = true;
+        }, 250);
       }
     };
 
     // Keyboard handlers (Down arrow, PageDown, Space)
     const handleKeyDown = (e) => {
-      const isAtTop = window.scrollY <= 15;
+      const isAtTop = window.scrollY <= 10;
       if (!isAtTop) return;
 
       if (!isResolvedRef.current && ['ArrowDown', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault();
+        window.scrollTo(0, 0);
         transitionToResolved(false);
-      } else if (isResolvedRef.current && !isAnimatingRef.current && !isLockedRef.current && ['ArrowUp', 'PageUp'].includes(e.key)) {
+        setTimeout(() => {
+          canScrollDownRef.current = true;
+        }, 400);
+      } else if (!canScrollDownRef.current && ['ArrowDown', 'PageDown', ' '].includes(e.key)) {
+        e.preventDefault();
+        window.scrollTo(0, 0);
+      } else if (isResolvedRef.current && canScrollDownRef.current && !isAnimatingRef.current && ['ArrowUp', 'PageUp'].includes(e.key)) {
         e.preventDefault();
         transitionToCramped();
       }
@@ -319,13 +328,17 @@ export default function Hero() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('keydown', handleKeyDown);
-      clearTimeout(gestureDebounceTimerRef.current);
-      clearTimeout(cooldownTimerRef.current);
+      clearTimeout(gestureInactivityTimerRef.current);
       if (activeTimelineRef.current) {
         activeTimelineRef.current.kill();
       }
     };
   }, [transitionToResolved, transitionToCramped]);
+
+  const unlockForNav = () => {
+    canScrollDownRef.current = true;
+    isResolvedRef.current = true;
+  };
 
   return (
     <section
@@ -399,12 +412,20 @@ export default function Hero() {
             </p>
 
             <div className="hero-cta-group">
-              <a href="#try-hmm" className="btn-clarity btn-clarity--hero">
+              <a
+                href="#try-hmm"
+                className="btn-clarity btn-clarity--hero"
+                onClick={unlockForNav}
+              >
                 <FileText size={18} />
                 <span>Try it with a document</span>
               </a>
 
-              <a href="#how-it-works" className="btn-ghost">
+              <a
+                href="#how-it-works"
+                className="btn-ghost"
+                onClick={unlockForNav}
+              >
                 <span>See how it works</span>
               </a>
             </div>
