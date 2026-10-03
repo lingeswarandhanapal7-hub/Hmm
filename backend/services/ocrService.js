@@ -45,36 +45,39 @@ async function performGeminiVisionOcr(fileBuffer, langCode = 'en', mimeType = 'i
     return null;
   }
 
-  try {
-    const genAI = new GoogleGenerativeAI(geminiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-3.8-flash' });
+  const effectiveMime = mimeType === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
+  const inlinePart = {
+    inlineData: {
+      data: fileBuffer.toString('base64'),
+      mimeType: effectiveMime
+    }
+  };
 
-    const effectiveMime = mimeType === 'application/pdf' ? 'application/pdf' : 'image/jpeg';
-    const inlinePart = {
-      inlineData: {
-        data: fileBuffer.toString('base64'),
-        mimeType: effectiveMime
-      }
-    };
-
-    const prompt = `Transcribe all readable text, tables, and clauses from this document (${effectiveMime}) verbatim.
+  const prompt = `Transcribe all readable text, tables, and clauses from this document (${effectiveMime}) verbatim.
 Language hint: ${langCode}.
 Preserve names, numbers, amounts, dates, reference numbers, headings, and legal/medical clauses accurately.
 Do not add conversational commentary; return only the extracted text.`;
 
-    const result = await model.generateContent([prompt, inlinePart]);
-    const extracted = result.response.text()?.trim();
+  const models = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-lite-latest'];
+  const genAI = new GoogleGenerativeAI(geminiKey);
 
-    if (extracted && extracted.length >= 8) {
-      return {
-        rawText: extracted,
-        confidence: 0.96,
-        language: langCode,
-        provider: mimeType === 'application/pdf' ? 'gemini-flash-pdf' : 'gemini-1.5-flash-vision'
-      };
+  for (const modelName of models) {
+    try {
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContent([prompt, inlinePart]);
+      const extracted = result.response.text()?.trim();
+
+      if (extracted && extracted.length >= 8) {
+        return {
+          rawText: extracted,
+          confidence: 0.96,
+          language: langCode,
+          provider: `${modelName}-vision`
+        };
+      }
+    } catch (err) {
+      console.warn(`[Gemini Document Ingestion Notice (${modelName})]:`, err.message);
     }
-  } catch (err) {
-    console.warn('[Gemini Document Ingestion Error]:', err.message);
   }
 
   return null;

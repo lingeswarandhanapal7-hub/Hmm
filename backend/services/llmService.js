@@ -73,17 +73,8 @@ export async function simplifyDocumentWithGemini(ocrText, targetLang = 'en', gro
     throw new Error('Gemini API Key is missing. Set GEMINI_API_KEY in backend/.env');
   }
 
+  const models = ['gemini-3.5-flash', 'gemini-3.5-flash-lite', 'gemini-flash-lite-latest'];
   const genAI = new GoogleGenerativeAI(apiKey);
-  
-  // Use gemini-3.8-flash for high speed, latest features, and structured JSON output
-  const model = genAI.getGenerativeModel({
-    model: 'gemini-3.8-flash',
-    systemInstruction: SYSTEM_INSTRUCTION,
-    generationConfig: {
-      responseMimeType: 'application/json',
-      temperature: 0.15
-    }
-  });
 
   const prompt = `TARGET LANGUAGE: ${targetLanguageName} (Code: ${targetLang})
 
@@ -98,26 +89,38 @@ ${ocrText}
 Please read the raw document text carefully. Cross-reference with the grounding context above.
 Respond strictly in JSON format as required by the schema in your system instructions, entirely translated into ${targetLanguageName}.`;
 
-  try {
-    const result = await model.generateContent(prompt);
-    const responseText = result.response.text();
-    const parsed = JSON.parse(responseText);
+  for (const modelName of models) {
+    try {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: SYSTEM_INSTRUCTION,
+        generationConfig: {
+          responseMimeType: 'application/json',
+          temperature: 0.15
+        }
+      });
 
-    return {
-      documentType: parsed.documentType || 'government_notice',
-      summary: parsed.summary || '',
-      keyFacts: Array.isArray(parsed.keyFacts) ? parsed.keyFacts : [],
-      nextSteps: Array.isArray(parsed.nextSteps) ? parsed.nextSteps : [],
-      urgency: parsed.urgency || 'medium',
-      groundedReference: parsed.groundedReference || ''
-    };
-  } catch (err) {
-    console.warn(`[LLM Service Notice]: Gemini API call encountered temporary condition (${err.message}). Using verified fallback.`);
-    if (process.env.FALLBACK_MODE !== 'false') {
-      return getStructuredFallback(ocrText, targetLang, groundedContext);
+      const result = await model.generateContent(prompt);
+      const responseText = result.response.text();
+      const parsed = JSON.parse(responseText);
+
+      return {
+        documentType: parsed.documentType || 'government_notice',
+        summary: parsed.summary || '',
+        keyFacts: Array.isArray(parsed.keyFacts) ? parsed.keyFacts : [],
+        nextSteps: Array.isArray(parsed.nextSteps) ? parsed.nextSteps : [],
+        urgency: parsed.urgency || 'medium',
+        groundedReference: parsed.groundedReference || ''
+      };
+    } catch (err) {
+      console.warn(`[LLM Service Notice (${modelName})]:`, err.message);
     }
-    throw err;
   }
+
+  if (process.env.FALLBACK_MODE !== 'false') {
+    return getStructuredFallback(ocrText, targetLang, groundedContext);
+  }
+  throw new Error('Could not analyze document with AI models.');
 }
 
 /**
