@@ -56,8 +56,11 @@ export default function Hero() {
         isAnimatingRef.current = false;
         isResolvedRef.current = true;
         setIsResolved(true);
-        // Note: canScrollDownRef stays FALSE while the initial scroll gesture is active.
-        // It will only be unlocked by the inactivity timer after the user's scroll stroke ends!
+        // Fallback inactivity timer: ensure canScrollDown unlocks once gesture settles
+        clearTimeout(gestureInactivityTimerRef.current);
+        gestureInactivityTimerRef.current = setTimeout(() => {
+          canScrollDownRef.current = true;
+        }, 300);
       }
     });
 
@@ -285,11 +288,11 @@ export default function Hero() {
 
     const handleTouchEnd = () => {
       // When the user lifts their finger from the first swipe, allow the NEXT swipe to scroll down!
-      if (isResolvedRef.current && !isAnimatingRef.current) {
+      if (isResolvedRef.current) {
         clearTimeout(gestureInactivityTimerRef.current);
         gestureInactivityTimerRef.current = setTimeout(() => {
           canScrollDownRef.current = true;
-        }, 250);
+        }, 200);
       }
     };
 

@@ -264,6 +264,7 @@ footer,
 .hero-scroll-wrapper {
   position: relative;
   min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
   width: 100%;
   background-color: var(--color-paper);
   display: flex;
@@ -273,12 +274,14 @@ footer,
 
 .hero-scroll-wrapper--reduced {
   min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
 }
 
 .hero-pinned-viewport {
   position: relative;
   width: 100%;
   min-height: calc(100vh - 68px);
+  min-height: calc(100dvh - 68px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -293,7 +296,7 @@ footer,
   align-items: flex-start;
   text-align: left;
   max-width: var(--editorial-max-width);
-  padding-top: 40px;
+  padding: 24px 0;
 }
 
 /* Faint Document Textures in the background */
@@ -2625,6 +2628,11 @@ footer,
   .hero-pinned-viewport {
     height: auto;
     min-height: calc(100vh - 68px);
+    min-height: calc(100dvh - 68px);
+  }
+
+  .hero-content-stage {
+    padding: 20px 0;
   }
 
   .hero-headline {
@@ -2688,52 +2696,108 @@ footer,
   }
 
   /* Hero Section */
-  .hero-scroll-wrapper,
+  .hero-scroll-wrapper {
+    height: auto;
+    min-height: calc(100vh - 60px);
+    min-height: calc(100dvh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
   .hero-pinned-viewport {
     height: auto;
     min-height: calc(100vh - 60px);
+    min-height: calc(100dvh - 60px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-top: clamp(14px, 2.5vh, 22px);
+    padding-bottom: clamp(14px, 3vh, 24px);
+    box-sizing: border-box;
   }
 
   .hero-content-stage {
-    padding-top: 24px;
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 100%;
+  }
+
+  .section-kicker {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
   }
 
   .hero-headline-stage {
-    min-height: 95px;
-    margin-bottom: 16px;
+    min-height: clamp(64px, 9vh, 76px);
+    margin-bottom: 12px;
+  }
+
+  .hero-headline {
+    font-size: clamp(1.75rem, 6.2vw, 2.3rem);
+    line-height: 1.18;
   }
 
   .hero-headline--cramped .hero-scan-marker {
     display: inline-block;
-    margin-top: 6px;
+    margin-top: 4px;
     margin-left: 0;
-    font-size: 0.7rem;
+    font-size: 0.6875rem;
   }
 
   .hero-subhead {
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 22px;
+    font-size: 0.95rem;
+    line-height: 1.48;
+    margin-bottom: 16px;
   }
 
   .hero-cta-group {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
-    margin-bottom: 28px;
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
   .btn-clarity--hero,
   .hero-cta-group .btn-ghost {
     width: 100%;
     justify-content: center;
-    padding: 13px 20px;
+    padding: 11px 18px;
+    font-size: 0.95rem;
   }
 
   .hero-trust-bar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 6px;
+    padding-top: 12px;
+  }
+
+  .hero-trust-item {
+    font-size: 0.775rem;
+    gap: 6px;
+  }
+
+  .hero-stamp {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+    opacity: 0.25;
+  }
+
+  .hero-stamp--left {
+    top: 8%;
+    left: 4%;
+  }
+
+  .hero-stamp--right {
+    bottom: 6%;
+    right: 4%;
+    opacity: 0.2;
+  }
+
+  .hero-clause-highlight {
+    display: none;
   }
 
   /* The Problem Section */
@@ -2937,18 +3001,41 @@ footer,
     font-size: 1.35rem;
   }
 
+  .hero-headline-stage {
+    min-height: 58px;
+    margin-bottom: 10px;
+  }
+
   .hero-headline {
-    font-size: 1.65rem;
+    font-size: 1.55rem;
   }
 
-  .stat-callout__number {
-    font-size: 2.2rem;
+  .hero-subhead {
+    font-size: 0.875rem;
+    line-height: 1.42;
+    margin-bottom: 14px;
   }
 
+  .hero-cta-group {
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+
+  .btn-clarity--hero,
+  .hero-cta-group .btn-ghost,
   .btn-clarity,
   .btn-ghost {
-    padding: 10px 16px;
+    padding: 10px 14px;
     font-size: 0.875rem;
+  }
+
+  .hero-trust-bar {
+    padding-top: 10px;
+    gap: 5px;
+  }
+
+  .hero-trust-item {
+    font-size: 0.725rem;
   }
 
   .language-chip-grid {
