@@ -13,12 +13,12 @@ export default function Hero() {
   const isResolvedRef = useRef(false);
   const isAnimatingRef = useRef(false);
   const freezeLockRef = useRef(false);
-  const freezeTimerRef = useRef(null);
+  const wheelSilenceTimerRef = useRef(null);
   const touchStartYRef = useRef(0);
-  const touchStartedInCrampedRef = useRef(false);
+  const touchActiveRef = useRef(false);
   const activeTimelineRef = useRef(null);
 
-  // Transition: Cramped -> Resolved (Freeze briefly during untangle, then unlock)
+  // Transition: Cramped -> Resolved (Freeze completely during untangle stroke)
   const transitionToResolved = useCallback((immediate = false) => {
     if (isAnimatingRef.current || isResolvedRef.current) return;
 
@@ -51,13 +51,6 @@ export default function Hero() {
       freezeLockRef.current = false;
       return;
     }
-
-    // Fixed 650ms freeze window on desktop: swallows full trailing inertia from stroke 1
-    clearTimeout(freezeTimerRef.current);
-    freezeTimerRef.current = setTimeout(() => {
-      freezeLockRef.current = false;
-      isAnimatingRef.current = false;
-    }, 650);
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -125,11 +118,11 @@ export default function Hero() {
       activeTimelineRef.current.kill();
     }
 
-    clearTimeout(freezeTimerRef.current);
-    freezeTimerRef.current = setTimeout(() => {
+    clearTimeout(wheelSilenceTimerRef.current);
+    wheelSilenceTimerRef.current = setTimeout(() => {
       freezeLockRef.current = false;
       isAnimatingRef.current = false;
-    }, 350);
+    }, 300);
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -209,15 +202,27 @@ export default function Hero() {
           e.preventDefault();
           window.scrollTo(0, 0);
           transitionToResolved(false);
+
+          // Swallow all trailing inertia from this first stroke until 220ms of silence
+          clearTimeout(wheelSilenceTimerRef.current);
+          wheelSilenceTimerRef.current = setTimeout(() => {
+            freezeLockRef.current = false;
+          }, 220);
           return;
         }
       }
 
-      // 2. During the 650ms freeze window, swallow ALL trailing wheel ticks
+      // 2. While freezeLock is active: swallow all trailing wheel ticks and keep at 0
       if (isAtTop && freezeLockRef.current) {
         if (e.deltaY > 0) {
           e.preventDefault();
           window.scrollTo(0, 0);
+
+          // Prolong until gesture momentum has completely died down to silence
+          clearTimeout(wheelSilenceTimerRef.current);
+          wheelSilenceTimerRef.current = setTimeout(() => {
+            freezeLockRef.current = false;
+          }, 220);
           return;
         }
       }
@@ -238,9 +243,7 @@ export default function Hero() {
     const handleTouchStart = (e) => {
       if (e.touches && e.touches.length > 0) {
         touchStartYRef.current = e.touches[0].clientY;
-        if (!isResolvedRef.current && window.scrollY <= 15) {
-          touchStartedInCrampedRef.current = true;
-        }
+        touchActiveRef.current = true;
       }
     };
 
@@ -255,11 +258,12 @@ export default function Hero() {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
         transitionToResolved(false);
+        freezeLockRef.current = true;
         return;
       }
 
-      // 2. Trailing movement during the first swipe or freeze window:
-      if (isAtTop && (freezeLockRef.current || touchStartedInCrampedRef.current) && diffY > 0) {
+      // 2. While freezeLock is active during stroke 1: absorb all upward swipe movement
+      if (isAtTop && freezeLockRef.current && diffY > 0) {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
         return;
@@ -276,13 +280,13 @@ export default function Hero() {
     };
 
     const handleTouchEnd = () => {
-      touchStartedInCrampedRef.current = false;
-      if (isResolvedRef.current) {
-        clearTimeout(freezeTimerRef.current);
-        freezeTimerRef.current = setTimeout(() => {
+      touchActiveRef.current = false;
+      // When finger lifts from the untangle swipe, unlock after a brief 150ms settle window
+      if (isResolvedRef.current && freezeLockRef.current) {
+        clearTimeout(wheelSilenceTimerRef.current);
+        wheelSilenceTimerRef.current = setTimeout(() => {
           freezeLockRef.current = false;
-          isAnimatingRef.current = false;
-        }, 300);
+        }, 150);
       }
     };
 
@@ -295,6 +299,10 @@ export default function Hero() {
         e.preventDefault();
         window.scrollTo(0, 0);
         transitionToResolved(false);
+        freezeLockRef.current = true;
+        setTimeout(() => {
+          freezeLockRef.current = false;
+        }, 300);
       } else if (freezeLockRef.current && ['ArrowDown', 'PageDown', ' '].includes(e.key)) {
         e.preventDefault();
         window.scrollTo(0, 0);
@@ -318,7 +326,7 @@ export default function Hero() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('keydown', handleKeyDown);
-      clearTimeout(freezeTimerRef.current);
+      clearTimeout(wheelSilenceTimerRef.current);
       if (activeTimelineRef.current) {
         activeTimelineRef.current.kill();
       }
