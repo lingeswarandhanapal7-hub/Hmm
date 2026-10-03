@@ -37,7 +37,7 @@ export default function TryHmmDemo({
   const [selectedDocId, setSelectedDocId] = useState(initialDocId);
   const [customFile, setCustomFile] = useState(null);
   const [customFilePreview, setCustomFilePreview] = useState(null);
-  const [selectedLang, setSelectedLang] = useState('ta'); // Tamil default for regional demo
+  const [selectedLang, setSelectedLang] = useState('en'); // Default to English as requested
   const [isProcessing, setIsProcessing] = useState(false);
   const [processStepIndex, setProcessStepIndex] = useState(0);
   const [hasResult, setHasResult] = useState(false);
@@ -136,11 +136,23 @@ export default function TryHmmDemo({
 
   // Retrieve fully localized content (both explanation AND action items inherit selectedLang or live backend)
   const localizedContent = getLocalizedDocumentContent(currentDoc, selectedLang);
-  const activeSimplifiedText = liveResult?.summary || localizedContent?.simplified || '';
-  const activeActionItems = liveResult?.nextSteps
-    ? liveResult.nextSteps.map((step, idx) => ({ text: step, priority: idx === 0 ? 'Urgent / Priority' : 'Actionable', done: false }))
+  const isLiveResultForCurrentLang = liveResult && liveResult.language === selectedLang;
+
+  const activeSimplifiedText = isLiveResultForCurrentLang
+    ? liveResult.summary
+    : (localizedContent?.simplified || '');
+
+  const activeActionItems = isLiveResultForCurrentLang && liveResult?.nextSteps
+    ? liveResult.nextSteps.map((step, idx) => ({
+        text: typeof step === 'string' ? step : (step.text || ''),
+        priority: idx === 0 ? 'Urgent / Priority' : 'Actionable',
+        done: false
+      }))
     : (localizedContent?.actionItems || []);
-  const activeGroundedRule = liveResult?.groundedReference || localizedContent?.groundedRule || '';
+
+  const activeGroundedRule = isLiveResultForCurrentLang
+    ? (liveResult.groundedReference || '')
+    : (localizedContent?.groundedRule || '');
 
   // Micro-copy sequence for processing state (deliberate nod to the name Hmm)
   const MICRO_COPIES = ['Hmm...', '...thinking', '...almost there'];
@@ -278,9 +290,10 @@ export default function TryHmmDemo({
   };
 
   // Submit and start processing
-  const handleSimplifySubmit = async (e) => {
+  const handleSimplifySubmit = async (e, langOverride = null) => {
     e?.preventDefault();
-    if (!selectedDocId || !selectedLang) return;
+    const targetLanguage = langOverride || selectedLang;
+    if (!selectedDocId || !targetLanguage) return;
 
     setIsProcessing(true);
     setHasResult(false);
@@ -309,7 +322,7 @@ export default function TryHmmDemo({
       if (fileToSend) {
         const formData = new FormData();
         formData.append('image', fileToSend, fileToSend.name || 'document.jpg');
-        formData.append('language', selectedLang);
+        formData.append('language', targetLanguage);
         if (user?.id) {
           formData.append('userId', user.id);
         }
@@ -321,7 +334,7 @@ export default function TryHmmDemo({
 
         const data = await response.json();
         if (data.success) {
-          setLiveResult(data);
+          setLiveResult({ ...data, language: targetLanguage });
           if (data.audioBase64) {
             setCloudAudioBase64(data.audioBase64);
           }
@@ -350,7 +363,28 @@ export default function TryHmmDemo({
         setIsProcessing(false);
         setHasResult(true);
         setCheckedItems({});
-      }, 2500);
+      }, 1500);
+    }
+  };
+
+  // Dynamically change language and automatically re-generate all text and speech
+  const handleLanguageChange = (newLang) => {
+    if (newLang === selectedLang) return;
+
+    // 1. Immediately stop any active audio from the previous language
+    stopAudio();
+    setCloudAudioBase64(null);
+
+    // 2. Switch language
+    setSelectedLang(newLang);
+
+    // 3. If results are already showing, immediately refresh content in the new language!
+    if (hasResult) {
+      setCheckedItems({});
+      if (liveResult && liveResult.language !== newLang) {
+        setLiveResult(null);
+      }
+      handleSimplifySubmit(null, newLang);
     }
   };
 
@@ -376,7 +410,7 @@ export default function TryHmmDemo({
     if (isPlayingAudio && audioMode === 'full') {
       stopAudio();
     } else {
-      if (cloudAudioBase64) {
+      if (cloudAudioBase64 && liveResult?.language === selectedLang) {
         stopAudio();
         const audio = new Audio(`data:audio/mp3;base64,${cloudAudioBase64}`);
         htmlAudioRef.current = audio;
@@ -429,10 +463,11 @@ export default function TryHmmDemo({
     if (customText) {
       textToSpeak = customText;
     } else if (mode === 'tasks') {
-      textToSpeak = getTasksOnlySpokenScript(currentDoc, selectedLang);
+      textToSpeak = activeActionItems.map((item, idx) => `Step ${idx + 1}: ${item.text}`).join('. ');
     } else {
-      // Full narrative: reads the simplified explanation AND all next-step tasks!
-      textToSpeak = getFullSpokenScript(currentDoc, selectedLang);
+      // Full narrative: reads the simplified explanation AND all next-step tasks in the current selected language!
+      const tasksText = activeActionItems.map((item, idx) => `Step ${idx + 1}: ${item.text}`).join('. ');
+      textToSpeak = `${activeSimplifiedText}. ${t('whatToDoNext')}: ${tasksText}`;
     }
 
     if (!textToSpeak) return;
@@ -798,10 +833,7 @@ ${activeGroundedRule}
                       role="radio"
                       aria-checked={isSelected}
                       className={`lang-pill ${isSelected ? 'lang-pill--active' : ''}`}
-                      onClick={() => {
-                        setSelectedLang(lang.id);
-                        if (isPlayingAudio) stopAudio();
-                      }}
+                      onClick={() => handleLanguageChange(lang.id)}
                     >
                       <span className="lang-pill__native" style={{ fontFamily: `var(--font-${lang.id}, sans-serif)` }}>
                         {lang.native}
