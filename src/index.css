@@ -80,8 +80,7 @@ html {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
 }
@@ -93,8 +92,7 @@ body {
   /* Subtle physical parchment paper noise texture via SVG data-uri */
   background-image: radial-gradient(rgba(34, 38, 43, 0.03) 1px, transparent 0);
   background-size: 24px 24px;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow-x: hidden;
   max-width: 100vw;
   width: 100%;
 }
@@ -103,8 +101,7 @@ body {
 .app-root {
   width: 100%;
   max-width: 100vw;
-  overflow-x: clip;
-  overflow-y: visible;
+  overflow-x: hidden;
   position: relative;
 }
 
