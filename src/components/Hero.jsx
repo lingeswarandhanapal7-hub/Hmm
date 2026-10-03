@@ -52,12 +52,12 @@ export default function Hero() {
       return;
     }
 
-    // Fixed 380ms freeze window: swallows trailing inertia from stroke 1 without cascading
+    // Fixed 650ms freeze window on desktop: swallows full trailing inertia from stroke 1
     clearTimeout(freezeTimerRef.current);
     freezeTimerRef.current = setTimeout(() => {
       freezeLockRef.current = false;
       isAnimatingRef.current = false;
-    }, 380);
+    }, 650);
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -191,21 +191,17 @@ export default function Hero() {
     }
 
     // Window scroll safety guard:
-    // Only lock to 0 while the untangle freeze is explicitly running
+    // Any time freezeLock is active or hero is unresolved at top, strictly freeze at 0!
     const handleWindowScroll = () => {
-      if (freezeLockRef.current && window.scrollY > 0 && window.scrollY < 80) {
+      if ((!isResolvedRef.current || freezeLockRef.current) && window.scrollY > 0) {
         window.scrollTo(0, 0);
         return;
-      }
-
-      if (window.scrollY > 80 && !isResolvedRef.current) {
-        transitionToResolved(true);
       }
     };
 
     // Wheel event handler:
     const handleWheel = (e) => {
-      const isAtTop = window.scrollY <= 10;
+      const isAtTop = window.scrollY <= 15;
 
       // 1. Initial downward scroll from cramped state: untangle and freeze!
       if (isAtTop && !isResolvedRef.current) {
@@ -217,7 +213,7 @@ export default function Hero() {
         }
       }
 
-      // 2. During the brief 380ms freeze window, swallow trailing wheel ticks
+      // 2. During the 650ms freeze window, swallow ALL trailing wheel ticks
       if (isAtTop && freezeLockRef.current) {
         if (e.deltaY > 0) {
           e.preventDefault();
@@ -242,19 +238,20 @@ export default function Hero() {
     const handleTouchStart = (e) => {
       if (e.touches && e.touches.length > 0) {
         touchStartYRef.current = e.touches[0].clientY;
-        touchStartedInCrampedRef.current = !isResolvedRef.current && window.scrollY <= 10;
+        if (!isResolvedRef.current && window.scrollY <= 15) {
+          touchStartedInCrampedRef.current = true;
+        }
       }
     };
 
     const handleTouchMove = (e) => {
-      const isAtTop = window.scrollY <= 10;
-      if (!isAtTop) return;
+      const isAtTop = window.scrollY <= 15;
 
       const currentY = e.touches[0].clientY;
       const diffY = touchStartYRef.current - currentY; // positive = swiping up to scroll down
 
       // 1. First swipe up from cramped state: untangle and freeze!
-      if (!isResolvedRef.current && diffY > 8) {
+      if (isAtTop && !isResolvedRef.current && diffY > 8) {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
         transitionToResolved(false);
@@ -262,14 +259,14 @@ export default function Hero() {
       }
 
       // 2. Trailing movement during the first swipe or freeze window:
-      if ((freezeLockRef.current || touchStartedInCrampedRef.current) && diffY > 0) {
+      if (isAtTop && (freezeLockRef.current || touchStartedInCrampedRef.current) && diffY > 0) {
         if (e.cancelable) e.preventDefault();
         window.scrollTo(0, 0);
         return;
       }
 
       // 3. Swipe down at top when resolved: animate back to cramped
-      if (isResolvedRef.current && !freezeLockRef.current && !isAnimatingRef.current && diffY < -25) {
+      if (isAtTop && isResolvedRef.current && !freezeLockRef.current && !isAnimatingRef.current && diffY < -25) {
         if (e.cancelable) e.preventDefault();
         transitionToCramped();
         return;
@@ -285,7 +282,7 @@ export default function Hero() {
         freezeTimerRef.current = setTimeout(() => {
           freezeLockRef.current = false;
           isAnimatingRef.current = false;
-        }, 120);
+        }, 300);
       }
     };
 
