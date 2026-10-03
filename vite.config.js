@@ -5,4 +5,14 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [react()],
   base: './',
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('gsap')) return 'gsap';
+          if (id.includes('lucide-react')) return 'lucide';
+        }
+      }
+    }
+  }
 })
