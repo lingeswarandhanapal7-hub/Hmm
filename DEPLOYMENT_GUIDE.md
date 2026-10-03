@@ -1,10 +1,13 @@
 # Complete Backend Deployment Guide for Hmm
 **Built by Linges.D.Waran**
 
-This guide walks you through deploying both of your backends:
-1. **Node.js + Express Backend** (`backend/`): Full OCR + Gemini Flash LLM + RAG + TTS + MySQL proxy.
-2. **Django Backend** (`backend_django/`): Function-based views & models + MySQL ORM.
-3. **Cloud MySQL Database**: Transitioning from your laptop's local `localhost:3306` to a live cloud MySQL database (or tunneling your local database).
+## 🚀 Live Production Deployments on Railway
+
+- **Node.js AI Pipeline Backend**: [`https://hmm-production-4d5d.up.railway.app`](https://hmm-production-4d5d.up.railway.app)
+  - Health check: `https://hmm-production-4d5d.up.railway.app/api/health`
+- **Django Function-Based Backend**: [`https://attractive-happiness-production-6915.up.railway.app`](https://attractive-happiness-production-6915.up.railway.app)
+  - Health check: `https://attractive-happiness-production-6915.up.railway.app/api/health/`
+- **Database**: Cloud MySQL Server 8.0 (`hmm_db`) on Railway internal network.
 
 ---
 
