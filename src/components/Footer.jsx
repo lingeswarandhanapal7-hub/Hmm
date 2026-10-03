@@ -51,7 +51,7 @@ export default function Footer({ onOpen404Demo }) {
           </div>
 
           <div className="footer-nav-col">
-            <h4 className="footer-heading">Team & Open Source</h4>
+            <h4 className="footer-heading">Creator & Contact</h4>
             <ul className="footer-link-list">
               <li>
                 <a
@@ -65,12 +65,9 @@ export default function Footer({ onOpen404Demo }) {
                 </a>
               </li>
               <li>
-                <a href="#team">Gear5coders Team</a>
-              </li>
-              <li>
-                <a href="mailto:contact@gear5coders.dev" className="footer-icon-link">
+                <a href="mailto:lingeswarandhanapal7@gmail.com" className="footer-icon-link">
                   <Mail size={15} />
-                  <span>contact@gear5coders.dev</span>
+                  <span>lingeswarandhanapal7@gmail.com</span>
                 </a>
               </li>
             </ul>
@@ -79,7 +76,7 @@ export default function Footer({ onOpen404Demo }) {
 
         <div className="footer-bottom-row">
           <div className="footer-credits">
-            <span>Built by <strong>Gear5coders</strong> with care for every citizen.</span>
+            <span>Built by <strong>Linges.D.Waran</strong> with care for every citizen.</span>
           </div>
           <div className="footer-legal">
             <span>© {new Date().getFullYear()} Hmm. All rights reserved.</span>

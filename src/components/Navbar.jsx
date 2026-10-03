@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Menu, X, ArrowUpRight } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, ArrowUpRight, LogIn, LogOut, User, UserPlus } from 'lucide-react';
 
-export default function Navbar({ onOpenDemo }) {
+export default function Navbar({ user, onOpenAuth, onLogout, onOpenDemo }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isReadingAloud, setIsReadingAloud] = useState(false);
@@ -70,7 +70,6 @@ export default function Navbar({ onOpenDemo }) {
             <a href="#try-hmm" className="nav-link">Try Hmm</a>
             <a href="#languages" className="nav-link">Languages</a>
             <a href="#why-hmm" className="nav-link">Why Hmm</a>
-            <a href="#team" className="nav-link">Team</a>
           </nav>
 
           {/* Right Action Elements */}
@@ -88,6 +87,36 @@ export default function Navbar({ onOpenDemo }) {
                 {isReadingAloud ? "Stop Voice" : "Read Aloud"}
               </span>
             </button>
+
+            {/* Authentication Control: Logged-in profile badge vs Sign In button */}
+            {user ? (
+              <div className="navbar__user-badge">
+                <span className="navbar__user-avatar" title={user.email}>
+                  {user.initials}
+                </span>
+                <span className="navbar__user-name" title={user.email}>
+                  {user.name.split(' ')[0]}
+                </span>
+                <button
+                  type="button"
+                  className="navbar__btn-logout"
+                  onClick={onLogout}
+                  title="Sign Out"
+                  aria-label="Sign Out"
+                >
+                  <LogOut size={13} />
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="navbar__btn-login"
+                onClick={() => onOpenAuth('login')}
+              >
+                <LogIn size={15} />
+                <span>Sign In</span>
+              </button>
+            )}
 
             {/* Try It Primary Button */}
             <a
@@ -139,13 +168,60 @@ export default function Navbar({ onOpenDemo }) {
           </button>
         </div>
 
+        {/* Mobile User Profile or Sign In Callout */}
+        {user ? (
+          <div className="mobile-drawer__user-card">
+            <span className="navbar__user-avatar">{user.initials}</span>
+            <div className="mobile-drawer__user-meta">
+              <strong>{user.name}</strong>
+              <span>{user.email}</span>
+            </div>
+            <button
+              type="button"
+              className="btn-drawer-logout"
+              onClick={() => {
+                onLogout();
+                closeMenu();
+              }}
+              title="Sign Out"
+            >
+              <LogOut size={15} />
+              <span>Sign Out</span>
+            </button>
+          </div>
+        ) : (
+          <div className="mobile-drawer__auth-actions">
+            <button
+              type="button"
+              className="btn-drawer-auth"
+              onClick={() => {
+                onOpenAuth('signup');
+                closeMenu();
+              }}
+            >
+              <UserPlus size={16} />
+              <span>Create Account</span>
+            </button>
+            <button
+              type="button"
+              className="btn-drawer-login"
+              onClick={() => {
+                onOpenAuth('login');
+                closeMenu();
+              }}
+            >
+              <LogIn size={16} />
+              <span>Sign In</span>
+            </button>
+          </div>
+        )}
+
         <nav className="mobile-drawer__nav">
           <a href="#the-problem" onClick={closeMenu} className="mobile-drawer__link">The Problem</a>
           <a href="#how-it-works" onClick={closeMenu} className="mobile-drawer__link">How It Works</a>
           <a href="#try-hmm" onClick={closeMenu} className="mobile-drawer__link">Try Hmm (Demo)</a>
           <a href="#languages" onClick={closeMenu} className="mobile-drawer__link">Supported Languages</a>
           <a href="#why-hmm" onClick={closeMenu} className="mobile-drawer__link">Why Hmm is Different</a>
-          <a href="#team" onClick={closeMenu} className="mobile-drawer__link">Team Gear5coders</a>
         </nav>
 
         <div className="mobile-drawer__footer">

@@ -14,8 +14,7 @@ import {
   CheckCircle2,
   RefreshCw,
   Sparkles,
-  VolumeX,
-  ListTodo
+  VolumeX
 } from 'lucide-react';
 import {
   LANGUAGES,
@@ -25,8 +24,15 @@ import {
   getFullSpokenScript,
   getTasksOnlySpokenScript
 } from '../data/mockData';
+import { API_ENDPOINTS } from '../config/api';
 
-export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
+export default function TryHmmDemo({
+  initialDocId = 'gov-notice',
+  user = null,
+  onRequireAuth = () => {},
+  queuedFile = null,
+  onClearQueuedFile = () => {}
+}) {
   // Single source of truth for language selection
   const [selectedDocId, setSelectedDocId] = useState(initialDocId);
   const [customFile, setCustomFile] = useState(null);
@@ -38,6 +44,12 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
+
+  // Backend Integration State (OCR + LLM + RAG + TTS proxy)
+  const [backendStatus, setBackendStatus] = useState({ online: false, checking: true });
+  const [liveResult, setLiveResult] = useState(null);
+  const [cloudAudioBase64, setCloudAudioBase64] = useState(null);
+  const htmlAudioRef = useRef(null);
 
   // Audio Player State
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
@@ -57,6 +69,44 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   // Checklist state for "What to do next"
   const [checkedItems, setCheckedItems] = useState({});
 
+  // Stop all speech synthesis and HTML5 audio cleanly
+  const stopAudio = () => {
+    isAudioCancelledRef.current = true;
+    if (htmlAudioRef.current) {
+      htmlAudioRef.current.pause();
+      htmlAudioRef.current = null;
+    }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (keepAliveIntervalRef.current) {
+      clearInterval(keepAliveIntervalRef.current);
+      keepAliveIntervalRef.current = null;
+    }
+    if (audioProgressIntervalRef.current) {
+      clearInterval(audioProgressIntervalRef.current);
+      audioProgressIntervalRef.current = null;
+    }
+    setIsPlayingAudio(false);
+    setAudioProgress(0);
+    setActiveSpeakingTaskId(null);
+    setAudioMode('full');
+  };
+
+  // Check backend server status on mount
+  useEffect(() => {
+    fetch(API_ENDPOINTS.HEALTH)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.status === 'online') {
+          setBackendStatus({ online: true, checking: false, data });
+        } else {
+          setBackendStatus({ online: false, checking: false });
+        }
+      })
+      .catch(() => setBackendStatus({ online: false, checking: false }));
+  }, []);
+
   // Helper to translate any static UI string based on single source of truth (selectedLang)
   const t = (key) => getTranslation(selectedLang, key);
 
@@ -68,6 +118,8 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
       setCustomFilePreview(null);
       setHasResult(false);
       setHasError(false);
+      setLiveResult(null);
+      setCloudAudioBase64(null);
       stopAudio();
     }
   }, [initialDocId]);
@@ -82,16 +134,26 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   // Current active document data
   const currentDoc = SAMPLE_DOCUMENTS.find((d) => d.id === selectedDocId) || SAMPLE_DOCUMENTS[0];
 
-  // Retrieve fully localized content (both explanation AND action items inherit selectedLang)
+  // Retrieve fully localized content (both explanation AND action items inherit selectedLang or live backend)
   const localizedContent = getLocalizedDocumentContent(currentDoc, selectedLang);
-  const activeSimplifiedText = localizedContent?.simplified || '';
-  const activeActionItems = localizedContent?.actionItems || [];
-  const activeGroundedRule = localizedContent?.groundedRule || '';
+  const activeSimplifiedText = liveResult?.summary || localizedContent?.simplified || '';
+  const activeActionItems = liveResult?.nextSteps
+    ? liveResult.nextSteps.map((step, idx) => ({ text: step, priority: idx === 0 ? 'Urgent / Priority' : 'Actionable', done: false }))
+    : (localizedContent?.actionItems || []);
+  const activeGroundedRule = liveResult?.groundedReference || localizedContent?.groundedRule || '';
 
   // Micro-copy sequence for processing state (deliberate nod to the name Hmm)
   const MICRO_COPIES = ['Hmm...', '...thinking', '...almost there'];
 
-  // Handle Drag & Drop
+  // Automatically process queued file when user logs in with a pending upload
+  useEffect(() => {
+    if (queuedFile) {
+      processUploadedFile(queuedFile);
+      onClearQueuedFile();
+    }
+  }, [queuedFile]);
+
+  // Handle Drag & Drop with authentication guard
   const handleDragOver = (e) => {
     e.preventDefault();
     setIsDragOver(true);
@@ -106,7 +168,20 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     e.preventDefault();
     setIsDragOver(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      processUploadedFile(e.dataTransfer.files[0]);
+      const droppedFile = e.dataTransfer.files[0];
+      if (!user) {
+        onRequireAuth('signup', droppedFile);
+        return;
+      }
+      processUploadedFile(droppedFile);
+    }
+  };
+
+  const handleTriggerUpload = (e) => {
+    if (!user) {
+      e.preventDefault();
+      e.stopPropagation();
+      onRequireAuth('signup', null);
     }
   };
 
@@ -144,36 +219,139 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     }
   };
 
+  // Helper to render sample document onto an offscreen canvas for real OCR processing
+  const createSampleDocImage = async (doc) => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 900;
+      canvas.height = 700;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      // Clean off-white paper styling
+      ctx.fillStyle = '#fbf9f5';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = '#d4cebe';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(16, 16, canvas.width - 32, canvas.height - 32);
+
+      ctx.fillStyle = '#1c1917';
+      ctx.font = 'bold 22px serif';
+      ctx.fillText(doc.issuingAuthority || 'OFFICIAL INTIMATION', 40, 60);
+
+      ctx.fillStyle = '#57534e';
+      ctx.font = '14px sans-serif';
+      ctx.fillText(`Ref: ${doc.refNumber || 'REF-101'} | Date: ${doc.date || 'Current'}`, 40, 90);
+
+      ctx.fillStyle = '#292524';
+      ctx.font = '15px monospace';
+      const lines = (doc.rawExcerpt || '').split('\n');
+      let y = 140;
+      for (const line of lines) {
+        const words = line.split(' ');
+        let currentLine = '';
+        for (const w of words) {
+          if ((currentLine + w).length > 65) {
+            ctx.fillText(currentLine, 40, y);
+            y += 24;
+            currentLine = w + ' ';
+          } else {
+            currentLine += w + ' ';
+          }
+        }
+        if (currentLine) {
+          ctx.fillText(currentLine, 40, y);
+          y += 24;
+        }
+      }
+
+      return new Promise((resolve) => {
+        canvas.toBlob((blob) => {
+          if (!blob) return resolve(null);
+          resolve(new File([blob], `${doc.id || 'sample'}.jpg`, { type: 'image/jpeg' }));
+        }, 'image/jpeg', 0.95);
+      });
+    } catch {
+      return null;
+    }
+  };
+
   // Submit and start processing
-  const handleSimplifySubmit = (e) => {
+  const handleSimplifySubmit = async (e) => {
     e?.preventDefault();
     if (!selectedDocId || !selectedLang) return;
 
     setIsProcessing(true);
     setHasResult(false);
     setHasError(false);
+    setLiveResult(null);
+    setCloudAudioBase64(null);
     stopAudio();
     setProcessStepIndex(0);
 
     const step1 = setTimeout(() => {
       setProcessStepIndex(1); // "...thinking"
-    }, 900);
+    }, 800);
 
     const step2 = setTimeout(() => {
       setProcessStepIndex(2); // "...almost there"
-    }, 1800);
+    }, 1600);
 
-    const step3 = setTimeout(() => {
-      setIsProcessing(false);
-      setHasResult(true);
-      setCheckedItems({});
-    }, 2700);
+    let processedByBackend = false;
 
-    return () => {
-      clearTimeout(step1);
-      clearTimeout(step2);
-      clearTimeout(step3);
-    };
+    try {
+      let fileToSend = customFile;
+      if (!fileToSend && currentDoc) {
+        fileToSend = await createSampleDocImage(currentDoc);
+      }
+
+      if (fileToSend) {
+        const formData = new FormData();
+        formData.append('image', fileToSend, fileToSend.name || 'document.jpg');
+        formData.append('language', selectedLang);
+        if (user?.id) {
+          formData.append('userId', user.id);
+        }
+
+        const response = await fetch(API_ENDPOINTS.PROCESS_DOCUMENT, {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setLiveResult(data);
+          if (data.audioBase64) {
+            setCloudAudioBase64(data.audioBase64);
+          }
+          processedByBackend = true;
+          clearTimeout(step1);
+          clearTimeout(step2);
+          setIsProcessing(false);
+          setHasResult(true);
+          setCheckedItems({});
+          return;
+        } else if (data.error) {
+          setHasError(true);
+          setErrorMessage(data.error);
+          clearTimeout(step1);
+          clearTimeout(step2);
+          setIsProcessing(false);
+          return;
+        }
+      }
+    } catch (err) {
+      console.warn('Backend proxy unavailable, falling back to mock content:', err);
+    }
+
+    if (!processedByBackend) {
+      setTimeout(() => {
+        setIsProcessing(false);
+        setHasResult(true);
+        setCheckedItems({});
+      }, 2500);
+    }
   };
 
   // Trigger plain language error state demo
@@ -192,13 +370,36 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
   };
 
   // =========================================================================
-  // Robust, Non-Stopping Sentence-Chunked Speech Synthesis Engine
+  // Robust, Non-Stopping Speech Engine (Cloud TTS + Web Speech synthesis fallback)
   // =========================================================================
   const togglePlayAudio = () => {
     if (isPlayingAudio && audioMode === 'full') {
       stopAudio();
     } else {
-      startAudio('full');
+      if (cloudAudioBase64) {
+        stopAudio();
+        const audio = new Audio(`data:audio/mp3;base64,${cloudAudioBase64}`);
+        htmlAudioRef.current = audio;
+        audio.playbackRate = playbackRate;
+        setAudioMode('full');
+        setIsPlayingAudio(true);
+        audio.onended = () => {
+          setIsPlayingAudio(false);
+          setAudioProgress(100);
+        };
+        audio.ontimeupdate = () => {
+          if (audio.duration) {
+            setAudioProgress(Math.round((audio.currentTime / audio.duration) * 100));
+            setAudioDuration(Math.round(audio.duration));
+          }
+        };
+        audio.play().catch(e => {
+          console.warn('HTML5 audio play error, falling back to Web Speech API:', e);
+          startAudio('full');
+        });
+      } else {
+        startAudio('full');
+      }
     }
   };
 
@@ -333,25 +534,6 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
     playChunk(0);
   };
 
-  const stopAudio = () => {
-    isAudioCancelledRef.current = true;
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-    }
-    if (keepAliveIntervalRef.current) {
-      clearInterval(keepAliveIntervalRef.current);
-      keepAliveIntervalRef.current = null;
-    }
-    if (audioProgressIntervalRef.current) {
-      clearInterval(audioProgressIntervalRef.current);
-      audioProgressIntervalRef.current = null;
-    }
-    setIsPlayingAudio(false);
-    setAudioProgress(0);
-    setActiveSpeakingTaskId(null);
-    setAudioMode('full');
-  };
-
   // Toggle checklist items
   const toggleCheckItem = (index) => {
     setCheckedItems((prev) => ({
@@ -366,7 +548,7 @@ export default function TryHmmDemo({ initialDocId = 'gov-notice' }) {
       'whatToDoNext'
     )}*:\n${activeActionItems
       .map((item, i) => `${i + 1}. ${item.text}`)
-      .join('\n')}\n\n${activeGroundedRule}\n\n— Hmm (Gear5coders)`;
+      .join('\n')}\n\n${activeGroundedRule}\n\n— Hmm (Built by Linges.D.Waran)`;
 
     const encoded = encodeURIComponent(text);
     window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank', 'noopener,noreferrer');
@@ -500,9 +682,14 @@ ${activeGroundedRule}
                     </button>
                   </div>
 
-                  {customFilePreview && (
+                  {customFilePreview ? (
                     <div className="custom-preview-thumbnail">
                       <img src={customFilePreview} alt="Uploaded document preview" />
+                    </div>
+                  ) : (
+                    <div className="custom-pdf-preview-box">
+                      <span className="pdf-badge">PDF DOCUMENT</span>
+                      <p className="pdf-doc-notice">Ready for AI text extraction & regional translation</p>
                     </div>
                   )}
                 </div>
@@ -528,17 +715,19 @@ ${activeGroundedRule}
 
               {/* Drag & Drop Upload Zone + Mobile Camera Trigger */}
               <div
-                className={`dropzone-box ${isDragOver ? 'dropzone-box--dragover' : ''}`}
+                className={`dropzone-box ${isDragOver ? 'dropzone-box--dragover' : ''} ${!user ? 'dropzone-box--auth-guarded' : ''}`}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
               >
+
                 <input
                   type="file"
                   id="doc-file-upload"
                   className="visually-hidden"
                   accept="image/jpeg,image/png,image/webp,application/pdf"
                   onChange={handleFileInput}
+                  disabled={!user}
                 />
                 <input
                   type="file"
@@ -547,6 +736,7 @@ ${activeGroundedRule}
                   accept="image/*"
                   capture="environment"
                   onChange={handleFileInput}
+                  disabled={!user}
                 />
 
                 <div className="dropzone-content">
@@ -554,17 +744,38 @@ ${activeGroundedRule}
                     <Upload size={20} />
                   </div>
                   <div className="dropzone-text">
-                    <label htmlFor="doc-file-upload" className="dropzone-label-link">
-                      {t('uploadOwn')}
-                    </label>
+                    {user ? (
+                      <label htmlFor="doc-file-upload" className="dropzone-label-link">
+                        {t('uploadOwn')}
+                      </label>
+                    ) : (
+                      <button
+                        type="button"
+                        className="dropzone-label-link-btn"
+                        onClick={handleTriggerUpload}
+                      >
+                        {t('uploadOwn')}
+                      </button>
+                    )}
                     <span className="dropzone-sub">{t('dragDrop')}</span>
                   </div>
 
                   {/* Mobile Camera Button */}
-                  <label htmlFor="doc-camera-capture" className="btn-camera-capture">
-                    <Camera size={15} />
-                    <span>{t('takePhoto')}</span>
-                  </label>
+                  {user ? (
+                    <label htmlFor="doc-camera-capture" className="btn-camera-capture">
+                      <Camera size={15} />
+                      <span>{t('takePhoto')}</span>
+                    </label>
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn-camera-capture"
+                      onClick={handleTriggerUpload}
+                    >
+                      <Camera size={15} />
+                      <span>{t('takePhoto')}</span>
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -682,6 +893,37 @@ ${activeGroundedRule}
                       {LANGUAGES.find((l) => l.id === selectedLang)?.name})
                     </span>
                   </div>
+
+                  {/* Pipeline Status Bar */}
+                  <div className="pipeline-status-bar">
+                    <span className="pipeline-badge pipeline-badge--live">
+                      <span className="pipeline-badge--dot"></span>
+                      {liveResult
+                        ? liveResult.fromCache
+                          ? 'Served from Backend Cache (0ms)'
+                          : `Live Backend Pipeline: OCR + Gemini + RAG + TTS (${liveResult.processingTimeMs || 25}ms)`
+                        : backendStatus.online
+                        ? 'Backend Proxy Connected (:3001)'
+                        : 'Demo Preview Mode'}
+                    </span>
+                    {liveResult?.urgency && (
+                      <span className={`urgency-badge urgency-badge--${liveResult.urgency}`}>
+                        {liveResult.urgency} urgency
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Key Facts Grid — Structured Card Representation */}
+                  {liveResult?.keyFacts && liveResult.keyFacts.length > 0 && (
+                    <div className="key-facts-grid" aria-label="Key Facts">
+                      {liveResult.keyFacts.map((fact, idx) => (
+                        <div key={idx} className="key-fact-card">
+                          <span className="key-fact-label">{fact.label}</span>
+                          <strong className="key-fact-value">{fact.value}</strong>
+                        </div>
+                      ))}
+                    </div>
+                  )}
 
                   {/* Simplified Plain-Language Text Block */}
                   <div className="results-text-block">

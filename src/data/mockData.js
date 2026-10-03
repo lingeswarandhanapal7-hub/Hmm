@@ -1,4 +1,4 @@
-// Data and sample documents for Hmm — Gear5coders
+// Data and sample documents for Hmm — Built by Linges.D.Waran
 
 export const LANGUAGES = [
   { id: 'ta', name: 'Tamil', native: 'தமிழ்', script: 'Noto Sans Tamil', sample: 'இந்த கடிதம் உங்கள் உள்ளாட்சி வரி கட்டணத்தை பற்றி விளக்குகிறது.' },
@@ -726,38 +726,6 @@ export function getTasksOnlySpokenScript(doc, langCode) {
   return `${intro} ${tasksText}`;
 }
 
-export const TEAM_MEMBERS = [
-  {
-    name: 'Lingeswaran D',
-    role: 'Team Lead & AI Architect',
-    focus: 'Multimodal OCR pipelines, regional TTS synthesis, and prompt grounding',
-    initials: 'LD'
-  },
-  {
-    name: 'Lingesh R',
-    role: 'Fullstack & Systems Engineer',
-    focus: 'Document ingestion pipelines, OCR processing, and backend service integration',
-    initials: 'LR'
-  },
-  {
-    name: 'Krishniya K',
-    role: 'Document Intelligence & RAG Engineer',
-    focus: 'Legal clause extraction, medical ontology mapping, and rules retrieval engine',
-    initials: 'KK'
-  },
-  {
-    name: 'Kiruthik V',
-    role: 'Frontend & Motion Specialist',
-    focus: 'High-performance scroll interactions, paper ergonomics, and audio engine',
-    initials: 'KV'
-  },
-  {
-    name: 'Harsithaa P',
-    role: 'Product & Accessibility Designer',
-    focus: 'Low-literacy UX ergonomics, multilingual typography, and WCAG AA compliance',
-    initials: 'HP'
-  }
-];
 
 export const SOURCED_STATISTIC = {
   figure: '68%',

@@ -1,0 +1,52 @@
+services:
+  # 1. Node.js Full AI Pipeline Backend (OCR + Gemini + RAG + TTS)
+  - type: web
+    name: hmm-node-backend
+    env: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3001
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FALLBACK_MODE
+        value: true
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: hmm_db
+
+  # 2. Django Backend (Function-Based Views & Models)
+  - type: web
+    name: hmm-django-backend
+    env: python
+    rootDir: backend_django
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn hmm_backend.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DEBUG
+        value: False
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: hmm_db
