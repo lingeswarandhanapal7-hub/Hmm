@@ -1,0 +1,65 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Fraunces-Medium.ttf",
+      "sha1": "c4d936f2368704edd73ea59f3b28ca7fbc23083b"
+    },
+    {
+      "path": "src/assets/fonts/Fraunces-SemiBold.ttf",
+      "sha1": "87923b878f1c9ec5d46f5ae1c76635f732652e9c"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Medium.ttf",
+      "sha1": "7404e33cf4dfc678693ddecdc2930ea76fff9848"
+    },
+    {
+      "path": "src/assets/fonts/Inter-Regular.ttf",
+      "sha1": "8e5bdcf036a36763ac1493e8ccb7c8898eca0e4e"
+    },
+    {
+      "path": "src/assets/fonts/Inter-SemiBold.ttf",
+      "sha1": "1760c1a88fc765119ae3fe88d8325b824855847a"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansBengali-Medium.ttf",
+      "sha1": "0dc6e940abb7a5cc8f7b75b6a9776c8b80e15398"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansBengali-Regular.ttf",
+      "sha1": "39ab0a11bd57750c388c2fe7371b69c54082c336"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansDevanagari-Medium.ttf",
+      "sha1": "22f5376580a3a7fb9a3019b9a22c4aed0d447ddb"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansDevanagari-Regular.ttf",
+      "sha1": "020726cf9a6cb065a98395fe0dcb0852bd4bda40"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansKannada-Medium.ttf",
+      "sha1": "4244a92d8e3296324758bd7acf69bf97dba9a5fe"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansKannada-Regular.ttf",
+      "sha1": "8c21cc53994dd80ebc8542946397246ba6e43765"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansTamil-Medium.ttf",
+      "sha1": "c2c2950a8aae550e44befe67ce75fa256f76a0de"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansTamil-Regular.ttf",
+      "sha1": "bdb651713cbdfeffd13e95a5ef416712b5a30d04"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansTelugu-Medium.ttf",
+      "sha1": "59579aa4b0c99a5b1ff7011ceca340d42c09d635"
+    },
+    {
+      "path": "src/assets/fonts/NotoSansTelugu-Regular.ttf",
+      "sha1": "1aa595af451cbaee8afa3c14a35ef4e8a678358f"
+    }
+  ]
+}

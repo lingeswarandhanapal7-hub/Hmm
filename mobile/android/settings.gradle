@@ -1,0 +1,6 @@
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromConfigFile(file("autolinking.json")) }
+rootProject.name = 'com.hmm.app'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')
